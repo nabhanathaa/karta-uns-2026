@@ -207,45 +207,62 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
             color: {t['teks_utama']} !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }}
-        /* Sembunyikan Menu/Footer Bawaan namun Pertahankan Tombol Buka-Tutup Sidebar (<< / >>) di Kiri Atas */
-        #MainMenu, footer {{
+        /* Sembunyikan Menu/Deploy Bawaan namun Pertahankan Tombol Buka-Tutup Sidebar (<< / >>) di Kiri Atas */
+        #MainMenu,
+        [data-testid="stMainMenu"],
+        [data-testid="stToolbarActions"],
+        [data-testid="stStatusWidget"],
+        [data-testid="stDecoration"],
+        [data-testid="stAppDeployButton"],
+        .stDeployButton,
+        .stAppDeployButton,
+        footer {{
             visibility: hidden !important;
             display: none !important;
         }}
         header[data-testid="stHeader"] {{
             background: transparent !important;
             border-bottom: none !important;
-            pointer-events: none !important;
+            height: 2.75rem !important;
         }}
-        header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"],
-        header[data-testid="stHeader"] [data-testid="collapsedControl"],
-        header[data-testid="stHeader"] [data-testid="stExpandSidebarButton"],
+        /* Tombol Buka/Tutup Sidebar (>> / <<) di Pojok Kiri Atas Dibuat Sangat Jelas (Hijau Emerald) */
         [data-testid="stSidebarCollapsedControl"],
         [data-testid="collapsedControl"],
         [data-testid="stExpandSidebarButton"],
-        button[kind="headerNoPadding"] {{
+        [data-testid="stSidebarCollapseButton"] button {{
             pointer-events: auto !important;
             visibility: visible !important;
             display: inline-flex !important;
-            background-color: {t['bg_card']} !important;
-            color: {t['aksen']} !important;
-            border: 1.5px solid {t['aksen']} !important;
-            border-radius: 10px !important;
-            box-shadow: {t['shadow']} !important;
+            opacity: 1 !important;
+            background-color: #059669 !important;
+            color: #FFFFFF !important;
+            border: 1.5px solid #34D399 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 3px 10px rgba(5, 150, 105, 0.35) !important;
+            z-index: 999999 !important;
         }}
-        div[data-testid="stToolbar"],
-        div[data-testid="stDecoration"],
-        div[data-testid="stStatusWidget"],
-        .stDeployButton,
-        .stAppDeployButton,
-        [class*="viewerBadge"],
-        [class*="manage-app"],
-        button[title*="Fork"] {{
-            visibility: hidden !important;
-            display: none !important;
+        [data-testid="stSidebarCollapsedControl"] svg,
+        [data-testid="collapsedControl"] svg,
+        [data-testid="stExpandSidebarButton"] svg,
+        [data-testid="stSidebarCollapseButton"] svg {{
+            fill: #FFFFFF !important;
+            color: #FFFFFF !important;
+        }}
+        /* Styling Expander Panel Kontrol Cepat di Atas Halaman */
+        div[data-testid="stExpander"] {{
+            background-color: {t['bg_card']} !important;
+            border: 1px solid {t['aksen']} !important;
+            border-radius: 12px !important;
+            box-shadow: {t['shadow']} !important;
+            margin-bottom: 12px !important;
+        }}
+        div[data-testid="stExpander"] summary {{
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            color: {t['teks_utama']} !important;
         }}
         .block-container {{
-            padding-top: 1.1rem !important;
+            padding-top: 2.2rem !important;
             padding-bottom: 2.5rem !important;
             max-width: 1440px !important;
         }}
@@ -1516,77 +1533,175 @@ def muat_ekosistem_karta(jenis_visi: str, metode_air: str, port_serial: str):
     return model_visi, model_air, konveyor, df_bench
 
 
-# ------------------------------------------------------------------ Sidebar Konfigurasi
+# ------------------------------------------------------------------ State Sinkronisasi Pengaturan (Sidebar Kiri & Panel Atas)
+pilihan_visi_map = {
+    "KARTA MultiScale Neural-Texture (DeepScene)": "karta_v4",
+    "DeepLabV3-MobileNetV3 Edge Hybrid": "deeplabv3",
+    "SegFormer-B0 Semantic Segmentation": "segformer",
+    "Ultralytics YOLOv11n-Seg": "yolo",
+    "CLIPSeg Zero-Shot Text-Guided": "zero-shot",
+    "Baseline Aturan HSV (Pembanding)": "demo",
+}
+pilihan_air_map = {
+    "Conformal Quantile Regression (CQR)": "gbm",
+    "Physics-Informed Jackknife+ Ridge": "koreksi_linear",
+    "Baseline Fisika Literatur": "fisika",
+}
+daftar_label_visi = list(pilihan_visi_map.keys())
+daftar_label_air = list(pilihan_air_map.keys())
+
+if "cfg_mode_gelap" not in st.session_state:
+    st.session_state["cfg_mode_gelap"] = False
+if "cfg_label_visi" not in st.session_state:
+    st.session_state["cfg_label_visi"] = daftar_label_visi[0]
+if "cfg_label_air" not in st.session_state:
+    st.session_state["cfg_label_air"] = daftar_label_air[0]
+if "cfg_hujan_24j" not in st.session_state:
+    st.session_state["cfg_hujan_24j"] = 12.0
+if "cfg_hujan_72j" not in st.session_state:
+    st.session_state["cfg_hujan_72j"] = 32.0
+if "cfg_port_arduino" not in st.session_state:
+    st.session_state["cfg_port_arduino"] = ""
+
+
+def _sinkron_dari_sidebar():
+    st.session_state["cfg_mode_gelap"] = st.session_state["sb_mode_gelap"]
+    st.session_state["cfg_label_visi"] = st.session_state["sb_label_visi"]
+    st.session_state["cfg_label_air"] = st.session_state["sb_label_air"]
+    st.session_state["cfg_hujan_24j"] = float(st.session_state["sb_hujan_24j"])
+    st.session_state["cfg_hujan_72j"] = float(st.session_state["sb_hujan_72j"])
+    st.session_state["cfg_port_arduino"] = st.session_state["sb_port_arduino"]
+
+
+def _sinkron_dari_panel_atas():
+    st.session_state["cfg_mode_gelap"] = st.session_state["top_mode_gelap"]
+    st.session_state["cfg_label_visi"] = st.session_state["top_label_visi"]
+    st.session_state["cfg_label_air"] = st.session_state["top_label_air"]
+    st.session_state["cfg_hujan_24j"] = float(st.session_state["top_hujan_24j"])
+    st.session_state["cfg_hujan_72j"] = float(st.session_state["top_hujan_72j"])
+    st.session_state["cfg_port_arduino"] = st.session_state["top_port_arduino"]
+
+
+# ------------------------------------------------------------------ Sidebar Konfigurasi Kiri
 with st.sidebar:
     st.markdown("### Pengaturan Sistem KARTA")
-    mode_gelap = st.toggle("Mode Tampilan Gelap (Dark Mode)", value=False)
-    tema = dapatkan_palet_tema(mode_gelap)
-    suntikkan_css_web(tema, mode_gelap=mode_gelap)
-
-    # Injeksi Pembersih Chrome Streamlit Cloud (Hilangkan Fork & Toolbar Kanan, Pertahankan Tombol Buka-Tutup Sidebar Kiri)
-    components.html(
-        """
-        <script>
-        function bersihkanChromeStreamlit() {
-            try {
-                var doc = window.parent.document;
-                var targetSelectors = [
-                    '[data-testid="stToolbar"]', '[data-testid="stStatusWidget"]',
-                    '[class*="viewerBadge"]', '[class*="manage-app"]', 'button[title*="Fork"]',
-                    '.stAppDeployButton', 'footer', '#MainMenu', '[data-testid="stDecoration"]'
-                ];
-                targetSelectors.forEach(function(sel) {
-                    var elems = doc.querySelectorAll(sel);
-                    for (var i = 0; i < elems.length; i++) {
-                        elems[i].style.setProperty('display', 'none', 'important');
-                        elems[i].style.setProperty('visibility', 'hidden', 'important');
-                    }
-                });
-            } catch(e) {}
-        }
-        bersihkanChromeStreamlit();
-        setTimeout(bersihkanChromeStreamlit, 800);
-        setTimeout(bersihkanChromeStreamlit, 2500);
-        </script>
-        """,
-        height=0,
-        width=0,
+    st.toggle(
+        "Mode Tampilan Gelap (Dark Mode)",
+        value=st.session_state["cfg_mode_gelap"],
+        key="sb_mode_gelap",
+        on_change=_sinkron_dari_sidebar,
     )
 
     st.markdown("---")
     st.markdown("**1. Arsitektur Model Visi & Regresi**")
-    pilihan_visi_map = {
-        "KARTA MultiScale Neural-Texture (DeepScene)": "karta_v4",
-        "DeepLabV3-MobileNetV3 Edge Hybrid": "deeplabv3",
-        "SegFormer-B0 Semantic Segmentation": "segformer",
-        "Ultralytics YOLOv11n-Seg": "yolo",
-        "CLIPSeg Zero-Shot Text-Guided": "zero-shot",
-        "Baseline Aturan HSV (Pembanding)": "demo",
-    }
-    label_visi = st.selectbox("Model Segmentasi Citra", list(pilihan_visi_map.keys()), index=0)
-    jenis_visi = pilihan_visi_map[label_visi]
-    label_chip_visi = "KARTA DEEPSCENE" if jenis_visi == "karta_v4" else jenis_visi.upper()
-
-    pilihan_air_map = {
-        "Conformal Quantile Regression (CQR)": "gbm",
-        "Physics-Informed Jackknife+ Ridge": "koreksi_linear",
-        "Baseline Fisika Literatur": "fisika",
-    }
-    label_air = st.selectbox("Model Estimasi Kadar Air & LHV", list(pilihan_air_map.keys()), index=0)
-    metode_air = pilihan_air_map[label_air]
-    label_chip_air = "CQR-GBM" if metode_air == "gbm" else metode_air.upper()
+    st.selectbox(
+        "Model Segmentasi Citra",
+        daftar_label_visi,
+        index=daftar_label_visi.index(st.session_state["cfg_label_visi"]),
+        key="sb_label_visi",
+        on_change=_sinkron_dari_sidebar,
+    )
+    st.selectbox(
+        "Model Estimasi Kadar Air & LHV",
+        daftar_label_air,
+        index=daftar_label_air.index(st.session_state["cfg_label_air"]),
+        key="sb_label_air",
+        on_change=_sinkron_dari_sidebar,
+    )
 
     st.markdown("---")
     st.markdown("**2. Parameter Cuaca & Perangkat Tepi**")
-    hujan_24j_default = st.slider("Curah Hujan 24 Jam BMKG (mm)", 0.0, 150.0, 12.0, 0.5)
-    hujan_72j_default = st.slider("Akumulasi Hujan 72 Jam (mm)", 0.0, 300.0, 32.0, 1.0)
-    port_arduino = st.text_input("Port Serial Arduino Konveyor", value="", placeholder="Kosong = Mode Simulasi")
+    st.slider(
+        "Curah Hujan 24 Jam BMKG (mm)",
+        0.0,
+        150.0,
+        float(st.session_state["cfg_hujan_24j"]),
+        0.5,
+        key="sb_hujan_24j",
+        on_change=_sinkron_dari_sidebar,
+    )
+    st.slider(
+        "Akumulasi Hujan 72 Jam (mm)",
+        0.0,
+        300.0,
+        float(st.session_state["cfg_hujan_72j"]),
+        1.0,
+        key="sb_hujan_72j",
+        on_change=_sinkron_dari_sidebar,
+    )
+    st.text_input(
+        "Port Serial Arduino Konveyor",
+        value=st.session_state["cfg_port_arduino"],
+        placeholder="Kosong = Mode Simulasi",
+        key="sb_port_arduino",
+        on_change=_sinkron_dari_sidebar,
+    )
 
     st.markdown("---")
     st.caption(
         "**Tim KARTA · Politeknik Statistika STIS**\n\n"
         "Mitra Pengguna: Dinas Lingkungan Hidup Kota Surakarta, Disperinaker Sukoharjo, & PLTSa Putri Cempo."
     )
+
+mode_gelap = bool(st.session_state["cfg_mode_gelap"])
+label_visi = str(st.session_state["cfg_label_visi"])
+label_air = str(st.session_state["cfg_label_air"])
+hujan_24j_default = float(st.session_state["cfg_hujan_24j"])
+hujan_72j_default = float(st.session_state["cfg_hujan_72j"])
+port_arduino = str(st.session_state["cfg_port_arduino"])
+
+jenis_visi = pilihan_visi_map[label_visi]
+label_chip_visi = "KARTA DEEPSCENE" if jenis_visi == "karta_v4" else jenis_visi.upper()
+metode_air = pilihan_air_map[label_air]
+label_chip_air = "CQR-GBM" if metode_air == "gbm" else metode_air.upper()
+
+tema = dapatkan_palet_tema(mode_gelap)
+suntikkan_css_web(tema, mode_gelap=mode_gelap)
+
+# Injeksi Pembersih Chrome Streamlit Cloud (Sembunyikan Deploy/Menu Kanan, Pastikan Tombol >> Sidebar Kiri Atas Selalu Tampil)
+components.html(
+    """
+    <script>
+    function bersihkanDanTampilkanToggleSidebar() {
+        try {
+            var doc = window.parent.document;
+            var hideSelectors = [
+                '[data-testid="stToolbarActions"]', '[data-testid="stStatusWidget"]',
+                '[data-testid="stAppDeployButton"]', '.stDeployButton', '.stAppDeployButton',
+                'footer', '#MainMenu', '[data-testid="stMainMenu"]', '[data-testid="stDecoration"]'
+            ];
+            hideSelectors.forEach(function(sel) {
+                var elems = doc.querySelectorAll(sel);
+                for (var i = 0; i < elems.length; i++) {
+                    elems[i].style.setProperty('display', 'none', 'important');
+                    elems[i].style.setProperty('visibility', 'hidden', 'important');
+                }
+            });
+            var showSelectors = [
+                'header[data-testid="stHeader"]', '[data-testid="stToolbar"]',
+                '[data-testid="stSidebarCollapsedControl"]', '[data-testid="collapsedControl"]',
+                '[data-testid="stExpandSidebarButton"]'
+            ];
+            showSelectors.forEach(function(sel) {
+                var elems = doc.querySelectorAll(sel);
+                for (var i = 0; i < elems.length; i++) {
+                    elems[i].style.setProperty('visibility', 'visible', 'important');
+                    if (sel !== 'header[data-testid="stHeader"]' && sel !== '[data-testid="stToolbar"]') {
+                        elems[i].style.setProperty('display', 'inline-flex', 'important');
+                        elems[i].style.setProperty('opacity', '1', 'important');
+                    }
+                }
+            });
+        } catch(e) {}
+    }
+    bersihkanDanTampilkanToggleSidebar();
+    setTimeout(bersihkanDanTampilkanToggleSidebar, 700);
+    setTimeout(bersihkanDanTampilkanToggleSidebar, 2200);
+    </script>
+    """,
+    height=0,
+    width=0,
+)
 
 visi, air, konveyor, df_bench = muat_ekosistem_karta(jenis_visi, metode_air, port_arduino)
 
@@ -1617,6 +1732,68 @@ st.markdown(
             <span class="karta-chip terracotta">KORIDOR SURAKARTA–SUKOHARJO</span>
         </div>
     </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Panel Kontrol & Pengaturan Sistem KARTA di Atas Halaman (Tersinkronisasi dengan Sidebar Kiri — Bisa Diakses Kapan Saja!)
+with st.expander(
+    f"Pengaturan Sistem KARTA · Mode {'Gelap (Dark)' if mode_gelap else 'Terang (Light)'} | "
+    f"Model Visi: {label_chip_visi} | Kalibrasi: {label_chip_air} | Hujan BMKG: {hujan_24j_default:.1f} mm (Klik untuk Buka/Ubah)",
+    expanded=False,
+):
+    c_cfg1, c_cfg2, c_cfg3 = st.columns([1.15, 1.35, 1.25], gap="medium")
+    with c_cfg1:
+        st.toggle(
+            "Mode Tampilan Gelap (Dark Mode)",
+            value=mode_gelap,
+            key="top_mode_gelap",
+            on_change=_sinkron_dari_panel_atas,
+        )
+        st.text_input(
+            "Port Serial Arduino Konveyor",
+            value=port_arduino,
+            placeholder="Kosong = Mode Simulasi",
+            key="top_port_arduino",
+            on_change=_sinkron_dari_panel_atas,
+        )
+    with c_cfg2:
+        st.selectbox(
+            "Arsitektur Model Segmentasi Citra",
+            daftar_label_visi,
+            index=daftar_label_visi.index(label_visi),
+            key="top_label_visi",
+            on_change=_sinkron_dari_panel_atas,
+        )
+        st.selectbox(
+            "Model Estimasi Kadar Air & LHV",
+            daftar_label_air,
+            index=daftar_label_air.index(label_air),
+            key="top_label_air",
+            on_change=_sinkron_dari_panel_atas,
+        )
+    with c_cfg3:
+        st.slider(
+            "Curah Hujan 24 Jam BMKG (mm)",
+            0.0,
+            150.0,
+            hujan_24j_default,
+            0.5,
+            key="top_hujan_24j",
+            on_change=_sinkron_dari_panel_atas,
+        )
+        st.slider(
+            "Akumulasi Hujan 72 Jam (mm)",
+            0.0,
+            300.0,
+            hujan_72j_default,
+            1.0,
+            key="top_hujan_72j",
+            on_change=_sinkron_dari_panel_atas,
+        )
+
+st.markdown(
+    """
     <div class="karta-pipeline-bar">
         <div class="pipe-step">
             <div class="pipe-num">TAHAP 01 · HULU GERBANG</div>
