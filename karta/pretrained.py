@@ -708,14 +708,14 @@ def _segmentasi_citra_lapangan_hires(bgr: np.ndarray) -> HasilVisi:
         proporsi=_proporsi_dari_peta(peta),
         peta_kelas=peta,
         keyakinan=keyakinan,
-        backend="KARTA-v4.5 DeepScene Structure-Tensor & Contextual MRF",
+        backend="KARTA DeepScene Structure-Tensor & Contextual MRF",
         ketidakpastian=unc,
         proporsi_lunak=lunak,
     )
 
 
 class ModelKartaV4:
-    """Pretrained Multi-Scale Texture-Neural & DeepScene Semantic Segmenter (KARTA v4.5)."""
+    """Pretrained Multi-Scale Texture-Neural & DeepScene Semantic Segmenter (KARTA)."""
 
     def __init__(self, folder_model: str | Path | None = None, langkah: int = 8):
         self.folder = Path(folder_model) if folder_model else FOLDER_MODEL_V4
@@ -786,7 +786,7 @@ class ModelKartaV4:
             proporsi=_proporsi_dari_peta(peta),
             peta_kelas=peta,
             keyakinan=keyakinan,
-            backend="KARTA-v4.5 MultiScale Neural-Texture",
+            backend="KARTA MultiScale Neural-Texture",
             ketidakpastian=unc,
             proporsi_lunak=lunak,
         )
@@ -880,7 +880,7 @@ def latih_dan_simpan_model_v4() -> dict:
     )
 
     meta_info = {
-        "nama_model": "KARTA-v4 MultiScale Neural-Texture Segmenter",
+        "nama_model": "KARTA MultiScale Neural-Texture Segmenter",
         "arsitektur": "18-Feature Chromatic-Texture Extractor + 64-Unit Nonlinear Projection + Class-Balanced Softmax",
         "kelas": KELAS_VISI,
         "langkah_grid": langkah,

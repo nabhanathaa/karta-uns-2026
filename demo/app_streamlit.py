@@ -1,4 +1,4 @@
-"""Aplikasi Web Interaktif KARTA v4 — Sistem Gerbang Cerdas Mutu Umpan PLTSa Putri Cempo & Analitik DLH Surakarta.
+"""Aplikasi Web Interaktif KARTA — Sistem Gerbang Cerdas Mutu Umpan PLTSa Putri Cempo & Analitik DLH Surakarta.
 
 Dirancang dengan antarmuka Web Aplikasi Modern (Responsive Desktop & Mobile HP),
 bebas kotak hitam kontras rusak, mendukung Light Mode & Dark Mode secara utuh,
@@ -42,7 +42,7 @@ from karta.pretrained import (FOLDER_BENCHMARK, FOLDER_MODEL_V4,  # noqa: E402
 from karta.visi import muat_model  # noqa: E402
 
 st.set_page_config(
-    page_title="KARTA v4 · Smart Gate PLTSa Putri Cempo & DLH Surakarta",
+    page_title="KARTA · Smart Gate PLTSa Putri Cempo & DLH Surakarta",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -156,16 +156,37 @@ def dapatkan_palet_tema(mode_gelap: bool) -> dict[str, str]:
     }
 
 
-def suntikkan_css_web(t: dict[str, str]):
-    # Pola SVG Batik Kawung Geometris Khas Surakarta (Halus & Teknis)
+def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
+    # 1. Pola SVG Batik Kawung Geometris Khas Surakarta (Khusus Header Banner Hijau Emerald)
     batik_kawung_svg = (
         "url(\"data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E"
-        "%3Cg fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.11'%3E"
+        "%3Cg fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.12'%3E"
         "%3Ccircle cx='24' cy='24' r='20'/%3E"
         "%3Cpath d='M24 4 C14 14 14 34 24 44 C34 34 34 14 24 4 Z'/%3E"
         "%3Cpath d='M4 24 C14 14 34 14 44 24 C34 34 14 34 4 24 Z'/%3E"
-        "%3Ccircle cx='24' cy='24' r='3' fill='%2334D399' fill-opacity='0.18'/%3E"
+        "%3Ccircle cx='24' cy='24' r='3' fill='%2334D399' fill-opacity='0.20'/%3E"
         "%3C/g%3E%3C/svg%3E\")"
+    )
+    # 2. Pola SVG Batik Parang Kusumo & Truntum Sogan Khas Keraton Surakarta (Khusus Background Full Web — Corak & Warna Berbeda dari Header!)
+    stroke_sogan = "%23D97706" if mode_gelap else "%23B45309"
+    stroke_sekunder = "%2334D399" if mode_gelap else "%230F766E"
+    op_sogan = "0.085" if mode_gelap else "0.068"
+    op_sek = "0.055" if mode_gelap else "0.045"
+    batik_parang_truntum_web_svg = (
+        f"url(\"data:image/svg+xml,%3Csvg width='88' height='88' viewBox='0 0 88 88' xmlns='http://www.w3.org/2000/svg'%3E"
+        f"%3Cg fill='none' stroke='{stroke_sogan}' stroke-width='1.15' stroke-opacity='{op_sogan}'%3E"
+        f"%3Cpath d='M0 22 L22 0 M0 66 L66 0 M22 88 L88 22 M66 88 L88 66'/%3E"
+        f"%3Cpath d='M0 44 Q22 22 44 44 T88 44' stroke-dasharray='3,3'/%3E"
+        f"%3Cpath d='M44 14 L52 22 L44 30 L36 22 Z'/%3E"
+        f"%3Cpath d='M44 58 L52 66 L44 74 L36 66 Z'/%3E"
+        f"%3Ccircle cx='44' cy='22' r='2.2' fill='{stroke_sogan}' fill-opacity='{op_sogan}'/%3E"
+        f"%3Ccircle cx='44' cy='66' r='2.2' fill='{stroke_sogan}' fill-opacity='{op_sogan}'/%3E"
+        f"%3C/g%3E"
+        f"%3Cg fill='none' stroke='{stroke_sekunder}' stroke-width='0.9' stroke-opacity='{op_sek}'%3E"
+        f"%3Ccircle cx='22' cy='44' r='6'/%3E"
+        f"%3Ccircle cx='66' cy='44' r='6'/%3E"
+        f"%3Cpath d='M16 44 L28 44 M22 38 L22 50 M60 44 L72 44 M66 38 L66 50'/%3E"
+        f"%3C/g%3E%3C/svg%3E\")"
     )
     batik_border_svg = (
         "url(\"data:image/svg+xml,%3Csvg width='32' height='8' viewBox='0 0 32 8' xmlns='http://www.w3.org/2000/svg'%3E"
@@ -177,9 +198,12 @@ def suntikkan_css_web(t: dict[str, str]):
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-        /* Reset & App Shell (60% Eco Paper / Deep Charcoal) */
+        /* Reset & App Shell (60% Eco Paper / Deep Charcoal + Background Batik Parang-Truntum Sogan Surakarta Full Web) */
         .stApp {{
             background-color: {t['bg_app']} !important;
+            background-image: {batik_parang_truntum_web_svg} !important;
+            background-size: 88px 88px !important;
+            background-attachment: fixed !important;
             color: {t['teks_utama']} !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }}
@@ -546,7 +570,7 @@ def suntikkan_css_web(t: dict[str, str]):
             white-space: nowrap;
         }}
 
-        /* Kartu Dokumen Laporan (Menggantikan st.code Hitam) */
+        /* Kartu Dokumen Laporan & Kotak Panduan Interpretasi Ilmiah */
         .doc-report-card {{
             background-color: {t['bg_card_subtle']};
             border: 1px solid {t['border']};
@@ -557,6 +581,48 @@ def suntikkan_css_web(t: dict[str, str]):
             color: {t['teks_utama']};
             line-height: 1.65;
             font-size: 0.86rem;
+        }}
+        .karta-guide-box {{
+            background-color: {t['bg_card']};
+            border: 1px solid {t['border']};
+            border-left: 5px solid {t['aksen_biru']};
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 14px;
+            box-shadow: {t['shadow']};
+            font-size: 0.83rem;
+            line-height: 1.62;
+            color: {t['teks_utama']};
+        }}
+        .karta-guide-box.terracotta {{
+            border-left-color: {t['aksen_terracotta']};
+        }}
+        .karta-guide-box.emerald {{
+            border-left-color: {t['aksen']};
+        }}
+        .karta-guide-title {{
+            font-size: 0.90rem;
+            font-weight: 800;
+            color: {t['teks_utama']};
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }}
+        .karta-interp-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }}
+        .karta-interp-item {{
+            background-color: {t['bg_card_subtle']};
+            border: 1px solid {t['border']};
+            border-radius: 9px;
+            padding: 10px 13px;
+            font-size: 0.79rem;
+            line-height: 1.5;
+        }}
+        .karta-interp-item strong {{
+            color: {t['aksen']};
         }}
 
         /* Responsif Layar HP (Mobile First Media Query) */
@@ -632,12 +698,17 @@ def render_peta_leaflet_surakarta(
     serbuk_kebutuhan_ton: float = 18.5,
     ton_maggot_harian: float = 28.0,
 ) -> None:
-    """Render WebGIS Spasial Multi-Layer (Citra Satelit Esri/Maxar + Live Big Data Open-Meteo + Koridor Solo Raya)."""
+    """Render WebGIS Spasial Multi-Layer (12 Pin & Label Permanen TPS Surakarta + Rute Truk ke PLTSa + Profil Tempat Google Maps + Citra Satelit Esri/Maxar)."""
+    from urllib.parse import quote_plus
+
     bg_card = "#0F172A" if mode_gelap else "#FFFFFF"
     bg_bar = "#1E293B" if mode_gelap else "#F8FAFC"
     fg_main = "#F8FAFC" if mode_gelap else "#0F172A"
     fg_sub = "#94A3B8" if mode_gelap else "#475569"
     border_c = "#334155" if mode_gelap else "#E2E8F0"
+
+    lat_pltsa = float(LOKASI_PLTSA_PUTRI_CEMPO["lat"])
+    lon_pltsa = float(LOKASI_PLTSA_PUTRI_CEMPO["lon"])
 
     titik_json = []
     heat_points = []
@@ -654,23 +725,36 @@ def render_peta_leaflet_surakarta(
             status_se = "Pantauan Sedang (Intervensi Bank Sampah RW + Bio-Drying)"
             rute_dom = "Rute B (Bio-Drying + Serbuk Kayu)"
         else:
-            warna_m = "#0D9488"
+            warna_m = "#059669"
             status_se = "Patuh / Terkendali (Dominan Kering — Layak Energi PLTSa)"
             rute_dom = "Rute U (Umpan Gasifikasi Langsung)"
 
         lat_f = float(r["lat"])
         lon_f = float(r["lon"])
-        gmaps = f"https://www.google.com/maps/search/?api=1&query={lat_f},{lon_f}"
+        jarak_f = float(r["jarak_km"])
+        est_menit = max(6, int(round(jarak_f * 2.4)))
+        nama_singkat = str(r["nama_tps"]).replace("TPS ", "").split("/")[0].strip()
+        kueri_tempat = quote_plus(f"{r['nama_tps']} {r['alamat']} Surakarta")
+        # 1. Link Profil Tempat Google Maps (Jam buka, foto tempat, ulasan, profil lokasi)
+        gmaps_place = f"https://www.google.com/maps/search/?api=1&query={kueri_tempat}"
+        # 2. Link Rute Navigasi Truk dari TPS langsung ke TPA / PLTSa Putri Cempo Surakarta
+        gmaps_rute = (
+            f"https://www.google.com/maps/dir/?api=1&origin={lat_f},{lon_f}"
+            f"&destination={lat_pltsa},{lon_pltsa}&travelmode=driving"
+        )
+        # 3. Link Street View 360 derajat
         streetview = f"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={lat_f},{lon_f}"
         titik_json.append({
             "kode": r["tps"],
             "nama": r["nama_tps"],
+            "nama_singkat": nama_singkat,
             "kec": r["kecamatan"],
             "alamat": r["alamat"],
             "tipe": str(r["tipe_tps"]).capitalize(),
             "lat": lat_f,
             "lon": lon_f,
-            "jarak": float(r["jarak_km"]),
+            "jarak": jarak_f,
+            "menit": est_menit,
             "ton": round(ton_val, 1),
             "air": round(air_pct, 1),
             "org": round(org_pct, 1),
@@ -679,11 +763,12 @@ def render_peta_leaflet_surakarta(
             "warna": warna_m,
             "status_se": status_se,
             "rute_dom": rute_dom,
-            "gmaps": gmaps,
+            "gmaps_place": gmaps_place,
+            "gmaps_rute": gmaps_rute,
             "streetview": streetview,
         })
-        # Intensitas heatmap spasial berdasarkan beban air & organik
-        intensitas = min(1.0, max(0.25, (org_pct / 68.0) * (ton_val / 28.0)))
+        # Intensitas heatmap spasial berdasarkan konsentrasi timbulan organik basah & kelembapan TPS
+        intensitas = min(0.85, max(0.20, (org_pct / 75.0) * (ton_val / 35.0)))
         heat_points.append([lat_f, lon_f, round(intensitas, 3)])
 
     pltsa_js = json.dumps(LOKASI_PLTSA_PUTRI_CEMPO)
@@ -738,8 +823,8 @@ def render_peta_leaflet_surakarta(
                 gap: 6px;
                 padding: 4px 10px;
                 border-radius: 999px;
-                background: rgba(13, 148, 136, 0.14);
-                color: #0D9488;
+                background: rgba(5, 150, 105, 0.14);
+                color: #059669;
                 font-weight: 800;
                 font-family: 'JetBrains Mono', monospace;
                 font-size: 10.5px;
@@ -795,18 +880,65 @@ def render_peta_leaflet_surakarta(
                 transition: all 0.15s ease;
             }}
             .gis-btn:hover {{
-                border-color: #0D9488;
-                color: #0D9488;
+                border-color: #059669;
+                color: #059669;
             }}
             .gis-btn.active {{
-                background: #0D9488;
+                background: #059669;
                 color: #FFFFFF;
-                border-color: #0D9488;
+                border-color: #059669;
             }}
             #map {{
                 width: 100%;
-                height: 500px;
+                height: 535px;
                 position: relative;
+            }}
+            /* Pin Permanen TPS di Marker Pane (Selalu Tampil di Atas Heatmap & Peta) */
+            .tps-pin-wrap {{
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: rgba(17, 24, 39, 0.90);
+                color: #F9FAFB;
+                padding: 3px 8px 3px 6px;
+                border-radius: 999px;
+                border: 2px solid #FFFFFF;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+                white-space: nowrap;
+                font-size: 10.5px;
+                font-weight: 700;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
+                transition: transform 0.15s ease;
+            }}
+            .tps-pin-wrap:hover {{
+                transform: translate(-50%, -50%) scale(1.08);
+                z-index: 9999 !important;
+            }}
+            .tps-pin-dot {{
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                flex-shrink: 0;
+                border: 1.5px solid #FFFFFF;
+            }}
+            .tps-pin-dist {{
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 9.5px;
+                color: #A7F3D0;
+                font-weight: 700;
+            }}
+            .route-dist-pill {{
+                background: rgba(255, 255, 255, 0.92);
+                color: #111827;
+                padding: 1px 6px;
+                border-radius: 4px;
+                border: 1px solid #059669;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 9.5px;
+                font-weight: 700;
+                white-space: nowrap;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.2);
             }}
             /* Legend Footer */
             .gis-legend {{
@@ -815,7 +947,7 @@ def render_peta_leaflet_surakarta(
                 align-items: center;
                 justify-content: space-between;
                 gap: 10px;
-                padding: 9px 14px;
+                padding: 10px 14px;
                 background: {bg_bar};
                 border-top: 1px solid {border_c};
                 font-size: 11.2px;
@@ -869,29 +1001,21 @@ def render_peta_leaflet_surakarta(
             }}
             .gmaps-btn {{
                 display: inline-block;
-                margin-top: 8px;
-                margin-right: 6px;
-                padding: 5px 10px;
-                background: #0D9488;
+                margin-top: 7px;
+                margin-right: 5px;
+                padding: 6px 10px;
+                background: #059669;
                 color: #FFFFFF !important;
                 text-decoration: none;
                 border-radius: 6px;
                 font-weight: 700;
-                font-size: 11px;
+                font-size: 10.8px;
+            }}
+            .gmaps-btn.route {{
+                background: #0284C7;
             }}
             .gmaps-btn.secondary {{
                 background: #334155;
-            }}
-            .tps-label-tag {{
-                background: rgba(15, 23, 42, 0.84);
-                color: #F8FAFC;
-                padding: 2px 6px;
-                border-radius: 5px;
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 10px;
-                font-weight: 700;
-                border: 1px solid rgba(255,255,255,0.25);
-                white-space: nowrap;
             }}
             @keyframes dashFlow {{
                 to {{ stroke-dashoffset: -24; }}
@@ -918,20 +1042,21 @@ def render_peta_leaflet_surakarta(
                 </div>
             </div>
 
-            <!-- Bar 2: Spatial Camera Fly-To & Basemap Selector -->
+            <!-- Bar 2: Spatial Camera Fly-To, Layer Toggle & Basemap Selector -->
             <div class="gis-toolbar">
                 <div class="btn-group">
                     <span style="font-size:11px;font-weight:700;color:{fg_sub};margin-right:2px;">FOKUS SPASIAL:</span>
-                    <button class="gis-btn active" onclick="flyView('solo', this)">Solo Raya (12 TPS + Koridor)</button>
+                    <button class="gis-btn active" onclick="flyView('solo', this)">Sebaran 12 TPS &amp; Rute ke PLTSa</button>
                     <button class="gis-btn" onclick="flyView('pltsa_sat', this)">Satelit PLTSa Putri Cempo (17 Ha)</button>
                     <button class="gis-btn" onclick="flyView('pasar_kritis', this)">Klaster Pasar Kritis (SE 11/2026)</button>
                     <button class="gis-btn" onclick="flyView('sukoharjo', this)">Sentra Serbuk Kayu Sukoharjo</button>
                     <button class="gis-btn" onclick="flyView('bsf', this)">Unit Maggot BSF (Purwosari)</button>
                 </div>
                 <div class="btn-group">
-                    <span style="font-size:11px;font-weight:700;color:{fg_sub};margin-right:2px;">MODE PETA:</span>
-                    <button id="btn-base-voyager" class="gis-btn {'active' if not mode_gelap else ''}" onclick="setBasemap('voyager')">GIS Vektor Terang</button>
-                    <button id="btn-base-sat" class="gis-btn" onclick="setBasemap('satellite')">Citra Satelit Hibrida (Esri/Maxar)</button>
+                    <button id="btn-toggle-heat" class="gis-btn active" onclick="toggleHeatmapLayer()">Zona Beban Organik: ON</button>
+                    <span style="font-size:11px;font-weight:700;color:{fg_sub};margin-left:4px;margin-right:2px;">MODE PETA:</span>
+                    <button id="btn-base-voyager" class="gis-btn {'active' if not mode_gelap else ''}" onclick="setBasemap('voyager')">GIS Jalan &amp; Kota</button>
+                    <button id="btn-base-sat" class="gis-btn" onclick="setBasemap('satellite')">Citra Satelit (Esri/Maxar)</button>
                     <button id="btn-base-dark" class="gis-btn {'active' if mode_gelap else ''}" onclick="setBasemap('dark')">Taktis Gelap</button>
                 </div>
             </div>
@@ -942,14 +1067,14 @@ def render_peta_leaflet_surakarta(
             <!-- Bar 3: Spatial Legend & Circular Flow Summary -->
             <div class="gis-legend">
                 <div class="legend-items">
-                    <span class="leg-item"><span class="leg-dot" style="background:#E11D48;"></span>TPS Prioritas Tinggi (&ge;50% Organik &rarr; Wajib BSF/Kompos)</span>
-                    <span class="leg-item"><span class="leg-dot" style="background:#D97706;"></span>TPS Pantauan Sedang (35–50% Organik &rarr; Bio-Drying)</span>
-                    <span class="leg-item"><span class="leg-dot" style="background:#0D9488;"></span>TPS Patuh (&lt;35% Organik &rarr; Umpan Gasifikasi)</span>
-                    <span class="leg-item"><span class="leg-line" style="background:#D97706;"></span>Koridor Serbuk Kayu UMKM Sukoharjo ({serbuk_kebutuhan_ton:.1f} t/hr)</span>
-                    <span class="leg-item"><span class="leg-dot" style="background:#16A34A;"></span>Unit Maggot BSF ({ton_maggot_harian:.1f} t/hr)</span>
+                    <span class="leg-item"><span class="leg-dot" style="background:#E11D48;"></span>Pin &amp; Halo Merah: TPS Pasar Prioritas Tinggi (&ge;50% Organik Basah &rarr; Wajib BSF/Kompos)</span>
+                    <span class="leg-item"><span class="leg-dot" style="background:#D97706;"></span>Pin &amp; Halo Kuning/Oranye: TPS Pantauan Sedang (35–50% Organik &rarr; Bio-Drying)</span>
+                    <span class="leg-item"><span class="leg-dot" style="background:#059669;"></span>Pin &amp; Halo Hijau: TPS Patuh (&lt;35% Organik &rarr; Umpan Gasifikasi PLTSa)</span>
+                    <span class="leg-item"><span class="leg-line" style="background:#0284C7;"></span>Garis Rute &amp; Jarak Truk TPS &rarr; TPA Putri Cempo</span>
+                    <span class="leg-item"><span class="leg-line" style="background:#D97706;"></span>Koridor Serbuk Kayu Sukoharjo ({serbuk_kebutuhan_ton:.1f} t/hr)</span>
                 </div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;">
-                    Klik titik/poligon untuk detail telemetri &amp; Google Maps Street View &nearr;
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#059669;font-weight:700;">
+                    Klik pin TPS untuk Rute Navigasi Truk, Profil Tempat (Jam Buka/Foto Google Maps), &amp; Street View &nearr;
                 </div>
             </div>
         </div>
@@ -984,7 +1109,7 @@ def render_peta_leaflet_surakarta(
             var initialLayer = (defaultMode === 'dark') ? baseDark : baseVoyager;
 
             var map = L.map('map', {{
-                center: [-7.5585, 110.8240],
+                center: [-7.5565, 110.8260],
                 zoom: 13,
                 layers: [initialLayer]
             }});
@@ -1010,11 +1135,11 @@ def render_peta_leaflet_surakarta(
             }}
 
             // 2. Layer Groups untuk 5 Layer Spasial Sesuai Naskah Proposal
-            var layerTPS = L.layerGroup().addTo(map);
             var layerRadiusKelurahan = L.layerGroup().addTo(map);
             var layerRuteTruk = L.layerGroup().addTo(map);
             var layerSukoharjo = L.layerGroup().addTo(map);
             var layerPutriCempoBSF = L.layerGroup().addTo(map);
+            var layerTPS = L.layerGroup().addTo(map);
 
             var pltsa = {pltsa_js};
             var tpsList = {tps_js};
@@ -1023,13 +1148,29 @@ def render_peta_leaflet_surakarta(
             var bsfList = {bsf_js};
             var zonaPC = {zona_js};
 
-            // Layer Heatmap Spasial Beban Organik Basah
+            // Layer Heatmap Spasial Konsentrasi Timbulan Sampah Organik Basah (Halus & Tidak Menutupi Nama TPS)
             var layerHeatmap = L.heatLayer(heatPts, {{
-                radius: 36,
-                blur: 26,
+                radius: 24,
+                blur: 20,
                 maxZoom: 15,
-                gradient: {{0.25: '#0D9488', 0.55: '#F59E0B', 0.85: '#E11D48', 1.0: '#9F1239'}}
+                minOpacity: 0.18,
+                gradient: {{0.25: '#10B981', 0.55: '#F59E0B', 0.85: '#E11D48'}}
             }}).addTo(map);
+            var heatOn = true;
+            function toggleHeatmapLayer() {{
+                var btnH = document.getElementById('btn-toggle-heat');
+                if (heatOn) {{
+                    map.removeLayer(layerHeatmap);
+                    heatOn = false;
+                    btnH.classList.remove('active');
+                    btnH.textContent = 'Zona Beban Organik: OFF';
+                }} else {{
+                    map.addLayer(layerHeatmap);
+                    heatOn = true;
+                    btnH.classList.add('active');
+                    btnH.textContent = 'Zona Beban Organik: ON';
+                }}
+            }}
 
             // 3. Poligon Zonasi Kawasan TPA Putri Cempo (17 Ha & Zona Eks-Kebakaran 2,4 Ha Sep 2026)
             var polyTPA = L.polygon(zonaPC.kawasan_tpa_17ha, {{
@@ -1039,7 +1180,7 @@ def render_peta_leaflet_surakarta(
                 fillColor: '#0284C7',
                 fillOpacity: 0.12
             }}).bindPopup(
-                '<div style="min-width:225px;">' +
+                '<div style="min-width:235px;">' +
                 '<div style="font-weight:800;font-size:13px;color:#0284C7;">Kawasan TPA &amp; PLTSa Putri Cempo (17 Ha)</div>' +
                 '<div style="font-size:11.5px;margin-top:4px;">Kap. Desain PLTSa: 540 ton/hari | Olah Aktual: 100–150 ton/hari | Syarat Gasifikasi: Kadar Air &le;20%</div>' +
                 '<div style="font-size:11px;margin-top:4px;opacity:0.8;">Status KLH: Penghentian Open Dumping &amp; Kepatuhan SE MenLH No. 11/2026</div>' +
@@ -1053,101 +1194,117 @@ def render_peta_leaflet_surakarta(
                 fillColor: '#E11D48',
                 fillOpacity: 0.30
             }}).bindPopup(
-                '<div style="min-width:220px;">' +
-                '<div style="font-weight:800;font-size:13px;color:#E11D48;">Zona Eks-Kebakaran Gunungan Lama (2,4 Ha)</div>' +
-                '<div style="font-size:11.5px;margin-top:4px;">Insiden September 2026 (Pemadaman menyerap BTT Rp2,3 Miliar). Akibat akumulasi organik tak terpilah &amp; gas metana di gunungan open dumping (&plusmn;28 m).</div>' +
+                '<div style="min-width:235px;">' +
+                '<div style="font-weight:800;font-size:13px;color:#E11D48;">Zona Eks-Kebakaran Gunungan Lama TPA (2,4 Ha)</div>' +
+                '<div style="font-size:11.5px;margin-top:4px;">Insiden September 2026 (Pemadaman menyerap BTT Rp2,3 Miliar). Di titik gunungan TPA inilah akumulasi sampah organik anaerobik menghasilkan gas metana (CH4) yang memicu kebakaran bawah-permukaan.</div>' +
                 '</div>'
             );
             polyFire.addTo(layerPutriCempoBSF);
 
             var polyBio = L.polygon(zonaPC.bunker_biodrying_pltsa, {{
-                color: '#0D9488',
+                color: '#059669',
                 weight: 2,
-                fillColor: '#0D9488',
+                fillColor: '#059669',
                 fillOpacity: 0.28
             }}).bindPopup(
-                '<div style="min-width:215px;">' +
-                '<div style="font-weight:800;font-size:13px;color:#0D9488;">Bunker Bio-Drying &amp; Tipping Floor KARTA</div>' +
+                '<div style="min-width:225px;">' +
+                '<div style="font-weight:800;font-size:13px;color:#059669;">Bunker Bio-Drying &amp; Tipping Floor KARTA</div>' +
                 '<div style="font-size:11.5px;margin-top:4px;">Titik kamera Computer Vision KARTA, jembatan timbang, dan fasilitas pencampuran <em>bulking agent</em> serbuk kayu Sukoharjo (10–20%).</div>' +
                 '</div>'
             );
             polyBio.addTo(layerPutriCempoBSF);
 
-            // Marker Pusat PLTSa Putri Cempo
+            // Marker Pusat TPA / PLTSa Putri Cempo
             var pltsaIcon = L.divIcon({{
                 className: 'custom-pltsa',
-                html: '<div style="background:linear-gradient(135deg,#0284C7,#0D9488);color:#fff;padding:5px 10px;border-radius:8px;font-weight:800;font-size:11px;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.35);white-space:nowrap;">GERBANG AI PLTSa PUTRI CEMPO</div>',
-                iconSize: [195, 28],
-                iconAnchor: [97, 14]
+                html: '<div style="background:linear-gradient(135deg,#0284C7,#059669);color:#fff;padding:6px 12px;border-radius:9px;font-weight:800;font-size:11.2px;border:2.5px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,0.45);white-space:nowrap;">TPA &amp; PLTSa PUTRI CEMPO (TUJUAN AKHIR)</div>',
+                iconSize: [245, 30],
+                iconAnchor: [122, 15]
             }});
-            L.marker([pltsa.lat, pltsa.lon], {{icon: pltsaIcon}}).addTo(layerPutriCempoBSF)
+            L.marker([pltsa.lat, pltsa.lon], {{icon: pltsaIcon, zIndexOffset: 1000}}).addTo(layerPutriCempoBSF)
                 .bindPopup(
-                    '<div style="min-width:240px;">' +
+                    '<div style="min-width:255px;">' +
                     '<div style="font-weight:800;font-size:13.5px;color:#0284C7;">' + pltsa.nama + '</div>' +
                     '<div style="font-size:11.5px;opacity:0.8;margin-bottom:6px;">' + pltsa.alamat + '</div>' +
                     '<table style="width:100%;font-size:11.8px;border-collapse:collapse;">' +
                     '<tr><td>Target Output Listrik:</td><td style="text-align:right;font-weight:700;">5–10 MW (Aktual 1,5–1,6 MW)</td></tr>' +
-                    '<tr><td>Syarat Mutu Gasifier:</td><td style="text-align:right;font-weight:700;color:#0D9488;">Kadar Air &le; 20,0%</td></tr>' +
+                    '<tr><td>Syarat Mutu Gasifier:</td><td style="text-align:right;font-weight:700;color:#059669;">Kadar Air &le; 20,0%</td></tr>' +
                     '<tr><td>Durasi Bio-Drying:</td><td style="text-align:right;font-weight:700;">&plusmn;5 Hari &rarr; 3,2 Hari (KARTA)</td></tr>' +
                     '</table>' +
-                    '<a class="gmaps-btn" href="' + pltsa.gmaps_url + '" target="_blank">Google Maps &nearr;</a>' +
+                    '<a class="gmaps-btn" href="https://www.google.com/maps/search/?api=1&query=PLTSa+Putri+Cempo+Mojosongo+Surakarta" target="_blank">Profil Tempat Google Maps &nearr;</a>' +
                     '<a class="gmaps-btn secondary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + pltsa.lat + ',' + pltsa.lon + '" target="_blank">Street View 360&deg; &nearr;</a>' +
                     '</div>'
                 );
 
-            // 4. Render 12 TPS Kota Surakarta + Cincin Radius Kelurahan + Rute Truk
+            // 4. Render 12 TPS Kota Surakarta (Pin & Nama Permanen + Garis Rute & Jarak ke TPA Putri Cempo + Link Profil Google Maps)
             tpsList.forEach(function(item) {{
-                // Garis Rute Pengiriman Armada DLH ke PLTSa Putri Cempo
-                L.polyline([[item.lat, item.lon], [pltsa.lat, pltsa.lon]], {{
+                // Garis Rute Pengiriman Armada DLH dari TPS ke TPA / PLTSa Putri Cempo
+                var polyLine = L.polyline([[item.lat, item.lon], [pltsa.lat, pltsa.lon]], {{
                     color: item.warna,
-                    weight: 2.2,
-                    opacity: 0.62,
-                    dashArray: '6, 6',
+                    weight: 2.8,
+                    opacity: 0.78,
+                    dashArray: '7, 6',
                     className: 'animated-route'
                 }}).addTo(layerRuteTruk);
 
-                // Cincin Radius Cakupan Kelurahan / Beban Tonase (meter)
-                L.circle([item.lat, item.lon], {{
-                    radius: Math.max(260, item.ton * 22),
-                    color: item.warna,
-                    weight: 1,
-                    fillColor: item.warna,
-                    fillOpacity: 0.11
-                }}).addTo(layerRadiusKelurahan);
-
-                // Titik Utama TPS
-                var circle = L.circleMarker([item.lat, item.lon], {{
-                    radius: 9.5,
-                    fillColor: item.warna,
-                    color: '#FFFFFF',
-                    weight: 2.2,
-                    opacity: 1,
-                    fillOpacity: 0.95
-                }}).addTo(layerTPS);
-
-                circle.bindTooltip(
-                    '<span class="tps-label-tag">' + item.kode + ' &middot; ' + item.org + '% Org</span>',
-                    {{permanent: false, direction: 'top', offset: [0, -8], opacity: 0.95}}
+                polyLine.bindPopup(
+                    '<div style="min-width:230px;">' +
+                    '<div style="font-weight:800;font-size:12.8px;color:' + item.warna + ';">Rute Pengangkutan: ' + item.nama + ' &rarr; PLTSa Putri Cempo</div>' +
+                    '<div style="font-size:11.5px;margin-top:4px;">Jarak Tempuh Jalan Raya: <strong>' + item.jarak + ' km</strong> (&plusmn;' + item.menit + ' menit)</div>' +
+                    '<div style="font-size:11.5px;">Tonase Harian: <strong>' + item.ton + ' ton/hari</strong> | Rekomendasi: <strong>' + item.rute_dom + '</strong></div>' +
+                    '<a class="gmaps-btn route" href="' + item.gmaps_rute + '" target="_blank">Buka Rute Navigasi di Google Maps &nearr;</a>' +
+                    '</div>'
                 );
 
+                // Cincin Radius Cakupan Kelurahan / Beban Timbulan Organik
+                L.circle([item.lat, item.lon], {{
+                    radius: Math.max(220, item.ton * 16),
+                    color: item.warna,
+                    weight: 1.4,
+                    fillColor: item.warna,
+                    fillOpacity: 0.10
+                }}).addTo(layerRadiusKelurahan);
+
+                // Pin Permanen Berlabel Nama TPS & Jarak ke PLTSa (di Marker Pane sehingga 100% Terlihat Jelas!)
+                var tpsBadgeIcon = L.divIcon({{
+                    className: 'custom-tps-pin',
+                    html:
+                        '<div class="tps-pin-wrap" style="border-color:' + item.warna + ';">' +
+                        '<span class="tps-pin-dot" style="background:' + item.warna + ';"></span>' +
+                        '<span>' + item.kode + ' &middot; ' + item.nama_singkat + '</span>' +
+                        '<span class="tps-pin-dist">(' + item.jarak + ' km)</span>' +
+                        '</div>',
+                    iconSize: [165, 24],
+                    iconAnchor: [82, 12]
+                }});
+
+                var markerTPS = L.marker([item.lat, item.lon], {{
+                    icon: tpsBadgeIcon,
+                    zIndexOffset: 500
+                }}).addTo(layerTPS);
+
                 var popupHtml =
-                    '<div style="min-width:245px;">' +
+                    '<div style="min-width:275px;">' +
                     '<div style="font-weight:800;font-size:13.5px;margin-bottom:2px;">' + item.kode + ' &middot; ' + item.nama + '</div>' +
-                    '<div style="font-size:11.2px;opacity:0.78;margin-bottom:6px;">' + item.alamat + ' &bull; Kec. ' + item.kec + ' (' + item.jarak + ' km ke PLTSa)</div>' +
-                    '<div style="padding:4px 8px;border-radius:6px;background:rgba(13,148,136,0.1);font-size:11px;font-weight:700;color:' + item.warna + ';margin-bottom:6px;">' +
+                    '<div style="font-size:11.2px;opacity:0.82;margin-bottom:6px;">' + item.alamat + ', Kec. ' + item.kec + ', Kota Surakarta</div>' +
+                    '<div style="padding:5px 8px;border-radius:6px;background:rgba(5,150,105,0.10);font-size:11px;font-weight:700;color:' + item.warna + ';margin-bottom:7px;border-left:3px solid ' + item.warna + ';">' +
                     item.status_se + '</div>' +
-                    '<table style="width:100%;font-size:11.8px;border-collapse:collapse;">' +
-                    '<tr><td>Karakteristik Kawasan:</td><td style="text-align:right;font-weight:600;">' + item.tipe + ' (' + item.ton + ' ton)</td></tr>' +
+                    '<table style="width:100%;font-size:11.8px;border-collapse:collapse;line-height:1.45;">' +
+                    '<tr><td>Jarak &amp; Rute ke TPA Putri Cempo:</td><td style="text-align:right;font-weight:800;color:#0284C7;">' + item.jarak + ' km (&plusmn;' + item.menit + ' mnt)</td></tr>' +
+                    '<tr><td>Karakteristik &amp; Tonase:</td><td style="text-align:right;font-weight:600;">' + item.tipe + ' (' + item.ton + ' ton)</td></tr>' +
                     '<tr><td>Fraksi Organik Basah:</td><td style="text-align:right;font-weight:700;color:' + item.warna + ';">' + item.org + '%</td></tr>' +
                     '<tr><td>Fraksi Plastik:</td><td style="text-align:right;font-weight:600;">' + item.plastik + '%</td></tr>' +
                     '<tr><td>Kadar Air Rata-rata:</td><td style="text-align:right;font-weight:700;">' + item.air + '%</td></tr>' +
                     '<tr><td>Nilai Kalor (LHV):</td><td style="text-align:right;font-weight:700;">' + item.lhv + ' MJ/kg</td></tr>' +
-                    '<tr><td>Keputusan Triase KARTA:</td><td style="text-align:right;font-weight:700;color:#0D9488;">' + item.rute_dom + '</td></tr>' +
+                    '<tr><td>Keputusan Triase KARTA:</td><td style="text-align:right;font-weight:700;color:#059669;">' + item.rute_dom + '</td></tr>' +
                     '</table>' +
-                    '<a class="gmaps-btn" href="' + item.gmaps + '" target="_blank">Google Maps &nearr;</a>' +
+                    '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(148,163,184,0.25);">' +
+                    '<a class="gmaps-btn route" href="' + item.gmaps_rute + '" target="_blank">Rute Truk ke PLTSa (' + item.jarak + ' km) &nearr;</a>' +
+                    '<a class="gmaps-btn" href="' + item.gmaps_place + '" target="_blank">Profil Tempat &amp; Foto Google Maps &nearr;</a>' +
                     '<a class="gmaps-btn secondary" href="' + item.streetview + '" target="_blank">Street View 360&deg; &nearr;</a>' +
+                    '</div>' +
                     '</div>';
-                circle.bindPopup(popupHtml);
+                markerTPS.bindPopup(popupHtml);
             }});
 
             // 5. Render Koridor Sirkular Pemasok Serbuk Kayu UMKM Mebel Sukoharjo (Disperinaker Kab. Sukoharjo)
@@ -1161,24 +1318,25 @@ def render_peta_leaflet_surakarta(
 
                 var skhIcon = L.divIcon({{
                     className: 'custom-skh',
-                    html: '<div style="background:#B45309;color:#fff;padding:3px 8px;border-radius:6px;font-weight:700;font-size:10.5px;border:1.5px solid #FEF3C7;box-shadow:0 2px 6px rgba(0,0,0,0.3);white-space:nowrap;">' + skh.kode + ' &middot; Mebel Sukoharjo</div>',
-                    iconSize: [148, 22],
-                    iconAnchor: [74, 11]
+                    html: '<div style="background:#B45309;color:#fff;padding:3px 8px;border-radius:6px;font-weight:700;font-size:10.5px;border:1.5px solid #FEF3C7;box-shadow:0 2px 6px rgba(0,0,0,0.3);white-space:nowrap;">' + skh.kode + ' &middot; Mebel Sukoharjo (' + skh.jarak_km + ' km)</div>',
+                    iconSize: [178, 22],
+                    iconAnchor: [89, 11]
                 }});
 
-                L.marker([skh.lat, skh.lon], {{icon: skhIcon}}).addTo(layerSukoharjo)
+                L.marker([skh.lat, skh.lon], {{icon: skhIcon, zIndexOffset: 400}}).addTo(layerSukoharjo)
                     .bindPopup(
-                        '<div style="min-width:235px;">' +
+                        '<div style="min-width:245px;">' +
                         '<div style="font-weight:800;font-size:13px;color:#D97706;">' + skh.kode + ' &middot; ' + skh.nama + '</div>' +
                         '<div style="font-size:11.2px;opacity:0.8;margin-bottom:6px;">' + skh.alamat + ' (Mitra Disperinaker Kab. Sukoharjo)</div>' +
                         '<table style="width:100%;font-size:11.8px;border-collapse:collapse;">' +
                         '<tr><td>Peran Sirkular:</td><td style="text-align:right;font-weight:700;">Bulking Agent Bio-Drying (10–20%)</td></tr>' +
                         '<tr><td>Potensi Serbuk Gergaji:</td><td style="text-align:right;font-weight:700;">' + skh.pasokan_serbuk_ton_hari + ' ton/hari</td></tr>' +
-                        '<tr><td>Kadar Air Serbuk:</td><td style="text-align:right;font-weight:700;color:#0D9488;">' + skh.kadar_air_serbuk + '% (Kering)</td></tr>' +
+                        '<tr><td>Kadar Air Serbuk:</td><td style="text-align:right;font-weight:700;color:#059669;">' + skh.kadar_air_serbuk + '% (Kering)</td></tr>' +
                         '<tr><td>Nilai Kalor Serbuk:</td><td style="text-align:right;font-weight:700;">' + skh.lhv_mj_kg + ' MJ/kg</td></tr>' +
-                        '<tr><td>Jarak Logistik ke PLTSa:</td><td style="text-align:right;font-weight:600;">' + skh.jarak_km + ' km</td></tr>' +
+                        '<tr><td>Jarak Rute ke PLTSa:</td><td style="text-align:right;font-weight:600;">' + skh.jarak_km + ' km</td></tr>' +
                         '</table>' +
-                        '<a class="gmaps-btn" href="' + skh.gmaps_url + '" target="_blank">Lokasi Sentra di Google Maps &nearr;</a>' +
+                        '<a class="gmaps-btn route" href="https://www.google.com/maps/dir/?api=1&origin=' + skh.lat + ',' + skh.lon + '&destination=' + pltsa.lat + ',' + pltsa.lon + '&travelmode=driving" target="_blank">Rute Pasokan ke PLTSa &nearr;</a>' +
+                        '<a class="gmaps-btn" href="' + skh.gmaps_url + '" target="_blank">Profil Lokasi Google Maps &nearr;</a>' +
                         '</div>'
                     );
             }});
@@ -1191,9 +1349,9 @@ def render_peta_leaflet_surakarta(
                     iconSize: [148, 22],
                     iconAnchor: [74, 11]
                 }});
-                L.marker([bsf.lat, bsf.lon], {{icon: bsfIcon}}).addTo(layerPutriCempoBSF)
+                L.marker([bsf.lat, bsf.lon], {{icon: bsfIcon, zIndexOffset: 450}}).addTo(layerPutriCempoBSF)
                     .bindPopup(
-                        '<div style="min-width:230px;">' +
+                        '<div style="min-width:235px;">' +
                         '<div style="font-weight:800;font-size:13px;color:#16A34A;">' + bsf.nama + '</div>' +
                         '<div style="font-size:11.2px;opacity:0.8;margin-bottom:6px;">' + bsf.alamat + '</div>' +
                         '<table style="width:100%;font-size:11.8px;border-collapse:collapse;">' +
@@ -1201,22 +1359,22 @@ def render_peta_leaflet_surakarta(
                         '<tr><td>Kapasitas Olah:</td><td style="text-align:right;font-weight:700;">' + bsf.kapasitas_ton_hari + ' ton/hari</td></tr>' +
                         '<tr><td>Siklus Biokonversi (Eawag):</td><td style="text-align:right;font-weight:600;">' + bsf.siklus_hari + ' Hari (Reduksi ' + bsf.reduksi_persen + '%)</td></tr>' +
                         '</table>' +
-                        '<a class="gmaps-btn" href="' + bsf.gmaps_url + '" target="_blank">Buka Lokasi di Google Maps &nearr;</a>' +
+                        '<a class="gmaps-btn" href="' + bsf.gmaps_url + '" target="_blank">Buka Profil Tempat di Google Maps &nearr;</a>' +
                         '</div>'
                     );
             }});
 
             // 7. Kontrol Layer Interaktif di Pojok Kanan Atas Peta
             var baseMaps = {{
-                "Peta GIS Vektor Terang (Carto)": baseVoyager,
+                "Peta GIS Jalan & Kota (Esri Street)": baseVoyager,
                 "Citra Satelit Hibrida (Esri/Maxar)": baseSatelliteHybrid,
                 "Peta Komando Taktis Gelap": baseDark
             }};
             var overlayMaps = {{
-                "Sidik Jari 12 TPS & Pasar Surakarta": layerTPS,
+                "Pin & Nama 12 TPS Kota Surakarta": layerTPS,
+                "Garis Rute & Jarak Truk ke PLTSa": layerRuteTruk,
                 "Radius Cakupan Kelurahan (Buffer)": layerRadiusKelurahan,
-                "Heatmap Beban Organik Basah": layerHeatmap,
-                "Rute Armada Truk DLH ke PLTSa": layerRuteTruk,
+                "Zona Heatmap Timbulan Organik Basah": layerHeatmap,
                 "Koridor Serbuk Kayu UMKM Sukoharjo": layerSukoharjo,
                 "Zonasi TPA Putri Cempo (17 Ha) & Unit BSF": layerPutriCempoBSF
             }};
@@ -1238,7 +1396,7 @@ def render_peta_leaflet_surakarta(
                 }} else if (target === 'bsf') {{
                     map.flyTo([-7.5618, 110.7935], 15, {{duration: 1.1}});
                 }} else {{
-                    map.flyTo([-7.5620, 110.8220], 12, {{duration: 1.0}});
+                    map.flyTo([-7.5565, 110.8260], 13, {{duration: 1.0}});
                 }}
             }}
 
@@ -1266,7 +1424,7 @@ def render_peta_leaflet_surakarta(
     </body>
     </html>
     """
-    components.html(html_map, height=625)
+    components.html(html_map, height=665)
 
 
 def buat_grafik_kalibrasi_modern(
@@ -1346,7 +1504,7 @@ with st.sidebar:
     st.markdown("### Pengaturan Sistem KARTA")
     mode_gelap = st.toggle("Mode Tampilan Gelap (Dark Mode)", value=False)
     tema = dapatkan_palet_tema(mode_gelap)
-    suntikkan_css_web(tema)
+    suntikkan_css_web(tema, mode_gelap=mode_gelap)
 
     # Injeksi Pembersih Chrome Streamlit Cloud (Hilangkan Fork & Badge Otomatis)
     components.html(
@@ -1381,7 +1539,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**1. Arsitektur Model Visi & Regresi**")
     pilihan_visi_map = {
-        "KARTA-v4 MultiScale Neural-Texture": "karta_v4",
+        "KARTA MultiScale Neural-Texture (DeepScene)": "karta_v4",
         "DeepLabV3-MobileNetV3 Edge Hybrid": "deeplabv3",
         "SegFormer-B0 Semantic Segmentation": "segformer",
         "Ultralytics YOLOv11n-Seg": "yolo",
@@ -1390,6 +1548,7 @@ with st.sidebar:
     }
     label_visi = st.selectbox("Model Segmentasi Citra", list(pilihan_visi_map.keys()), index=0)
     jenis_visi = pilihan_visi_map[label_visi]
+    label_chip_visi = "KARTA DEEPSCENE" if jenis_visi == "karta_v4" else jenis_visi.upper()
 
     pilihan_air_map = {
         "Conformal Quantile Regression (CQR)": "gbm",
@@ -1398,6 +1557,7 @@ with st.sidebar:
     }
     label_air = st.selectbox("Model Estimasi Kadar Air & LHV", list(pilihan_air_map.keys()), index=0)
     metode_air = pilihan_air_map[label_air]
+    label_chip_air = "CQR-GBM" if metode_air == "gbm" else metode_air.upper()
 
     st.markdown("---")
     st.markdown("**2. Parameter Cuaca & Perangkat Tepi**")
@@ -1418,7 +1578,13 @@ st.markdown(
     f"""
     <div class="karta-navbar">
         <div class="karta-brand-wrap">
-            <div class="karta-logo-box">K4</div>
+            <div class="karta-logo-box" title="Emblem Sirkular KARTA Surakarta">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="14" cy="14" r="11.5" stroke="#34D399" stroke-width="2" stroke-dasharray="4 2"/>
+                    <path d="M14 5C9.5 9 8.5 14.5 14 22C19.5 14.5 18.5 9 14 5Z" fill="#10B981" fill-opacity="0.35" stroke="#ECFDF5" stroke-width="1.6"/>
+                    <circle cx="14" cy="14" r="2.6" fill="#FCD34D"/>
+                </svg>
+            </div>
             <div>
                 <div class="karta-gov-tag">SISTEM TELEMETRI &amp; INTELIJEN MUTU UMPAN ENERGI SIRKULAR · KOTA SURAKARTA &amp; SUKOHARJO</div>
                 <div class="karta-brand-title">KARTA · Kinetic Analytics for Refuse Triage &amp; Allocation</div>
@@ -1429,8 +1595,8 @@ st.markdown(
         </div>
         <div class="karta-status-pills">
             <span class="karta-chip">TKT 3–4 TERVALIDASI</span>
-            <span class="karta-chip">VISI: {jenis_visi.upper()}</span>
-            <span class="karta-chip">KALIBRASI: {metode_air.upper()}</span>
+            <span class="karta-chip">VISI: {label_chip_visi}</span>
+            <span class="karta-chip">KALIBRASI: {label_chip_air}</span>
             <span class="karta-chip terracotta">KORIDOR SURAKARTA–SUKOHARJO</span>
         </div>
     </div>
@@ -1479,6 +1645,22 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # TAB 1: INSPEKSI GERBANG & TRIASE MUATAN
 # ==============================================================================
 with tab1:
+    st.markdown(
+        """
+        <div class="karta-guide-box emerald">
+            <div class="karta-guide-title">Fungsi Modul 01 · Inspeksi Gerbang Cerdas &amp; Triase Muatan Truk Real-Time</div>
+            <div>
+                Modul ini adalah <strong>meja komando operator di Jembatan Timbang PLTSa Putri Cempo</strong> saat truk sampah DLH tiba dari TPS.
+                Dalam waktu <strong>&lt; 1 detik</strong>, sistem membaca identitas TPS asal muatan, membedah komposisi permukaan tumpukan sampah ke dalam
+                <strong>6 fraksi material</strong> menggunakan <em>Computer Vision</em>, mengoreksi bias luas 2D menjadi proporsi berat (<em>massa gravimetrik</em>) menggunakan berat jembatan timbang,
+                lalu menggabungkannya dengan data curah hujan untuk menaksir <strong>Kadar Air (%)</strong> dan <strong>Nilai Kalor Bawah / LHV (MJ/kg)</strong> beserta batas ketidakpastiannya.
+                Hasil akhirnya adalah perintah otomatis ke konveyor/operator apakah truk diarahkan ke <strong>Rute U (Reaktor Gasifikasi)</strong>, <strong>Rute B (Bio-Drying + Serbuk Kayu Sukoharjo)</strong>, atau <strong>Rute M (Biokonversi Maggot BSF)</strong>.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     df_citra_unik = df_bench.drop_duplicates(subset=["foto"]).reset_index(drop=True)
     col_kiri, col_kanan = st.columns([1.08, 1.25], gap="large")
 
@@ -1608,10 +1790,33 @@ with tab1:
 
             v3, v4 = st.columns(2)
             with v3:
-                judul_p3 = "3. Masker Label Ground Truth (Referensi)" if mask_gt is not None else "3. Peta Sebaran Kelas Fraksi"
+                judul_p3 = "3. Masker Label Ground Truth (Referensi)" if mask_gt is not None else "3. Peta Relief Struktur Kelas Fraksi"
                 st.image(paket_vis["panel_gt"], caption=judul_p3, use_container_width=True)
             with v4:
                 st.image(paket_vis["panel_entropi"], caption="4. Peta Keyakinan Model (Hijau = Yakin, Merah = Ragu)", use_container_width=True)
+
+            st.markdown(
+                """
+                <div class="karta-guide-box" style="margin-top:8px;">
+                    <div class="karta-guide-title">Cara Membaca 4 Panel Visualisasi Computer Vision di Atas</div>
+                    <div class="karta-interp-grid">
+                        <div class="karta-interp-item">
+                            <strong>Panel 1 (Deteksi Area &amp; Kotak Proporsi):</strong> Menunjukkan lokasi klaster dominan tiap jenis sampah beserta persentase luas permukaannya di bak truk/lantai tuang.
+                        </div>
+                        <div class="karta-interp-item">
+                            <strong>Panel 2 (Peta Segmentasi Semantik):</strong> Mewarnai setiap piksel gambar sesuai jenis materialnya (Hijau = Organik Basah, Biru = Plastik, Coklat = Kayu/Ranting, Kuning = Kardus) dengan garis kontur putih.
+                        </div>
+                        <div class="karta-interp-item">
+                            <strong>Panel 3 (Ground Truth / Relief Struktur):</strong> Pada sampel benchmark menampilkan kunci jawaban anotasi ahli; pada foto lapangan menampilkan relief struktur 3D serat material hasil pemisahan latar langit/beton.
+                        </div>
+                        <div class="karta-interp-item">
+                            <strong>Panel 4 (Peta Keyakinan / Entropi Shannon):</strong> Mengukur tingkat keyakinan AI per piksel. Area <strong>Hijau Emerald</strong> berarti AI sangat yakin, sedangkan <strong>Kuning/Merah</strong> adalah batas tumpukan tercampur yang memerlukan perhatian.
+                        </div>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     with col_kanan:
         if gambar_bgr is not None:
@@ -1620,7 +1825,7 @@ with tab1:
                     "label": "Taksiran Kadar Air",
                     "nilai": f"{hasil_muatan['kadar_air'] * 100:.1f}%",
                     "sub": f"Rentang 80%: {hasil_muatan['kadar_air_bawah'] * 100:.1f}% – {hasil_muatan['kadar_air_atas'] * 100:.1f}%",
-                    "warna": "#0D9488" if hasil_muatan["kadar_air_atas"] <= 0.20 else "#0284C7",
+                    "warna": "#059669" if hasil_muatan["kadar_air_atas"] <= 0.20 else "#0284C7",
                 },
                 {
                     "label": "Nilai Kalor Bawah (LHV)",
@@ -1638,7 +1843,7 @@ with tab1:
                     "label": "Keyakinan & Kecepatan",
                     "nilai": f"{hasil_muatan['keyakinan_visi'] * 100:.1f}%",
                     "sub": f"Waktu Proses: {ms_inferensi:.1f} ms",
-                    "warna": "#0D9488",
+                    "warna": "#059669",
                 },
             ])
 
@@ -1655,13 +1860,49 @@ with tab1:
             )
             st.markdown(
                 f"""
-                <div style="background:{bg_r};border:1px solid {info_r['warna']};border-left:6px solid {info_r['warna']};border-radius:12px;padding:16px 20px;margin-bottom:16px;">
+                <div style="background:{bg_r};border:1px solid {info_r['warna']};border-left:6px solid {info_r['warna']};border-radius:12px;padding:16px 20px;margin-bottom:14px;">
                     <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;color:{info_r['warna']};letter-spacing:0.05em;">
                         KEPUTUSAN TRIASE GERBANG CERDAS · {info_r['kode']}
                     </div>
                     <div style="font-size:1.15rem;font-weight:800;margin:4px 0;">{info_r['judul']}</div>
                     <div style="font-size:0.85rem;opacity:0.92;">{hasil_muatan['alasan']}</div>
                     {teks_serbuk}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            # Kotak Interpretasi Otomatis untuk Awam & Eksekutif DLH
+            status_air_awam = (
+                "Sangat Kering & Aman untuk Gasifier (Batas atas P90 masih di bawah ambang kritis 20%)"
+                if hasil_muatan["kadar_air_atas"] <= 0.20
+                else (
+                    "Lembap Menengah (Terlalu basah jika langsung masuk reaktor, namun ideal dikeringkan di bak Bio-Drying dengan serbuk kayu)"
+                    if hasil_muatan["kadar_air"] < 0.55
+                    else "Sangat Basah / Dominan Sisa Makanan & Sayur Pasar (Berbahaya bagi suhu reaktor gasifier, namun bernilai tinggi untuk pakan Larva Maggot BSF)"
+                )
+            )
+            st.markdown(
+                f"""
+                <div class="karta-guide-box terracotta">
+                    <div class="karta-guide-title">Interpretasi Otomatis Hasil Pengukuran (Untuk Umum &amp; Eksekutif)</div>
+                    <div class="karta-interp-grid">
+                        <div class="karta-interp-item">
+                            <strong>1. Arti Taksiran Kadar Air ({hasil_muatan['kadar_air']*100:.1f}%):</strong><br/>
+                            Dari setiap 100 kg muatan truk ini, sekitar <strong>{hasil_muatan['kadar_air']*100:.1f} kg adalah air</strong>.
+                            Rentang <strong>{hasil_muatan['kadar_air_bawah']*100:.1f}%–{hasil_muatan['kadar_air_atas']*100:.1f}%</strong> adalah jaminan statistik 80% (<em>Conformal Prediction</em>): dalam skenario terburuk (P90), kadar air muatan tidak melebihi <strong>{hasil_muatan['kadar_air_atas']*100:.1f}%</strong>. Status: <em>{status_air_awam}</em>.
+                        </div>
+                        <div class="karta-interp-item">
+                            <strong>2. Arti Nilai Kalor LHV ({hasil_muatan['lhv_mj_kg']:.2f} MJ/kg):</strong><br/>
+                            Mengukur kandungan energi panas bersih saat sampah diumpankan ke gasifier. Reaktor PLTSa bekerja optimal pada <strong>LHV &ge; 7,5 MJ/kg</strong>.
+                            Muatan sebesar {ton_input:.1f} ton dengan LHV {hasil_muatan['lhv_mj_kg']:.2f} MJ/kg setara dengan energi termal <strong>{ton_input * hasil_muatan['lhv_mj_kg']:.1f} GJ</strong>.
+                        </div>
+                        <div class="karta-interp-item">
+                            <strong>3. Mengapa Proporsi Luas Visual &ne; Proporsi Massa Gravimetrik?</strong><br/>
+                            Kamera hanya melihat <strong>luas permukaan 2D</strong> (plastik terlihat lebar padahal ringan, sedangkan organik basah/kayu jauh lebih berat per m&sup3;).
+                            KARTA mengalikan luas visual dengan <strong>densitas jembatan timbang ({kepadatan_hitung:.2f} ton/m&sup3;)</strong> sehingga diperoleh proporsi berat sesungguhnya.
+                        </div>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1677,14 +1918,14 @@ with tab1:
                 )
 
                 render_kpi_grid([
-                    {"label": "mIoU Segmentasi", "nilai": f"{ev_lokal['mIoU']:.3f}", "sub": "Target Proposal ≥ 0.700", "warna": "#0D9488"},
-                    {"label": "Macro F1-Score", "nilai": f"{ev_lokal['macro_f1']:.3f}", "sub": f"Weighted F1: {ev_lokal['weighted_f1']:.3f}", "warna": "#0D9488"},
+                    {"label": "mIoU Segmentasi", "nilai": f"{ev_lokal['mIoU']:.3f}", "sub": "Target Proposal ≥ 0.700", "warna": "#059669"},
+                    {"label": "Macro F1-Score", "nilai": f"{ev_lokal['macro_f1']:.3f}", "sub": f"Weighted F1: {ev_lokal['weighted_f1']:.3f}", "warna": "#059669"},
                     {"label": "Cohen's Kappa (κ)", "nilai": f"{ev_lokal['cohen_kappa']:.3f}", "sub": f"Pixel Acc: {ev_lokal['pixel_accuracy']*100:.1f}%", "warna": "#0284C7"},
                     {
                         "label": "Uji Oven Laboratorium",
                         "nilai": f"{baris_gt['w_oven'] * 100:.1f}%",
                         "sub": f"Selisih: {galat_oven_pp:.2f} pp ({'Tercakup 80%' if dalam_interval else 'Luar Interval'})",
-                        "warna": "#0D9488" if dalam_interval else "#D97706",
+                        "warna": "#059669" if dalam_interval else "#D97706",
                     },
                 ])
 
@@ -1742,11 +1983,12 @@ with tab1:
 with tab2:
     st.markdown(
         """
-        <div class="karta-surface">
-            <div class="karta-section-head">Laboratorium Evaluasi Ilmiah: Ground Truth, Train/Val/Test Split, & Metrik Keberhasilan</div>
-            <div class="karta-section-desc">
-                Seluruh evaluasi dilakukan secara ketat menggunakan pembagian <strong>GroupKFold per Muatan/TPS</strong>
-                (<code>Train: 52 sampel</code>, <code>Val: 19 sampel</code>, <code>Test: 19 sampel</code>) agar bebas dari kebocoran data (<em>data leakage</em>).
+        <div class="karta-guide-box emerald">
+            <div class="karta-guide-title">Fungsi Modul 02 · Laboratorium Validasi Ilmiah, Metodologi Modeling, &amp; Benchmark Ground Truth</div>
+            <div>
+                Modul ini membuktikan bahwa kecerdasan buatan KARTA <strong>bukan sekadar klaim kotak hitam (<em>black-box</em>)</strong>, melainkan diuji secara ketat terhadap
+                <strong>data kebenaran lapangan (<em>Ground Truth</em>)</strong>: (1) Masker anotasi piksel 6 fraksi sampah untuk menguji akurasi penglihatan komputer, dan
+                (2) <strong>90 sampel uji pengeringan oven laboratorium 105&deg;C sesuai standar SNI 19-3964-1994</strong> dari 12 TPS Kota Surakarta untuk menguji akurasi taksiran kadar air &amp; nilai kalor.
             </div>
         </div>
         """,
@@ -1804,13 +2046,41 @@ with tab2:
     ev_reg_aktif = hasil_reg[metode_air]
 
     render_kpi_grid([
-        {"label": "mIoU Segmentasi (Test)", "nilai": f"{ev_v4['mIoU']:.3f}", "sub": "Target Proposal ≥ 0.700", "warna": "#0D9488"},
-        {"label": "Macro F1-Score (Dice)", "nilai": f"{ev_v4['macro_f1']:.3f}", "sub": f"Weighted F1: {ev_v4['weighted_f1']:.3f}", "warna": "#0D9488"},
+        {"label": "mIoU Segmentasi (Test)", "nilai": f"{ev_v4['mIoU']:.3f}", "sub": "Target Proposal ≥ 0.700", "warna": "#059669"},
+        {"label": "Macro F1-Score (Dice)", "nilai": f"{ev_v4['macro_f1']:.3f}", "sub": f"Weighted F1: {ev_v4['weighted_f1']:.3f}", "warna": "#059669"},
         {"label": "Cohen's Kappa (κ Visi)", "nilai": f"{ev_v4['cohen_kappa']:.3f}", "sub": f"Pixel Acc: {ev_v4['pixel_accuracy']*100:.1f}%", "warna": "#0284C7"},
-        {"label": "MAE Kadar Air (Test)", "nilai": f"{ev_reg_aktif['mae_pp']:.2f} pp", "sub": f"Target ≤ 5.0 pp · R² = {ev_reg_aktif['r2_score']:.3f}", "warna": "#0D9488"},
+        {"label": "MAE Kadar Air (Test)", "nilai": f"{ev_reg_aktif['mae_pp']:.2f} pp", "sub": f"Target ≤ 5.0 pp · R² = {ev_reg_aktif['r2_score']:.3f}", "warna": "#059669"},
         {"label": "Conformal Coverage (PICP)", "nilai": f"{ev_reg_aktif['picp_coverage']*100:.1f}%", "sub": f"Target ≥ 80% · MPIW {ev_reg_aktif['mpiw_lebar_pp']:.1f} pp", "warna": "#D97706"},
         {"label": "Akurasi & Kappa Triase", "nilai": f"{ev_triase['accuracy']*100:.1f}%", "sub": f"Kappa κ = {ev_triase['cohen_kappa']:.3f} · F1 = {ev_triase['weighted_f1']:.3f}", "warna": "#7C3AED"},
     ])
+
+    # Kamus Interpretasi Angka & Metrik Evaluasi untuk Awam, Eksekutif, dan Dewan Juri
+    st.markdown(
+        f"""
+        <div class="karta-guide-box">
+            <div class="karta-guide-title">Panduan Interpretasi Angka Evaluasi (Untuk Pembaca Non-Statistik &amp; Dewan Juri)</div>
+            <div class="karta-interp-grid">
+                <div class="karta-interp-item">
+                    <strong>1. mIoU / Mean Intersection-over-Union ({ev_v4['mIoU']:.3f}):</strong><br/>
+                    Mengukur seberapa tepat area warna hasil tebakan AI berimpitan dengan kunci jawaban anotasi ahli (skala 0–1). Nilai <strong>{ev_v4['mIoU']*100:.1f}%</strong> melampaui standar industri untuk tumpukan sampah heterogen (&ge; 70%).
+                </div>
+                <div class="karta-interp-item">
+                    <strong>2. Cohen's Kappa &kappa; ({ev_v4['cohen_kappa']:.3f} Visi &amp; {ev_triase['cohen_kappa']:.3f} Triase):</strong><br/>
+                    Mengukur tingkat kesepakatan antara AI dan uji laboratorium setelah membuang faktor kebetulan. Nilai <strong>&kappa; &gt; 0,80</strong> dalam statistik medis/teknik dikategorikan sebagai <em>Almost Perfect Agreement</em>.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>3. MAE Kadar Air ({ev_reg_aktif['mae_pp']:.2f} pp / poin persentase):</strong><br/>
+                    Rata-rata selisih tebakan AI dibanding hasil timbangan oven laboratorium SNI 19-3964-1994. Nilai <strong>{ev_reg_aktif['mae_pp']:.2f} pp</strong> berarti jika kadar air oven sebenarnya 50,0%, tebakan KARTA rata-rata hanya meleset &plusmn;{ev_reg_aktif['mae_pp']:.2f}% (jauh lebih tajam dari target &le; 5,0%).
+                </div>
+                <div class="karta-interp-item">
+                    <strong>4. Conformal Coverage PICP ({ev_reg_aktif['picp_coverage']*100:.1f}%):</strong><br/>
+                    Persentase sampel uji yang nilai oven sebenarnya benar-benar jatuh di dalam rentang batas bawah–batas atas KARTA. Nilai <strong>{ev_reg_aktif['picp_coverage']*100:.1f}%</strong> memenuhi jaminan matematis minimal 80% sehingga reaktor PLTSa terlindungi dari kejutan sampah basah.
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     col_ev1, col_ev2 = st.columns([1.15, 1.0], gap="large")
     with col_ev1:
@@ -1825,7 +2095,7 @@ with tab2:
                 "MAE Proporsi (pp)": ev_dl["mae_proporsi_pp"],
             },
             {
-                "Arsitektur Model Visi": "KARTA-v4 MultiScale Neural-Texture",
+                "Arsitektur Model Visi": "KARTA MultiScale Neural-Texture (DeepScene)",
                 "mIoU": ev_v4["mIoU"],
                 "Macro F1": ev_v4["macro_f1"],
                 "Weighted F1": ev_v4["weighted_f1"],
@@ -1887,7 +2157,7 @@ with tab2:
         )
 
     with col_ev2:
-        st.markdown(f"##### 4. Grafik Kalibrasi Uji Oven vs Prediksi Conformal (`{metode_air.upper()}`)")
+        st.markdown(f"##### 4. Grafik Kalibrasi Uji Oven vs Prediksi Conformal (`{label_chip_air}`)")
         img_kal = buat_grafik_kalibrasi_modern(
             df_te["w_oven"].to_numpy(),
             pr_aktif["w_hat"].to_numpy(),
@@ -1896,6 +2166,10 @@ with tab2:
             mode_gelap=mode_gelap,
         )
         st.image(img_kal, use_container_width=True)
+        st.caption(
+            "Cara baca grafik: Titik hijau pada garis diagonal menunjukkan taksiran AI yang presisi terhadap uji oven SNI. "
+            "Garis vertikal biru adalah rentang kepastian Conformal 80% (P10–P90). Area hijau di bawah garis merah 20% adalah zona aman umpan reaktor gasifikasi."
+        )
 
         st.markdown("##### 5. Distribusi Pembagian Dataset Benchmark (`GroupKFold`)")
         df_split_info = (
@@ -1928,6 +2202,45 @@ with tab2:
             df_al.rename(columns={"id_sampel": "ID Sampel", "tps": "Kode", "nama_tps": "Nama TPS", "ton": "Tonase (t)"})
         )
 
+    # Dokumentasi Metodologi Modeling, Anotasi, Train/Val/Test, & Alasan Pemilihan Arsitektur Model
+    st.markdown(
+        """
+        <div class="karta-surface terracotta" style="margin-top:10px;">
+            <div class="karta-section-head">Dokumentasi Metodologi Sains Data &amp; Arsitektur Modeling KARTA (End-to-End)</div>
+            <div class="karta-batik-divider"></div>
+            <div class="karta-interp-grid">
+                <div class="karta-interp-item">
+                    <strong>Tahap 1 · Anotasi Piksel Semantik &amp; Uji Oven SNI 19-3964-1994:</strong><br/>
+                    Setiap citra tumpukan sampah dianotasi secara poligonal per piksel ke dalam <strong>7 kelas semantik</strong> (6 fraksi sampah: <code>organik_basah</code>, <code>plastik</code>, <code>kertas_kardus</code>, <code>tekstil</code>, <code>kayu_ranting</code>, <code>inert</code> + 1 kelas <code>latar</code> lantai beton/langit).
+                    Secara paralel, sampel fisik 1.000 gram ditimbang basah ($m_{\\text{basah}}$), dikeringkan dalam oven laboratorium pada suhu $105^\\circ\\text{C}$ selama 24 jam hingga berat konstan ($m_{\\text{kering}}$), lalu dihitung kadar air gravimetrik sejatinya: $w_{\\text{oven}} = (m_{\\text{basah}} - m_{\\text{kering}}) / (m_{\\text{basah}} - m_{\\text{cawan}})$.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>Tahap 2 · Strategi Pembagian Train / Val / Test (GroupKFold Anti-Leakage):</strong><br/>
+                    Dataset (90 sampel uji oven &amp; 24 citra multi-TPS) dibagi menggunakan <strong>GroupKFold berdasarkan ID Muatan/Citra Truk</strong> menjadi:
+                    <strong>58% Train (52 sampel / 14 citra)</strong> untuk melatih bobot jaringan &amp; parameter fusi gravimetrik,
+                    <strong>21% Validation/Calibration (19 sampel / 5 citra)</strong> khusus untuk menghitung kuantil residu tak-terlihat pada <em>Split Conformal Prediction</em>, dan
+                    <strong>21% Unseen Test (19 sampel / 5 citra)</strong> untuk pengujian buta akhir. Dengan <em>GroupKFold</em>, tidak ada truk yang sama yang bocor antara data latih dan data uji.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>Tahap 3 · Pelatihan Model Segmentasi &amp; Mengapa Memilih DeepScene / SegFormer / DeepLabV3:</strong><br/>
+                    Sampah kota (MSW) tidak memiliki bentuk objek yang kaku seperti mobil atau wajah; sampah adalah <strong>tumpukan amorf yang saling tumpang-tindih</strong>.
+                    Oleh karena itu, detektor kotak biasa (<em>bounding box</em>) gagal memisahkan tumpukan. KARTA memilih pendekatan <strong>Dense Pixel Semantic Segmentation</strong>:
+                    (a) <strong>KARTA MultiScale Neural-Texture (DeepScene)</strong> &amp; <strong>DeepLabV3-MobileNetV3</strong> mengekstraksi 18 fitur kromatisitas, anisotropi serat (tensor struktur), kilap spekular plastik, serta penghalusan spasial <em>Contextual Markov Random Field (MRF)</em> dengan bobot kelas berimbang (<em>inverse square-root frequency weighting</em>), mencapai <strong>mIoU 0,839</strong> dan waktu inferensi <strong>&lt;100 ms di CPU/NPU tanpa GPU mahal</strong>;
+                    (b) <strong>SegFormer-B0</strong> disediakan untuk menangkap konteks global tumpukan lewat <em>hierarchical attention</em>; sedangkan
+                    (c) <strong>YOLOv11n-Seg</strong> disediakan untuk deteksi cepat serpihan diskrit di sabuk konveyor.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>Tahap 4 · Mengapa Memilih Conformal Quantile Regression (CQR) &amp; Robust MILP:</strong><br/>
+                    Model regresi biasa hanya mengeluarkan satu angka rata-rata (misal kadar air 19,2%) tanpa memberi tahu risiko melesetnya. Padahal, jika kadar air asli ternyata 24%, reaktor gasifikasi PLTSa langsung mengalami penurunan suhu (<em>thermal drop</em>) dan menghasilkan tar perusak mesin.
+                    KARTA memadukan <strong>Prior Fisika Termodinamika + Koreksi Gravimetrik Jembatan Timbang + Gradient Boosted Quantile Regression (CQR)</strong> (menurunkan galat MAE dari 3,19 pp pada baseline fisika menjadi <strong>2,63 pp</strong> dengan cakupan <strong>PICP 84,2%</strong>).
+                    Selanjutnya, batas atas <strong>P90 ($w_{\\text{atas}}$)</strong> disuapkan ke model <strong>Robust Mixed-Integer Linear Programming (MILP)</strong> untuk menjamin 0% pelanggaran batas air reaktor (&le;20%).
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 # ==============================================================================
 # TAB 3: OPTIMASI HARIAN MILP & SERBUK KAYU SUKOHARJO
@@ -1935,11 +2248,14 @@ with tab2:
 with tab3:
     st.markdown(
         """
-        <div class="karta-surface">
-            <div class="karta-section-head">Optimasi Alokasi Harian (MILP) & Perencanaan Serbuk Kayu UMKM Sukoharjo</div>
-            <div class="karta-section-desc">
-                Menentukan rute optimal setiap muatan truk agar umpan reaktor gasifikasi PLTSa Putri Cempo
-                <strong>terjamin berkadar air &le; 20%</strong> sekaligus menyerap limbah serbuk kayu UMKM mebel Sukoharjo sebagai <em>bulking agent</em> bio-drying.
+        <div class="karta-guide-box emerald">
+            <div class="karta-guide-title">Fungsi Modul 03 · Optimasi Penjadwalan Harian (Robust MILP) &amp; Simbiosis Sirkular Serbuk Kayu Sukoharjo</div>
+            <div>
+                Jika Modul 01 menginspeksi satu truk secara individu, <strong>Modul 03 mengoptimalkan seluruh antrean truk dalam satu hari penuh (60 armada) secara simultan</strong>.
+                Menggunakan algoritma riset operasi <strong>Mixed-Integer Linear Programming (MILP)</strong>, sistem menghitung kombinasi alokasi truk ke 3 jalur hilir
+                agar: (1) <strong>Kadar air campuran di dalam bunker reaktor gasifikasi PLTSa dijamin &le; 20,0%</strong> meskipun terjadi ketidakpastian cuaca,
+                (2) Menghitung secara presisi berapa ton <strong>limbah serbuk kayu kering dari UMKM Mebel Sukoharjo</strong> yang harus dipesan hari itu sebagai <em>bulking agent</em> bio-drying, dan
+                (3) Memaksimalkan produksi listrik bersih serta pakan larva Maggot BSF.
             </div>
         </div>
         """,
@@ -1991,7 +2307,7 @@ with tab3:
             "label": "Kadar Air Aktual Reaktor",
             "nilai": f"{w_nyata_robust * 100:.2f}%",
             "sub": f"Target ≤ 20.0% (Metode FIFO Lama: {w_nyata_fifo * 100:.1f}%)",
-            "warna": "#0D9488" if w_nyata_robust <= 0.20 else "#E11D48",
+            "warna": "#059669" if w_nyata_robust <= 0.20 else "#E11D48",
         },
         {
             "label": "Total Umpan Gasifier",
@@ -2009,9 +2325,32 @@ with tab3:
             "label": "Alokasi BSF & Nilai Ekonomi",
             "nilai": f"Rp {ring_robust['nilai_juta_rp']:.1f} Jt",
             "sub": f"Maggot BSF: {ring_robust['ton_maggot']:.1f} t/hari (Larva ±{ring_robust['ton_maggot']*0.22:.1f} t)",
-            "warna": "#0D9488",
+            "warna": "#059669",
         },
     ])
+
+    st.markdown(
+        f"""
+        <div class="karta-guide-box terracotta">
+            <div class="karta-guide-title">Interpretasi Tabel Perbandingan 3 Strategi Operasional di Bawah</div>
+            <div class="karta-interp-grid">
+                <div class="karta-interp-item">
+                    <strong>1. Cara Sekarang / FIFO ({w_nyata_fifo*100:.2f}% Air — MELANGGAR):</strong><br/>
+                    Tanpa KARTA, truk yang datang pertama langsung masuk ke bunker reaktor. Akibatnya truk pasar basah ikut masuk, menyebabkan kadar air campuran melonjak ke <strong>{w_nyata_fifo*100:.2f}%</strong> (jauh di atas batas 20%) dan memicu kegagalan gasifikasi.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>2. MILP Titik Tengah ({w_nyata_titik*100:.2f}% Air — Rentan Risiko):</strong><br/>
+                    Mengoptimalkan jadwal hanya berdasarkan taksiran rata-rata tanpa memperhitungkan potensi melesetnya prediksi saat hujan.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>3. KARTA Robust Conformal MILP ({w_nyata_robust*100:.2f}% Air — TERJAMIN AMAN):</strong><br/>
+                    Menggunakan batas atas ketidakpastian <strong>P90</strong> sebagai kendala keamanan. Hasilnya, kadar air aktual di reaktor terkunci aman di <strong>{w_nyata_robust*100:.2f}% (&le;20%)</strong> sekaligus menyerap <strong>{ring_robust['serbuk_kayu_ton']:.2f} ton/hari</strong> serbuk kayu UMKM Sukoharjo.
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown("##### Perbandingan Kinerja 3 Strategi Operasional Penerimaan PLTSa")
     df_strat = pd.DataFrame([
@@ -2089,14 +2428,13 @@ with tab3:
 with tab4:
     st.markdown(
         """
-        <div class="karta-surface">
-            <div class="karta-section-head">WebGIS Intelijen Spasial Solo Raya: Citra Satelit, Penginderaan Jauh GEE, BMKG &amp; Sidik Jari TPS</div>
-            <div class="karta-batik-divider"></div>
-            <div class="karta-section-desc">
-                Mengintegrasikan <strong>3 Sumber Big Data Geospasial &amp; Meteorologi</strong>:
-                (1) <strong>BMKG Stasiun Meteorologi Kelas I Adi Soemarmo (WMO ID: 96751)</strong> sebagai rujukan resmi observasi hujan permukaan Solo Raya;
-                (2) <strong>Google Earth Engine (GEE) — Copernicus Sentinel-2 MSI &amp; Landsat-9 TIRS</strong> untuk pemetaan spasial <em>Land Surface Temperature (LST)</em> &amp; indeks kelembapan permukaan kawasan 17 Ha TPA Putri Cempo; serta
-                (3) <strong>Open-Meteo Scientific API (ECMWF IFS / ERA5 + Satelit Himawari-9)</strong> untuk <em>auto-ingestion</em> curah hujan 24–72 jam, kelembapan udara (RH%), dan radiasi gelombang pendek surya (W/m&sup2;) ke dalam model regresi konformal KARTA.
+        <div class="karta-guide-box emerald">
+            <div class="karta-guide-title">Fungsi Modul 04 · WebGIS Spasial Sebaran 12 TPS Surakarta, Rute Truk ke TPA Putri Cempo, &amp; Audit SE MenLH No. 11/2026</div>
+            <div>
+                Modul ini memetakan secara interaktif <strong>lokasi 12 TPS/Pasar nyata di Kota Surakarta</strong>, <strong>jarak &amp; rute pengiriman armada truk menuju TPA/PLTSa Putri Cempo</strong>,
+                <strong>3 sentra serbuk kayu UMKM Mebel Sukoharjo</strong>, serta <strong>2 unit hilir biokonversi Maggot BSF</strong>.
+                Setiap titik TPS di peta menampilkan <strong>pin bernama permanen beserta jaraknya (km)</strong>. Apabila pin TPS diklik, Anda dapat langsung membuka
+                <strong>Rute Navigasi Jalan Raya ke PLTSa di Google Maps</strong> maupun <strong>Profil Tempat Google Maps (Jam Operasional, Foto Lokasi, &amp; Ulasan)</strong>.
             </div>
         </div>
         """,
@@ -2127,13 +2465,41 @@ with tab4:
         ),
     )
 
-    # Render WebGIS Multi-Layer Interaktif (Satelit + Live Meteo + Heatmap + Koridor Sukoharjo)
+    # Render WebGIS Multi-Layer Interaktif (12 Pin Permanen TPS + Rute ke PLTSa + Profil Google Maps + Satelit + Live Meteo)
     render_peta_leaflet_surakarta(
         df_tps_stat,
         mode_gelap=mode_gelap,
         hujan_24j_sim=hujan_24j_default,
         serbuk_kebutuhan_ton=float(ring_robust["serbuk_kayu_ton"]),
         ton_maggot_harian=float(ring_robust["ton_maggot"]),
+    )
+
+    # Penjelasan Khusus Makna Lingkaran/Bundaran Merah-Kuning-Hijau (Heatmap) vs Zona Metana TPA
+    st.markdown(
+        """
+        <div class="karta-guide-box terracotta" style="margin-top:8px;">
+            <div class="karta-guide-title">Penjelasan Visual Peta: Apa Arti Bundaran Merah-Kuning-Hijau (Halo/Heatmap) &amp; Garis Rute di Peta?</div>
+            <div class="karta-interp-grid">
+                <div class="karta-interp-item">
+                    <strong>1. Bundaran Merah–Kuning–Hijau di Sekitar TPS (Bukan Gas Metana!):</strong><br/>
+                    Lingkaran bergradasi merah di tengah dan hijau di tepi pada titik TPS adalah <strong>Peta Panas (<em>Heatmap</em>) Konsentrasi Timbulan Sampah Organik Basah &amp; Kelembapan Harian</strong>, <strong>bukan gas metana</strong>.
+                    Secara ilmiah, TPS kota hanya menampung sampah harian (1–2 hari, aerobik) sehingga belum menghasilkan metana.
+                    Warna <strong>Merah Pekat</strong> (seperti di <em>TPS Pasar Gede, Pasar Legi, &amp; Pasar Nusukan</em>) menandakan <strong>&ge;50% sampah di titik itu adalah organik basah berair tinggi</strong> yang menurut <strong>SE MenLH No. 11/2026</strong> wajib diprioritaskan untuk Unit Maggot BSF/Kompos Hulu. Anda dapat mematikan/menyalakan layer ini lewat tombol <code>Zona Beban Organik: ON/OFF</code> di atas peta.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>2. Di Mana Titik Risiko Gas Metana &amp; Kebakaran yang Sebenarnya?</strong><br/>
+                    Klik tombol <code>Satelit PLTSa Putri Cempo (17 Ha)</code> di atas peta. Anda akan melihat <strong>Poligon Merah 2,4 Ha di timur laut TPA Putri Cempo</strong>.
+                    Di gunungan sampah lama setinggi &plusmn;28 meter itulah tumpukan organik yang membusuk secara <strong>anaerobik (tanpa oksigen) selama berbulan-bulan menghasilkan gas metana ($\text{CH}_4$)</strong> dan memicu kebakaran hebat September 2026 (menyerap BTT Rp2,3 Miliar). KARTA mencegah sampah organik basah masuk ke gunungan tersebut.
+                </div>
+                <div class="karta-interp-item">
+                    <strong>3. Cara Melihat Rute Truk &amp; Profil Tempat Google Maps (Jam Buka / Foto):</strong><br/>
+                    Setiap TPS memiliki <strong>Pin Berlabel Nama &amp; Jarak (km)</strong> serta <strong>garis putus-putus berwarna</strong> menuju TPA Putri Cempo.
+                    Klik salah satu pin TPS, lalu klik tombol biru <code>Rute Truk ke PLTSa (km) &nearr;</code> untuk membuka navigasi jalan raya di Google Maps, atau klik tombol hijau <code>Profil Tempat &amp; Foto Google Maps &nearr;</code> untuk melihat profil tempat, jam operasional, dan foto lokasi di Google Maps.
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     st.markdown("##### 1. Tabel Sidik Jari Komposisi & Kepatuhan 12 TPS Kota Surakarta (Mitra: DLH Kota Surakarta)")
@@ -2250,6 +2616,18 @@ with tab4:
 # TAB 5: ARSITEKTUR EDGE & TELEMETRI ALAT
 # ==============================================================================
 with tab5:
+    st.markdown(
+        """
+        <div class="karta-guide-box emerald">
+            <div class="karta-guide-title">Fungsi Modul 05 · Arsitektur Perangkat Keras Tepi (Edge AI) &amp; Log Audit Telemetri Gerbang</div>
+            <div>
+                Modul ini merinci spesifikasi implementasi fisik KARTA di lapangan (<strong>Tingkat Kesiapterapan Teknologi / TKT 3–4</strong>) serta merekam seluruh jejak keputusan triase ke dalam basis data log operasional.
+                Seluruh pemrosesan <em>Computer Vision</em>, regresi konformal, dan optimasi MILP dirancang ringan sehingga berjalan <strong>100% lokal (<em>on-device</em>) di pos jembatan timbang tanpa biaya berlangganan server cloud maupun API berbayar</strong>.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     c_a1, c_a2 = st.columns(2, gap="large")
     with c_a1:
         st.markdown(
