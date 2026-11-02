@@ -955,15 +955,21 @@ def render_peta_leaflet_surakarta(
         </div>
 
         <script>
-            // 1. Definisi Multi-Basemap (GIS Terang, Citra Satelit Esri World Imagery + Hybrid Labels, OSM, Dark)
-            var baseVoyager = L.tileLayer('https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+            // 1. Definisi Multi-Basemap Bebas API Key (Esri World Street, Esri Dark Canvas, & Esri Satelit Hibrida)
+            var baseVoyager = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
                 maxZoom: 19,
-                attribution: '&copy; OpenStreetMap &amp; CARTO Voyager'
+                attribution: '&copy; Esri &amp; OpenStreetMap'
             }});
-            var baseDark = L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+            var esriDarkBase = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
                 maxZoom: 19,
-                attribution: '&copy; OpenStreetMap &amp; CARTO Dark Matter'
+                attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap'
             }});
+            var esriDarkLabels = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+                maxZoom: 19,
+                opacity: 0.90
+            }});
+            var baseDark = L.layerGroup([esriDarkBase, esriDarkLabels]);
+
             var esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
                 maxZoom: 19,
                 attribution: 'Tiles &copy; Esri, Maxar, Earthstar Geographics, Sentinel-2'
@@ -1341,6 +1347,36 @@ with st.sidebar:
     mode_gelap = st.toggle("Mode Tampilan Gelap (Dark Mode)", value=False)
     tema = dapatkan_palet_tema(mode_gelap)
     suntikkan_css_web(tema)
+
+    # Injeksi Pembersih Chrome Streamlit Cloud (Hilangkan Fork & Badge Otomatis)
+    components.html(
+        """
+        <script>
+        function bersihkanChromeStreamlit() {
+            try {
+                var doc = window.parent.document;
+                var targetSelectors = [
+                    'header', '[data-testid="stHeader"]', '[data-testid="stToolbar"]',
+                    '[class*="viewerBadge"]', '[class*="manage-app"]', 'button[title*="Fork"]',
+                    '.stAppDeployButton', 'footer', '#MainMenu', '[data-testid="stDecoration"]'
+                ];
+                targetSelectors.forEach(function(sel) {
+                    var elems = doc.querySelectorAll(sel);
+                    for (var i = 0; i < elems.length; i++) {
+                        elems[i].style.setProperty('display', 'none', 'important');
+                        elems[i].style.setProperty('visibility', 'hidden', 'important');
+                    }
+                });
+            } catch(e) {}
+        }
+        bersihkanChromeStreamlit();
+        setTimeout(bersihkanChromeStreamlit, 800);
+        setTimeout(bersihkanChromeStreamlit, 2500);
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
 
     st.markdown("---")
     st.markdown("**1. Arsitektur Model Visi & Regresi**")
