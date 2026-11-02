@@ -207,20 +207,37 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
             color: {t['teks_utama']} !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }}
-        /* Sembunyikan Header Bawaan, Toolbar, Tombol Fork, dan Footer Streamlit Cloud */
+        /* Sembunyikan Menu/Footer Bawaan namun Pertahankan Tombol Buka-Tutup Sidebar (<< / >>) di Kiri Atas */
         #MainMenu, footer {{
             visibility: hidden !important;
             display: none !important;
         }}
         header[data-testid="stHeader"] {{
             background: transparent !important;
-            display: none !important;
-            height: 0px !important;
+            border-bottom: none !important;
+            pointer-events: none !important;
+        }}
+        header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"],
+        header[data-testid="stHeader"] [data-testid="collapsedControl"],
+        header[data-testid="stHeader"] [data-testid="stExpandSidebarButton"],
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"],
+        [data-testid="stExpandSidebarButton"],
+        button[kind="headerNoPadding"] {{
+            pointer-events: auto !important;
+            visibility: visible !important;
+            display: inline-flex !important;
+            background-color: {t['bg_card']} !important;
+            color: {t['aksen']} !important;
+            border: 1.5px solid {t['aksen']} !important;
+            border-radius: 10px !important;
+            box-shadow: {t['shadow']} !important;
         }}
         div[data-testid="stToolbar"],
         div[data-testid="stDecoration"],
         div[data-testid="stStatusWidget"],
         .stDeployButton,
+        .stAppDeployButton,
         [class*="viewerBadge"],
         [class*="manage-app"],
         button[title*="Fork"] {{
@@ -1506,7 +1523,7 @@ with st.sidebar:
     tema = dapatkan_palet_tema(mode_gelap)
     suntikkan_css_web(tema, mode_gelap=mode_gelap)
 
-    # Injeksi Pembersih Chrome Streamlit Cloud (Hilangkan Fork & Badge Otomatis)
+    # Injeksi Pembersih Chrome Streamlit Cloud (Hilangkan Fork & Toolbar Kanan, Pertahankan Tombol Buka-Tutup Sidebar Kiri)
     components.html(
         """
         <script>
@@ -1514,7 +1531,7 @@ with st.sidebar:
             try {
                 var doc = window.parent.document;
                 var targetSelectors = [
-                    'header', '[data-testid="stHeader"]', '[data-testid="stToolbar"]',
+                    '[data-testid="stToolbar"]', '[data-testid="stStatusWidget"]',
                     '[class*="viewerBadge"]', '[class*="manage-app"]', 'button[title*="Fork"]',
                     '.stAppDeployButton', 'footer', '#MainMenu', '[data-testid="stDecoration"]'
                 ];
