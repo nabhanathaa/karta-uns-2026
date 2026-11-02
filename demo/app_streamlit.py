@@ -45,6 +45,11 @@ st.set_page_config(
     page_title="KARTA v4 · Smart Gate PLTSa Putri Cempo & DLH Surakarta",
     layout="wide",
     initial_sidebar_state="expanded",
+    menu_items={
+        "Get Help": None,
+        "Report a bug": None,
+        "About": None,
+    },
 )
 
 LOG_PATH = AKAR / "demo" / "log_muatan.csv"
@@ -178,16 +183,29 @@ def suntikkan_css_web(t: dict[str, str]):
             color: {t['teks_utama']} !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }}
-        header[data-testid="stHeader"] {{
-            background-color: {t['bg_app']} !important;
-            border-bottom: 1px solid {t['border']} !important;
+        /* Sembunyikan Header Bawaan, Toolbar, Tombol Fork, dan Footer Streamlit Cloud */
+        #MainMenu, footer {{
+            visibility: hidden !important;
+            display: none !important;
         }}
-        header[data-testid="stHeader"] * {{
-            color: {t['teks_utama']} !important;
+        header[data-testid="stHeader"] {{
+            background: transparent !important;
+            display: none !important;
+            height: 0px !important;
+        }}
+        div[data-testid="stToolbar"],
+        div[data-testid="stDecoration"],
+        div[data-testid="stStatusWidget"],
+        .stDeployButton,
+        [class*="viewerBadge"],
+        [class*="manage-app"],
+        button[title*="Fork"] {{
+            visibility: hidden !important;
+            display: none !important;
         }}
         .block-container {{
-            padding-top: 2.0rem !important;
-            padding-bottom: 3rem !important;
+            padding-top: 1.1rem !important;
+            padding-bottom: 2.5rem !important;
             max-width: 1440px !important;
         }}
 
