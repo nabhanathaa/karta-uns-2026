@@ -1,0 +1,257 @@
+{
+  "info": {
+    "catatan": "SIMULASI - data sintetis, bukan data lapangan",
+    "n_muatan": 5400,
+    "mae_proporsi_kamera_pp": 3.17,
+    "kadar_air_asli_rata": 0.5
+  },
+  "E1": [
+    {
+      "n_uji_oven": 15,
+      "metode": "fisika",
+      "mae_pp_mean": 7.365,
+      "mae_pp_std": 0.0,
+      "cakupan80_mean": 0.778,
+      "cakupan80_std": 0.067,
+      "lebar_pp_mean": 22.924,
+      "lebar_pp_std": 3.579
+    },
+    {
+      "n_uji_oven": 15,
+      "metode": "koreksi_linear",
+      "mae_pp_mean": 5.068,
+      "mae_pp_std": 0.41,
+      "cakupan80_mean": 0.814,
+      "cakupan80_std": 0.098,
+      "lebar_pp_mean": 17.462,
+      "lebar_pp_std": 3.753
+    },
+    {
+      "n_uji_oven": 30,
+      "metode": "fisika",
+      "mae_pp_mean": 7.365,
+      "mae_pp_std": 0.0,
+      "cakupan80_mean": 0.757,
+      "cakupan80_std": 0.066,
+      "lebar_pp_mean": 21.748,
+      "lebar_pp_std": 3.199
+    },
+    {
+      "n_uji_oven": 30,
+      "metode": "gbm",
+      "mae_pp_mean": 5.978,
+      "mae_pp_std": 0.458,
+      "cakupan80_mean": 0.787,
+      "cakupan80_std": 0.083,
+      "lebar_pp_mean": 19.265,
+      "lebar_pp_std": 3.619
+    },
+    {
+      "n_uji_oven": 30,
+      "metode": "koreksi_linear",
+      "mae_pp_mean": 4.906,
+      "mae_pp_std": 0.231,
+      "cakupan80_mean": 0.794,
+      "cakupan80_std": 0.076,
+      "lebar_pp_mean": 15.881,
+      "lebar_pp_std": 3.001
+    },
+    {
+      "n_uji_oven": 60,
+      "metode": "fisika",
+      "mae_pp_mean": 7.365,
+      "mae_pp_std": 0.0,
+      "cakupan80_mean": 0.763,
+      "cakupan80_std": 0.046,
+      "lebar_pp_mean": 21.85,
+      "lebar_pp_std": 2.125
+    },
+    {
+      "n_uji_oven": 60,
+      "metode": "gbm",
+      "mae_pp_mean": 5.265,
+      "mae_pp_std": 0.31,
+      "cakupan80_mean": 0.824,
+      "cakupan80_std": 0.042,
+      "lebar_pp_mean": 18.015,
+      "lebar_pp_std": 1.924
+    },
+    {
+      "n_uji_oven": 60,
+      "metode": "koreksi_linear",
+      "mae_pp_mean": 4.725,
+      "mae_pp_std": 0.215,
+      "cakupan80_mean": 0.819,
+      "cakupan80_std": 0.048,
+      "lebar_pp_mean": 15.771,
+      "lebar_pp_std": 1.369
+    },
+    {
+      "n_uji_oven": 120,
+      "metode": "fisika",
+      "mae_pp_mean": 7.365,
+      "mae_pp_std": 0.0,
+      "cakupan80_mean": 0.749,
+      "cakupan80_std": 0.033,
+      "lebar_pp_mean": 21.141,
+      "lebar_pp_std": 1.363
+    },
+    {
+      "n_uji_oven": 120,
+      "metode": "gbm",
+      "mae_pp_mean": 4.784,
+      "mae_pp_std": 0.166,
+      "cakupan80_mean": 0.825,
+      "cakupan80_std": 0.035,
+      "lebar_pp_mean": 16.808,
+      "lebar_pp_std": 1.42
+    },
+    {
+      "n_uji_oven": 120,
+      "metode": "koreksi_linear",
+      "mae_pp_mean": 4.553,
+      "mae_pp_std": 0.096,
+      "cakupan80_mean": 0.819,
+      "cakupan80_std": 0.032,
+      "lebar_pp_mean": 15.13,
+      "lebar_pp_std": 1.233
+    },
+    {
+      "n_uji_oven": 240,
+      "metode": "fisika",
+      "mae_pp_mean": 7.365,
+      "mae_pp_std": 0.0,
+      "cakupan80_mean": 0.756,
+      "cakupan80_std": 0.025,
+      "lebar_pp_mean": 21.356,
+      "lebar_pp_std": 0.998
+    },
+    {
+      "n_uji_oven": 240,
+      "metode": "gbm",
+      "mae_pp_mean": 4.493,
+      "mae_pp_std": 0.103,
+      "cakupan80_mean": 0.819,
+      "cakupan80_std": 0.027,
+      "lebar_pp_mean": 15.525,
+      "lebar_pp_std": 0.866
+    },
+    {
+      "n_uji_oven": 240,
+      "metode": "koreksi_linear",
+      "mae_pp_mean": 4.494,
+      "mae_pp_std": 0.052,
+      "cakupan80_mean": 0.808,
+      "cakupan80_std": 0.031,
+      "lebar_pp_mean": 14.502,
+      "lebar_pp_std": 0.979
+    }
+  ],
+  "E2": {
+    "mae_acak_mean": 4.901899410531353,
+    "mae_acak_sd": 0.22312978805827624,
+    "mae_aktif_mean": 4.867580954291629,
+    "mae_aktif_sd": 0.2987452285767042,
+    "aktif_lebih_baik_pada": "9 dari 20 ulangan"
+  },
+  "E3": [
+    {
+      "robust": "robust",
+      "hari_melanggar_20pct": 7,
+      "w_nyata_maks": 0.209,
+      "ton_umpan_rata": 65.412,
+      "ton_umpan_segar_rata": 5.412,
+      "ton_maggot_rata": 0.082,
+      "nilai_juta_rp_rata": 70.469
+    },
+    {
+      "robust": "robust_buffer",
+      "hari_melanggar_20pct": 0,
+      "w_nyata_maks": 0.19,
+      "ton_umpan_rata": 60.846,
+      "ton_umpan_segar_rata": 0.846,
+      "ton_maggot_rata": 0.082,
+      "nilai_juta_rp_rata": 65.379
+    },
+    {
+      "robust": "titik",
+      "hari_melanggar_20pct": 13,
+      "w_nyata_maks": 0.224,
+      "ton_umpan_rata": 69.968,
+      "ton_umpan_segar_rata": 9.968,
+      "ton_maggot_rata": 0.082,
+      "nilai_juta_rp_rata": 75.538
+    }
+  ],
+  "E4": {
+    "gj_per_hari_karta": 1496.1,
+    "gj_per_hari_urutan_datang": 1332.2,
+    "kenaikan_persen": 12.3,
+    "hari_karta_lebih_tinggi": "29 dari 30",
+    "ton_bd_rata_karta": 179.9,
+    "ton_bd_rata_urutan_datang": 176.7
+  },
+  "E5": [
+    {
+      "konsentrasi": 15,
+      "mae_proporsi_pp": 6.04,
+      "mae_air_pp": 6.36,
+      "sd_mae_air": 0.49,
+      "cakupan80": 0.84
+    },
+    {
+      "konsentrasi": 30,
+      "mae_proporsi_pp": 4.46,
+      "mae_air_pp": 5.68,
+      "sd_mae_air": 0.42,
+      "cakupan80": 0.78
+    },
+    {
+      "konsentrasi": 60,
+      "mae_proporsi_pp": 3.17,
+      "mae_air_pp": 4.95,
+      "sd_mae_air": 0.25,
+      "cakupan80": 0.84
+    },
+    {
+      "konsentrasi": 120,
+      "mae_proporsi_pp": 2.23,
+      "mae_air_pp": 4.08,
+      "sd_mae_air": 0.22,
+      "cakupan80": 0.85
+    },
+    {
+      "konsentrasi": 400,
+      "mae_proporsi_pp": 1.23,
+      "mae_air_pp": 3.78,
+      "sd_mae_air": 0.4,
+      "cakupan80": 0.83
+    },
+    {
+      "konsentrasi": 5000,
+      "mae_proporsi_pp": 0.35,
+      "mae_air_pp": 3.4,
+      "sd_mae_air": 0.19,
+      "cakupan80": 0.85
+    }
+  ],
+  "E6": {
+    "n_hari_uji": 67,
+    "mae_model_pp": 0.9683853887049163,
+    "mae_persistensi_pp": 2.56275939196247,
+    "mae_rata7_pp": 1.8487320837962091,
+    "cakupan80": 0.8387096774193549
+  },
+  "contoh_ringkasan_hari": {
+    "status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "ton_umpan_langsung": 8.689612758852565,
+    "ton_stok_biodrying_diumpankan": 60.0,
+    "ton_biodrying_baru": 179.92963912443022,
+    "ton_maggot": 0.0,
+    "ton_residu": 193.27747087744146,
+    "serbuk_kayu_ton": 19.307721781299982,
+    "w_campuran_umpan_taksiran": 0.177421332638841,
+    "nilai_juta_rp": 84.41987384408903
+  },
+  "detik": 53.0
+}

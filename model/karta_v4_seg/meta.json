@@ -1,0 +1,317 @@
+{
+  "nama_model": "KARTA-v4 MultiScale Neural-Texture Segmenter",
+  "arsitektur": "18-Feature Chromatic-Texture Extractor + 64-Unit Nonlinear Projection + Class-Balanced Softmax",
+  "kelas": [
+    "organik_basah",
+    "plastik",
+    "kertas_kardus",
+    "tekstil",
+    "kayu_ranting",
+    "inert",
+    "latar"
+  ],
+  "langkah_grid": 8,
+  "tanggal_latih": "2026-11-02",
+  "metrik_split": {
+    "train": {
+      "mIoU": 0.8768,
+      "macro_f1": 0.9338,
+      "weighted_f1": 0.9525,
+      "macro_precision": 0.9321,
+      "macro_recall": 0.9357,
+      "cohen_kappa": 0.9374,
+      "pixel_accuracy": 0.9525,
+      "mae_proporsi_pp": 0.25,
+      "rmse_proporsi_pp": 0.28,
+      "cosine_similarity_proporsi": 0.9999,
+      "nama_kelas": [
+        "organik_basah",
+        "plastik",
+        "kertas_kardus",
+        "tekstil",
+        "kayu_ranting",
+        "inert",
+        "latar"
+      ],
+      "per_kelas": [
+        {
+          "kelas": "organik_basah",
+          "iou": 0.9022,
+          "precision": 0.9519,
+          "recall": 0.9454,
+          "f1_score": 0.9486,
+          "proporsi_gt_pct": 36.35,
+          "proporsi_pred_pct": 36.08,
+          "selisih_prop_pp": -0.27,
+          "piksel_gt": 789697
+        },
+        {
+          "kelas": "plastik",
+          "iou": 0.8635,
+          "precision": 0.9184,
+          "recall": 0.9352,
+          "f1_score": 0.9267,
+          "proporsi_gt_pct": 21.1,
+          "proporsi_pred_pct": 21.47,
+          "selisih_prop_pp": 0.37,
+          "piksel_gt": 458243
+        },
+        {
+          "kelas": "kertas_kardus",
+          "iou": 0.8547,
+          "precision": 0.9319,
+          "recall": 0.9116,
+          "f1_score": 0.9217,
+          "proporsi_gt_pct": 18.4,
+          "proporsi_pred_pct": 17.99,
+          "selisih_prop_pp": -0.41,
+          "piksel_gt": 399684
+        },
+        {
+          "kelas": "tekstil",
+          "iou": 0.8562,
+          "precision": 0.9107,
+          "recall": 0.9347,
+          "f1_score": 0.9225,
+          "proporsi_gt_pct": 4.82,
+          "proporsi_pred_pct": 4.94,
+          "selisih_prop_pp": 0.12,
+          "piksel_gt": 104633
+        },
+        {
+          "kelas": "kayu_ranting",
+          "iou": 0.8562,
+          "precision": 0.9128,
+          "recall": 0.9324,
+          "f1_score": 0.9225,
+          "proporsi_gt_pct": 12.14,
+          "proporsi_pred_pct": 12.39,
+          "selisih_prop_pp": 0.25,
+          "piksel_gt": 263639
+        },
+        {
+          "kelas": "inert",
+          "iou": 0.8359,
+          "precision": 0.9146,
+          "recall": 0.9067,
+          "f1_score": 0.9106,
+          "proporsi_gt_pct": 7.2,
+          "proporsi_pred_pct": 7.13,
+          "selisih_prop_pp": -0.07,
+          "piksel_gt": 156347
+        },
+        {
+          "kelas": "latar",
+          "iou": 0.9689,
+          "precision": 0.9847,
+          "recall": 0.9837,
+          "f1_score": 0.9842,
+          "proporsi_gt_pct": 0.0,
+          "proporsi_pred_pct": 0.0,
+          "selisih_prop_pp": 0.0,
+          "piksel_gt": 1411757
+        }
+      ]
+    },
+    "val": {
+      "mIoU": 0.8729,
+      "macro_f1": 0.9315,
+      "weighted_f1": 0.9522,
+      "macro_precision": 0.9324,
+      "macro_recall": 0.9307,
+      "cohen_kappa": 0.9366,
+      "pixel_accuracy": 0.9522,
+      "mae_proporsi_pp": 0.2,
+      "rmse_proporsi_pp": 0.26,
+      "cosine_similarity_proporsi": 0.9999,
+      "nama_kelas": [
+        "organik_basah",
+        "plastik",
+        "kertas_kardus",
+        "tekstil",
+        "kayu_ranting",
+        "inert",
+        "latar"
+      ],
+      "per_kelas": [
+        {
+          "kelas": "organik_basah",
+          "iou": 0.8968,
+          "precision": 0.9458,
+          "recall": 0.9453,
+          "f1_score": 0.9456,
+          "proporsi_gt_pct": 34.53,
+          "proporsi_pred_pct": 34.57,
+          "selisih_prop_pp": 0.04,
+          "piksel_gt": 267456
+        },
+        {
+          "kelas": "plastik",
+          "iou": 0.8581,
+          "precision": 0.9196,
+          "recall": 0.9277,
+          "f1_score": 0.9236,
+          "proporsi_gt_pct": 24.07,
+          "proporsi_pred_pct": 24.32,
+          "selisih_prop_pp": 0.25,
+          "piksel_gt": 186404
+        },
+        {
+          "kelas": "kertas_kardus",
+          "iou": 0.8647,
+          "precision": 0.9388,
+          "recall": 0.9164,
+          "f1_score": 0.9274,
+          "proporsi_gt_pct": 22.37,
+          "proporsi_pred_pct": 21.87,
+          "selisih_prop_pp": -0.5,
+          "piksel_gt": 173227
+        },
+        {
+          "kelas": "tekstil",
+          "iou": 0.8047,
+          "precision": 0.894,
+          "recall": 0.8896,
+          "f1_score": 0.8918,
+          "proporsi_gt_pct": 2.18,
+          "proporsi_pred_pct": 2.18,
+          "selisih_prop_pp": -0.01,
+          "piksel_gt": 16916
+        },
+        {
+          "kelas": "kayu_ranting",
+          "iou": 0.8699,
+          "precision": 0.9199,
+          "recall": 0.9412,
+          "f1_score": 0.9304,
+          "proporsi_gt_pct": 11.64,
+          "proporsi_pred_pct": 11.93,
+          "selisih_prop_pp": 0.29,
+          "piksel_gt": 90138
+        },
+        {
+          "kelas": "inert",
+          "iou": 0.8493,
+          "precision": 0.9266,
+          "recall": 0.9106,
+          "f1_score": 0.9185,
+          "proporsi_gt_pct": 5.21,
+          "proporsi_pred_pct": 5.13,
+          "selisih_prop_pp": -0.08,
+          "piksel_gt": 40381
+        },
+        {
+          "kelas": "latar",
+          "iou": 0.967,
+          "precision": 0.9819,
+          "recall": 0.9845,
+          "f1_score": 0.9832,
+          "proporsi_gt_pct": 0.0,
+          "proporsi_pred_pct": 0.0,
+          "selisih_prop_pp": 0.0,
+          "piksel_gt": 505478
+        }
+      ]
+    },
+    "test": {
+      "mIoU": 0.8561,
+      "macro_f1": 0.9215,
+      "weighted_f1": 0.9506,
+      "macro_precision": 0.9191,
+      "macro_recall": 0.924,
+      "cohen_kappa": 0.9333,
+      "pixel_accuracy": 0.9506,
+      "mae_proporsi_pp": 0.21,
+      "rmse_proporsi_pp": 0.26,
+      "cosine_similarity_proporsi": 0.9999,
+      "nama_kelas": [
+        "organik_basah",
+        "plastik",
+        "kertas_kardus",
+        "tekstil",
+        "kayu_ranting",
+        "inert",
+        "latar"
+      ],
+      "per_kelas": [
+        {
+          "kelas": "organik_basah",
+          "iou": 0.8882,
+          "precision": 0.9425,
+          "recall": 0.9391,
+          "f1_score": 0.9408,
+          "proporsi_gt_pct": 32.36,
+          "proporsi_pred_pct": 32.25,
+          "selisih_prop_pp": -0.11,
+          "piksel_gt": 248847
+        },
+        {
+          "kelas": "plastik",
+          "iou": 0.8842,
+          "precision": 0.9346,
+          "recall": 0.9425,
+          "f1_score": 0.9385,
+          "proporsi_gt_pct": 37.09,
+          "proporsi_pred_pct": 37.41,
+          "selisih_prop_pp": 0.32,
+          "piksel_gt": 285253
+        },
+        {
+          "kelas": "kertas_kardus",
+          "iou": 0.8298,
+          "precision": 0.9209,
+          "recall": 0.8935,
+          "f1_score": 0.907,
+          "proporsi_gt_pct": 17.36,
+          "proporsi_pred_pct": 16.85,
+          "selisih_prop_pp": -0.51,
+          "piksel_gt": 133513
+        },
+        {
+          "kelas": "tekstil",
+          "iou": 0.8184,
+          "precision": 0.889,
+          "recall": 0.9115,
+          "f1_score": 0.9001,
+          "proporsi_gt_pct": 4.75,
+          "proporsi_pred_pct": 4.87,
+          "selisih_prop_pp": 0.12,
+          "piksel_gt": 36517
+        },
+        {
+          "kelas": "kayu_ranting",
+          "iou": 0.8009,
+          "precision": 0.8778,
+          "recall": 0.9013,
+          "f1_score": 0.8894,
+          "proporsi_gt_pct": 5.16,
+          "proporsi_pred_pct": 5.3,
+          "selisih_prop_pp": 0.14,
+          "piksel_gt": 39704
+        },
+        {
+          "kelas": "inert",
+          "iou": 0.8011,
+          "precision": 0.8842,
+          "recall": 0.895,
+          "f1_score": 0.8896,
+          "proporsi_gt_pct": 3.28,
+          "proporsi_pred_pct": 3.32,
+          "selisih_prop_pp": 0.04,
+          "piksel_gt": 25227
+        },
+        {
+          "kelas": "latar",
+          "iou": 0.9702,
+          "precision": 0.9847,
+          "recall": 0.9851,
+          "f1_score": 0.9849,
+          "proporsi_gt_pct": 0.0,
+          "proporsi_pred_pct": 0.0,
+          "selisih_prop_pp": 0.0,
+          "piksel_gt": 510939
+        }
+      ]
+    }
+  }
+}

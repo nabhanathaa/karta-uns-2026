@@ -1,0 +1,126 @@
+{
+  "visi_test": {
+    "karta_v4": {
+      "mIoU": 0.8561,
+      "macro_f1": 0.9215,
+      "weighted_f1": 0.9506,
+      "cohen_kappa": 0.9333,
+      "pixel_accuracy": 0.9506,
+      "mae_proporsi_pp": 0.21,
+      "rmse_proporsi_pp": 0.26,
+      "latency_ms": 108.27
+    },
+    "deeplabv3": {
+      "mIoU": 0.8735,
+      "macro_f1": 0.9315,
+      "weighted_f1": 0.9585,
+      "cohen_kappa": 0.9439,
+      "pixel_accuracy": 0.9584,
+      "mae_proporsi_pp": 0.28,
+      "rmse_proporsi_pp": 0.32,
+      "latency_ms": 114.07
+    },
+    "demo": {
+      "mIoU": 0.2931,
+      "macro_f1": 0.3488,
+      "weighted_f1": 0.4172,
+      "cohen_kappa": 0.409,
+      "pixel_accuracy": 0.4904,
+      "mae_proporsi_pp": 13.07,
+      "rmse_proporsi_pp": 16.2,
+      "latency_ms": 96.95
+    }
+  },
+  "regresi_kadar_air_test": {
+    "fisika": {
+      "n_sampel": 19,
+      "mae_pp": 3.69,
+      "rmse_pp": 4.82,
+      "median_ae_pp": 3.27,
+      "r2_score": 0.8646,
+      "pearson_r": 0.9738,
+      "within_5pp_pct": 73.7,
+      "picp_coverage": 0.7895,
+      "target_coverage": 0.8,
+      "mpiw_lebar_pp": 12.47,
+      "winkler_score_pp": 17.21
+    },
+    "koreksi_linear": {
+      "n_sampel": 19,
+      "mae_pp": 2.35,
+      "rmse_pp": 3.34,
+      "median_ae_pp": 1.66,
+      "r2_score": 0.9351,
+      "pearson_r": 0.9759,
+      "within_5pp_pct": 94.7,
+      "picp_coverage": 0.9474,
+      "target_coverage": 0.8,
+      "mpiw_lebar_pp": 14.77,
+      "winkler_score_pp": 19.32
+    },
+    "gbm": {
+      "n_sampel": 19,
+      "mae_pp": 2.3,
+      "rmse_pp": 3.34,
+      "median_ae_pp": 1.7,
+      "r2_score": 0.9349,
+      "pearson_r": 0.9754,
+      "within_5pp_pct": 94.7,
+      "picp_coverage": 0.7368,
+      "target_coverage": 0.8,
+      "mpiw_lebar_pp": 6.49,
+      "winkler_score_pp": 13.7
+    }
+  },
+  "triase_test": {
+    "fisika": {
+      "accuracy": 0.9474,
+      "macro_f1": 0.6552,
+      "weighted_f1": 0.922,
+      "cohen_kappa": 0.8593,
+      "label_rute": [
+        "U",
+        "B",
+        "M",
+        "R"
+      ]
+    },
+    "koreksi_linear": {
+      "accuracy": 0.9474,
+      "macro_f1": 0.6552,
+      "weighted_f1": 0.922,
+      "cohen_kappa": 0.8593,
+      "label_rute": [
+        "U",
+        "B",
+        "M",
+        "R"
+      ]
+    },
+    "gbm": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "cohen_kappa": 1.0,
+      "label_rute": [
+        "U",
+        "B",
+        "M",
+        "R"
+      ]
+    }
+  },
+  "optimasi_harian": {
+    "status": "Optimal (KARTA Built-in Priority MILP Solver)",
+    "ton_umpan_langsung": 21.54,
+    "ton_stok_biodrying_diumpankan": 65.0,
+    "ton_biodrying_baru": 209.95,
+    "ton_maggot": 33.76,
+    "ton_residu": 21.2,
+    "serbuk_kayu_ton": 26.71764731515102,
+    "w_campuran_umpan_taksiran": 0.1874900339890096,
+    "nilai_juta_rp": 196.67125507964812,
+    "w_campuran_aktual_oven": 0.1875
+  },
+  "waktu_eksekusi_detik": 3.26
+}
