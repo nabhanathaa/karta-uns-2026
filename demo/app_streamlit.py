@@ -1533,6 +1533,73 @@ def muat_ekosistem_karta(jenis_visi: str, metode_air: str, port_serial: str):
     return model_visi, model_air, konveyor, df_bench
 
 
+@st.cache_data(show_spinner="Menghitung evaluasi segmentasi pada data uji...", max_entries=1)
+def hitung_evaluasi_visi():
+    """Evaluasi 3 model segmentasi pada citra uji. Dihitung SEKALI lalu di-cache agar memori dan CPU server hemat."""
+    df_b = pd.read_csv(FOLDER_BENCHMARK / "uji_oven_surakarta.csv")
+    df_citra = df_b[df_b["split"] == "test"].drop_duplicates(subset=["foto"]).reset_index(drop=True)
+    model_set = {"v4": muat_model("karta_v4"), "dl": muat_model("deeplabv3"), "hsv": muat_model("demo")}
+    pred = {k: [] for k in model_set}
+    gts = []
+    for _, r in df_citra.iterrows():
+        bgr_t = np.array(Image.open(FOLDER_BENCHMARK / "images" / r["foto"]).convert("RGB"), dtype=np.uint8)[:, :, ::-1]
+        gts.append(np.array(Image.open(FOLDER_BENCHMARK / "masks" / r["foto"]), dtype=np.uint8))
+        for k, m in model_set.items():
+            pred[k].append(m(bgr_t).peta_kelas)
+    g = np.stack(gts)
+    return tuple(evaluasi_segmentasi_piksel(np.stack(pred[k]), g) for k in ("v4", "dl", "hsv"))
+
+
+@st.cache_data(show_spinner="Menghitung evaluasi regresi kadar air...", max_entries=3)
+def hitung_evaluasi_regresi(metode_aktif: str):
+    """Evaluasi 3 metode kadar air + triase. Di-cache per metode aktif."""
+    df_b = pd.read_csv(FOLDER_BENCHMARK / "uji_oven_surakarta.csv")
+    tr = df_b[df_b["split"] == "train"].reset_index(drop=True)
+    te = df_b[df_b["split"] == "test"].reset_index(drop=True)
+    hasil, preds = {}, {}
+    for m_nama in ["fisika", "koreksi_linear", "gbm"]:
+        pr = ModelKadarAir(m_nama, alpha_interval=0.20).fit(tr, tr["w_oven"]).predict(te)
+        preds[m_nama] = pr
+        hasil[m_nama] = evaluasi_regresi_kadar_air(
+            te["w_oven"].to_numpy(), pr["w_hat"].to_numpy(), pr["w_bawah"].to_numpy(), pr["w_atas"].to_numpy(), alpha=0.20,
+        )
+    pa = preds[metode_aktif]
+    rute_pred = [
+        rute_satu_muatan(
+            float(pa.loc[i, "w_hat"]), float(pa.loc[i, "w_atas"]),
+            float(te.loc[i, "plastik_massa"]), float(te.loc[i, "organik_massa"]), float(te.loc[i, "massa_gt_inert"]),
+        )[0]
+        for i in te.index
+    ]
+    return hasil, preds, evaluasi_keputusan_triase(rute_pred, te["rute_gt"].tolist())
+
+
+@st.cache_data(show_spinner="Menjalankan optimasi MILP harian...", max_entries=8)
+def hitung_optimasi_harian(metode_aktif: str, kap_gas: float, kap_bd: float, kap_mag: float, stok_serbuk: float):
+    """Optimasi MILP (robust & titik tengah) untuk 60 truk. Di-cache per kombinasi parameter."""
+    df_b = pd.read_csv(FOLDER_BENCHMARK / "uji_oven_surakarta.csv")
+    tr = df_b[df_b["split"] == "train"].reset_index(drop=True)
+    model_a = ModelKadarAir(metode=metode_aktif, alpha_interval=0.20).fit(tr, tr["w_oven"])
+    df_ant = df_b.iloc[:60].copy().reset_index(drop=True)
+    pa = model_a.predict(df_ant)
+    for kol_p in ["w_hat", "w_bawah", "w_atas", "lhv_hat", "lhv_bawah", "lhv_atas"]:
+        df_ant[kol_p] = pa[kol_p].to_numpy()
+    p_rob = Parameter(kapasitas_gasifier_ton=kap_gas, kapasitas_biodrying_ton=kap_bd, kapasitas_maggot_ton=kap_mag,
+                      stok_serbuk_ton=stok_serbuk, pakai_batas_atas=True, w_maks_umpan=0.195)
+    p_tit = Parameter(kapasitas_gasifier_ton=kap_gas, kapasitas_biodrying_ton=kap_bd, kapasitas_maggot_ton=kap_mag,
+                      stok_serbuk_ton=stok_serbuk, pakai_batas_atas=False, w_maks_umpan=0.20)
+    rc_r, ring_r = rencana_harian(df_ant, p_rob)
+    rc_t, ring_t = rencana_harian(df_ant, p_tit)
+    w_r = w_campuran_nyata(rc_r, ring_r, p_rob, kolom_w_asli="w_oven")
+    w_t = w_campuran_nyata(rc_t, ring_t, p_tit, kolom_w_asli="w_oven")
+    fifo = df_ant.iloc[:12]
+    w_f = float(
+        (fifo["ton"] @ fifo["w_oven"] + p_rob.stok_biodrying_siap_ton * p_rob.w_biodrying_keluar)
+        / (fifo["ton"].sum() + p_rob.stok_biodrying_siap_ton)
+    )
+    return rc_r, ring_r, rc_t, ring_t, p_rob, df_ant, w_r, w_t, w_f, fifo
+
+
 # ------------------------------------------------------------------ State Sinkronisasi Pengaturan (Sidebar Kiri & Panel Atas)
 pilihan_visi_map = {
     "KARTA MultiScale Neural-Texture (DeepScene)": "karta_v4",
@@ -2189,54 +2256,15 @@ with tab2:
         unsafe_allow_html=True,
     )
 
-    df_test_citra = df_bench[df_bench["split"] == "test"].drop_duplicates(subset=["foto"]).reset_index(drop=True)
-    model_hsv = muat_model("demo")
-    model_v4 = muat_model("karta_v4")
-    model_dl = muat_model("deeplabv3")
-
-    preds_v4, preds_dl, preds_hsv, gts_all = [], [], [], []
-    for _, r in df_test_citra.iterrows():
-        bgr_t = np.array(Image.open(FOLDER_BENCHMARK / "images" / r["foto"]).convert("RGB"), dtype=np.uint8)[:, :, ::-1]
-        msk_t = np.array(Image.open(FOLDER_BENCHMARK / "masks" / r["foto"]), dtype=np.uint8)
-        preds_v4.append(model_v4(bgr_t).peta_kelas)
-        preds_dl.append(model_dl(bgr_t).peta_kelas)
-        preds_hsv.append(model_hsv(bgr_t).peta_kelas)
-        gts_all.append(msk_t)
-
-    ev_v4 = evaluasi_segmentasi_piksel(np.stack(preds_v4), np.stack(gts_all))
-    ev_dl = evaluasi_segmentasi_piksel(np.stack(preds_dl), np.stack(gts_all))
-    ev_hsv = evaluasi_segmentasi_piksel(np.stack(preds_hsv), np.stack(gts_all))
-
     df_tr = df_bench[df_bench["split"] == "train"].reset_index(drop=True)
     df_va = df_bench[df_bench["split"] == "val"].reset_index(drop=True)
     df_te = df_bench[df_bench["split"] == "test"].reset_index(drop=True)
 
-    hasil_reg = {}
-    pred_te_map = {}
-    for m_nama in ["fisika", "koreksi_linear", "gbm"]:
-        mod_m = ModelKadarAir(m_nama, alpha_interval=0.20).fit(df_tr, df_tr["w_oven"])
-        pr_te = mod_m.predict(df_te)
-        pred_te_map[m_nama] = pr_te
-        hasil_reg[m_nama] = evaluasi_regresi_kadar_air(
-            df_te["w_oven"].to_numpy(),
-            pr_te["w_hat"].to_numpy(),
-            pr_te["w_bawah"].to_numpy(),
-            pr_te["w_atas"].to_numpy(),
-            alpha=0.20,
-        )
+    # Perhitungan berat dijalankan sekali lalu disimpan di cache (tidak diulang pada setiap interaksi pengguna)
+    ev_v4, ev_dl, ev_hsv = hitung_evaluasi_visi()
+    hasil_reg, pred_te_map, ev_triase = hitung_evaluasi_regresi(metode_air)
 
     pr_aktif = pred_te_map[metode_air]
-    rute_pred_te = [
-        rute_satu_muatan(
-            float(pr_aktif.loc[i, "w_hat"]),
-            float(pr_aktif.loc[i, "w_atas"]),
-            float(df_te.loc[i, "plastik_massa"]),
-            float(df_te.loc[i, "organik_massa"]),
-            float(df_te.loc[i, "massa_gt_inert"]),
-        )[0]
-        for i in df_te.index
-    ]
-    ev_triase = evaluasi_keputusan_triase(rute_pred_te, df_te["rute_gt"].tolist())
     ev_reg_aktif = hasil_reg[metode_air]
 
     render_kpi_grid([
@@ -2462,37 +2490,10 @@ with tab3:
     kap_mag = c_p3.slider("Kapasitas Unit Maggot BSF Kawasan (Ton/Hari)", 10.0, 80.0, 35.0, 5.0)
     stok_serbuk = c_p4.slider("Stok Serbuk Kayu UMKM Sukoharjo (Ton/Hari)", 10.0, 60.0, 35.0, 2.5)
 
-    df_antrean = df_bench.iloc[:60].copy().reset_index(drop=True)
-    pred_antrean = air.predict(df_antrean)
-    for kol_p in ["w_hat", "w_bawah", "w_atas", "lhv_hat", "lhv_bawah", "lhv_atas"]:
-        df_antrean[kol_p] = pred_antrean[kol_p].to_numpy()
-
-    par_robust = Parameter(
-        kapasitas_gasifier_ton=kap_gas,
-        kapasitas_biodrying_ton=kap_bd,
-        kapasitas_maggot_ton=kap_mag,
-        stok_serbuk_ton=stok_serbuk,
-        pakai_batas_atas=True,
-        w_maks_umpan=0.195,
-    )
-    par_titik = Parameter(
-        kapasitas_gasifier_ton=kap_gas,
-        kapasitas_biodrying_ton=kap_bd,
-        kapasitas_maggot_ton=kap_mag,
-        stok_serbuk_ton=stok_serbuk,
-        pakai_batas_atas=False,
-        w_maks_umpan=0.20,
-    )
-
-    rc_robust, ring_robust = rencana_harian(df_antrean, par_robust)
-    rc_titik, ring_titik = rencana_harian(df_antrean, par_titik)
-    w_nyata_robust = w_campuran_nyata(rc_robust, ring_robust, par_robust, kolom_w_asli="w_oven")
-    w_nyata_titik = w_campuran_nyata(rc_titik, ring_titik, par_titik, kolom_w_asli="w_oven")
-
-    fifo_u = df_antrean.iloc[:12]
-    w_nyata_fifo = float(
-        (fifo_u["ton"] @ fifo_u["w_oven"] + par_robust.stok_biodrying_siap_ton * par_robust.w_biodrying_keluar)
-        / (fifo_u["ton"].sum() + par_robust.stok_biodrying_siap_ton)
+    # Optimasi MILP dijalankan sekali per kombinasi parameter lalu disimpan di cache
+    (rc_robust, ring_robust, rc_titik, ring_titik, par_robust, df_antrean,
+     w_nyata_robust, w_nyata_titik, w_nyata_fifo, fifo_u) = hitung_optimasi_harian(
+        metode_air, kap_gas, kap_bd, kap_mag, stok_serbuk
     )
 
     tot_umpan_gas = ring_robust["ton_umpan_langsung"] + ring_robust["ton_stok_biodrying_diumpankan"]

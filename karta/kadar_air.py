@@ -194,7 +194,7 @@ class ModelKadarAir:
             par = dict(n_estimators=300, learning_rate=0.03, num_leaves=7,
                        min_child_samples=max(5, len(y) // 15), subsample=0.8,
                        subsample_freq=1, colsample_bytree=0.8, verbose=-1,
-                       random_state=self.seed)
+                       random_state=self.seed, n_jobs=1)
             mk = lambda q: lgb.LGBMRegressor(objective="quantile", alpha=q, **par)
             splits = list(KFold(5, shuffle=True, random_state=self.seed).split(X))
         except Exception:
