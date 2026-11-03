@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pratinjau Aset Batik KARTA - Surakarta</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background-color: #F8FAFC;
+      color: #1E293B;
+    }
+    h1 { color: #065F46; margin-bottom: 5px; }
+    p { color: #64748B; margin-top: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-top: 25px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border: 1px solid #E2E8F0;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #F1F5F9;
+      background: #FAFAFA;
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #0F172A;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: #64748B;
+    }
+    .preview-box {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tiled-bg-kawung {
+      background-color: #064E3B;
+      background-image: url('batik_header_emerald.svg');
+      background-size: 48px 48px;
+    }
+    .tiled-bg-parang-truntum {
+      background-color: #F8FAFC;
+      background-image: url('batik_parang_truntum_sogan.svg');
+      background-size: 88px 88px;
+    }
+    .code-box {
+      background: #0F172A;
+      color: #38BDF8;
+      padding: 12px 16px;
+      font-family: monospace;
+      font-size: 12px;
+      border-top: 1px solid #E2E8F0;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Katalog Aset Motif Batik KARTA (Surakarta)</h1>
+  <p>File SVG orisinal beresolusi tajam (vector tak terbatas) untuk desain presentasi Canva, Figma, poster, dan proposal tim.</p>
+
+  <div class="grid">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">1. Batik Kawung Geometris Surakarta</div>
+        <div class="card-sub">Digunakan khusus pada Header Banner Hijau Emerald KARTA</div>
+      </div>
+      <div class="preview-box tiled-bg-kawung">
+        <img src="batik_kawung_surakarta.svg" width="90" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); background: white; padding: 12px; border-radius: 50%;">
+      </div>
+      <div class="code-box">File: assets/batik/batik_kawung_surakarta.svg</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">2. Batik Parang Kusumo & Truntum Sogan</div>
+        <div class="card-sub">Digunakan khusus pada Full Background Web KARTA (Gaya Keraton Solo)</div>
+      </div>
+      <div class="preview-box tiled-bg-parang-truntum">
+        <img src="batik_parang_truntum_sogan.svg" width="100" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); background: white; padding: 10px; border-radius: 12px; border: 1px solid #CBD5E1;">
+      </div>
+      <div class="code-box">File: assets/batik/batik_parang_truntum_sogan.svg</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">3. Batik Border Zigzag Ornamen</div>
+        <div class="card-sub">Garis pemisah kartu & ornamen tepi bernuansa klasik</div>
+      </div>
+      <div class="preview-box" style="background: #FFFBEB;">
+        <img src="batik_border_zigzag.svg" width="180">
+      </div>
+      <div class="code-box">File: assets/batik/batik_border_zigzag.svg</div>
+    </div>
+  </div>
+</body>
+</html>
+
