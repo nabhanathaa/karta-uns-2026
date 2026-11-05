@@ -487,6 +487,14 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
         }}
 
         /* Ornamen Garis Batik Surakarta pada Kartu Seksi */
+        div[data-testid="stVerticalBlockBorderWrapper"] {{
+            background-color: {t['bg_card']} !important;
+            border: 1px solid {t['border']} !important;
+            border-top: 3px solid {t['aksen']} !important;
+            border-radius: 16px !important;
+            padding: 20px 22px !important;
+            box-shadow: {t['shadow']} !important;
+        }}
         .karta-surface {{
             background-color: {t['bg_card']};
             border: 1px solid {t['border']};
@@ -1781,12 +1789,16 @@ components.html(
 visi, air, konveyor, df_bench = muat_ekosistem_karta(jenis_visi, metode_air, port_arduino)
 
 
-LOGO_KARTA_SVG = """<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+def _rapikan_html(teks_html: str) -> str:
+    """Hilangkan baris kosong dan indentasi >=4 spasi agar CommonMark tidak merender HTML sebagai blok kode."""
+    return "\n".join(baris.strip() for baris in teks_html.splitlines() if baris.strip())
+
+LOGO_KARTA_SVG = _rapikan_html("""<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M8.64001 18C8.64001 23.1659 12.8341 27.36 18 27.36C23.1659 27.36 27.36 23.1659 27.36 18C27.36 12.8341 23.1659 8.64 18 8.64C12.8341 8.64 8.64001 12.8341 8.64001 18V18" stroke-width="0.54" stroke="#0D9488" stroke-opacity="0.35"/>
-<path d="M18 8.64V10.44" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
-<path d="M18 25.56V27.36" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
-<path d="M8.64001 18H10.44" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
-<path d="M25.5601 18H27.3601" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
+<path d="M18 8.64V10.8" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
+<path d="M18 25.2V27.36" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
+<path d="M8.64001 18H10.8" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
+<path d="M25.2 18H27.36" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
 <path d="M11.52 11.52L12.96 12.96" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
 <path d="M23.04 23.04L24.48 24.48" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
 <path d="M24.48 11.52L23.04 12.96" stroke-width="0.54" stroke-linecap="round" stroke="#0D9488" stroke-opacity="0.4"/>
@@ -1798,29 +1810,13 @@ LOGO_KARTA_SVG = """<svg width="36" height="36" viewBox="0 0 36 36" fill="none" 
 <path d="M18 9.36C15.12 14.4 14.4 19.44 18 26.64C21.6 19.44 20.88 14.4 18 9.36V9.36" fill="url(#paint4_linear_4_303)"/>
 <path opacity="0.85" d="M17.9999 12.96C16.9199 16.2 16.9199 19.8 17.9999 23.04C19.0799 19.8 19.0799 16.2 17.9999 12.96V12.96" fill="white"/>
 <defs>
-<linearGradient id="paint0_linear_4_303" x1="18" y1="2.88" x2="33.12" y2="18" gradientUnits="userSpaceOnUse">
-<stop stop-color="#059669"/>
-<stop offset="1" stop-color="#0284C7"/>
-</linearGradient>
-<linearGradient id="paint1_linear_4_303" x1="33.12" y1="18" x2="18" y2="33.12" gradientUnits="userSpaceOnUse">
-<stop stop-color="#0284C7"/>
-<stop offset="1" stop-color="#0D9488"/>
-</linearGradient>
-<linearGradient id="paint2_linear_4_303" x1="18" y1="33.12" x2="2.88" y2="18" gradientUnits="userSpaceOnUse">
-<stop stop-color="#0D9488"/>
-<stop offset="1" stop-color="#10B981"/>
-</linearGradient>
-<linearGradient id="paint3_linear_4_303" x1="2.88" y1="18" x2="18" y2="2.88" gradientUnits="userSpaceOnUse">
-<stop stop-color="#10B981"/>
-<stop offset="1" stop-color="#059669"/>
-</linearGradient>
-<linearGradient id="paint4_linear_4_303" x1="18" y1="9.36" x2="18" y2="26.64" gradientUnits="userSpaceOnUse">
-<stop stop-color="#F59E0B"/>
-<stop offset="0.65" stop-color="#D97706"/>
-<stop offset="1" stop-color="#0D9488"/>
-</linearGradient>
+<linearGradient id="paint0_linear_4_303" x1="18" y1="2.88" x2="33.12" y2="18" gradientUnits="userSpaceOnUse"><stop stop-color="#059669"/><stop offset="1" stop-color="#0284C7"/></linearGradient>
+<linearGradient id="paint1_linear_4_303" x1="33.12" y1="18" x2="18" y2="33.12" gradientUnits="userSpaceOnUse"><stop stop-color="#0284C7"/><stop offset="1" stop-color="#0D9488"/></linearGradient>
+<linearGradient id="paint2_linear_4_303" x1="18" y1="33.12" x2="2.88" y2="18" gradientUnits="userSpaceOnUse"><stop stop-color="#0D9488"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+<linearGradient id="paint3_linear_4_303" x1="2.88" y1="18" x2="18" y2="2.88" gradientUnits="userSpaceOnUse"><stop stop-color="#10B981"/><stop offset="1" stop-color="#059669"/></linearGradient>
+<linearGradient id="paint4_linear_4_303" x1="18" y1="9.36" x2="18" y2="26.64" gradientUnits="userSpaceOnUse"><stop stop-color="#F59E0B"/><stop offset="0.65" stop-color="#D97706"/><stop offset="1" stop-color="#0D9488"/></linearGradient>
 </defs>
-</svg>"""
+</svg>""")
 
 # ------------------------------------------------------------------ Inisialisasi State Autentikasi Pengguna
 if "authenticated" not in st.session_state:
@@ -1836,190 +1832,183 @@ if "chat_history" not in st.session_state:
 
 def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
     """Menampilkan landing portal login eksekutif 2-kolom DLH Surakarta & PLTSa Putri Cempo (gaya SIMANTAP)."""
-    col_hero, col_card = st.columns([1.18, 1.0], gap="large")
+    bg_glass_card = "rgba(30, 41, 59, 0.94)" if mode_gelap else "rgba(255, 255, 255, 0.96)"
+    border_glass = "rgba(52, 211, 153, 0.35)" if mode_gelap else "rgba(13, 148, 136, 0.28)"
+    st.markdown(
+        _rapikan_html(f"""
+        <style>
+        div[data-testid="stVerticalBlockBorderWrapper"] {{
+            background: {bg_glass_card} !important;
+            backdrop-filter: blur(20px) !important;
+            border-radius: 24px !important;
+            padding: 30px 28px !important;
+            box-shadow: 0 24px 55px -12px rgba(2, 44, 34, 0.22) !important;
+            border: 1.5px solid {border_glass} !important;
+        }}
+        </style>
+        """),
+        unsafe_allow_html=True,
+    )
+
+    col_hero, col_card = st.columns([1.15, 1.0], gap="large")
 
     with col_hero:
-        st.markdown(
-            f"""
-            <div style="background: linear-gradient(135deg, #022C22 0%, #064E3B 30%, #0F766E 65%, #0369A1 100%); border-radius: 24px; padding: 34px 30px; color: white; box-shadow: 0 20px 50px -10px rgba(2, 44, 34, 0.45); border: 1.5px solid rgba(52, 211, 153, 0.3); position: relative; overflow: hidden;">
-                <!-- Header Brand -->
-                <div style="display:flex; align-items:center; gap: 14px; margin-bottom: 18px;">
-                    <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 10px; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, 0.35); display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 6px 16px rgba(0,0,0,0.2);">
-                        {LOGO_KARTA_SVG}
-                    </div>
-                    <div>
-                        <div style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #FFFFFF;">KARTA</div>
-                        <div style="font-size: 0.72rem; font-weight: 700; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px;">
-                            🏛️ SISTEM MANAJEMEN INTELIJEN MUTU UMPAN PLTSA PUTRI CEMPO
-                        </div>
-                    </div>
+        hero_html = _rapikan_html(f"""
+        <div style="background: linear-gradient(135deg, #022C22 0%, #064E3B 32%, #0F766E 68%, #0369A1 100%); border-radius: 24px; padding: 34px 30px; color: white; box-shadow: 0 22px 50px -12px rgba(2, 44, 34, 0.45); border: 1.5px solid rgba(52, 211, 153, 0.32); position: relative; overflow: hidden;">
+            <div style="display:flex; align-items:center; gap: 14px; margin-bottom: 18px;">
+                <div style="background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); padding: 10px; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, 0.32); display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 6px 16px rgba(0,0,0,0.2);">
+                    {LOGO_KARTA_SVG}
                 </div>
-
-                <!-- Headline -->
-                <div style="font-size: 1.40rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; color: #F0FDF4;">
-                    Mendukung Efisiensi PLTSa Putri Cempo &amp; Audit SE MenLH No. 11/2026
-                </div>
-                <div style="font-size: 0.82rem; color: #A7F3D0; line-height: 1.5; margin-bottom: 22px;">
-                    Aplikasi resmi Dinas Lingkungan Hidup (DLH) Kota Surakarta bekerjasama dengan pengelola PLTSa Putri Cempo untuk pengawasan mutu fraksi bahan baku energi berbasis kecerdasan artifisial.
-                </div>
-
-                <!-- 3 Frosted Feature Cards -->
-                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
-                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                        <span style="font-size: 1.15rem;">🚛</span> Monitoring Armada &amp; Jembatan Timbang
+                <div>
+                    <div style="font-size: 2.15rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #FFFFFF;">KARTA</div>
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 3px;">
+                        🏛️ SISTEM MANAJEMEN INTELIJEN MUTU UMPAN PLTSA PUTRI CEMPO
                     </div>
-                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                        Pencatatan telemetri live 12 TPS se-Surakarta, gravimetrik timbangan, &amp; tiket sopir digital otomatis.
-                    </div>
-                </div>
-
-                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
-                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                        <span style="font-size: 1.15rem;">🔬</span> Computer Vision &amp; Kadar Air CQR
-                    </div>
-                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                        Segmentasi DeepLabv3+ 6 fraksi &amp; regresi konformal kalibrasi SNI 19-3964-1994 (kadar air &le; 20.0%).
-                    </div>
-                </div>
-
-                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 20px;">
-                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                        <span style="font-size: 1.15rem;">🪵</span> Rantai Pasok Sirkular Sukoharjo
-                    </div>
-                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                        Model optimasi Robust MILP serapan serbuk gergaji UMKM mebel Trangsan/Gatak sebagai <em>bulking agent</em> bio-drying.
-                    </div>
-                </div>
-
-                <!-- 3 Highlights -->
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
-                        <div style="font-size: 1.1rem;">⚡</div>
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Proses Cepat</div>
-                        <div style="font-size: 0.65rem; color: #A7F3D0;">Edge AI &lt; 1.0 Detik</div>
-                    </div>
-                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
-                        <div style="font-size: 1.1rem;">🛡️</div>
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Data Aman</div>
-                        <div style="font-size: 0.65rem; color: #A7F3D0;">Audit SE 11/2026</div>
-                    </div>
-                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
-                        <div style="font-size: 1.1rem;">☁️</div>
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Sinergi Daerah</div>
-                        <div style="font-size: 0.65rem; color: #A7F3D0;">Solo Raya Terpadu</div>
-                    </div>
-                </div>
-
-                <!-- Municipal Footer -->
-                <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; font-size: 0.74rem; color: #A7F3D0;">
-                    <div>📍 DLH Kota Surakarta &amp; PLTSa Putri Cempo</div>
-                    <div>⏱️ Surakarta Smart Eco-City 2026</div>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+            <div style="font-size: 1.38rem; font-weight: 800; line-height: 1.28; margin-bottom: 6px; color: #F0FDF4;">
+                Mendukung Efisiensi PLTSa Putri Cempo &amp; Audit SE MenLH No. 11/2026
+            </div>
+            <div style="font-size: 0.82rem; color: #A7F3D0; line-height: 1.5; margin-bottom: 20px;">
+                Aplikasi resmi Dinas Lingkungan Hidup (DLH) Kota Surakarta bekerjasama dengan pengelola PLTSa Putri Cempo untuk pengawasan mutu fraksi bahan baku energi berbasis kecerdasan artifisial.
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
+                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                    <span style="font-size: 1.15rem;">🚛</span> Monitoring Armada &amp; Jembatan Timbang
+                </div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                    Pencatatan telemetri live 12 TPS se-Surakarta, gravimetrik timbangan, &amp; tiket sopir digital otomatis.
+                </div>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
+                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                    <span style="font-size: 1.15rem;">🔬</span> Computer Vision &amp; Kadar Air CQR
+                </div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                    Segmentasi DeepLabv3+ 6 fraksi &amp; regresi konformal kalibrasi SNI 19-3964-1994 (kadar air &le; 20.0%).
+                </div>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 20px;">
+                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                    <span style="font-size: 1.15rem;">🪵</span> Rantai Pasok Sirkular Sukoharjo
+                </div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                    Model optimasi Robust MILP serapan serbuk gergaji UMKM mebel Trangsan/Gatak sebagai <em>bulking agent</em> bio-drying.
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
+                    <div style="font-size: 1.15rem;">⚡</div>
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Proses Cepat</div>
+                    <div style="font-size: 0.65rem; color: #A7F3D0;">Edge AI &lt; 1.0 Detik</div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
+                    <div style="font-size: 1.15rem;">🛡️</div>
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Data Aman</div>
+                    <div style="font-size: 0.65rem; color: #A7F3D0;">Audit SE 11/2026</div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
+                    <div style="font-size: 1.15rem;">☁️</div>
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Sinergi Daerah</div>
+                    <div style="font-size: 0.65rem; color: #A7F3D0;">Solo Raya Terpadu</div>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.22); padding-top: 12px; font-size: 0.74rem; color: #A7F3D0;">
+                <div>📍 DLH Kota Surakarta &amp; PLTSa Putri Cempo</div>
+                <div>⏱️ Surakarta Smart Eco-City 2026</div>
+            </div>
+        </div>
+        """)
+        st.markdown(hero_html, unsafe_allow_html=True)
 
     with col_card:
-        st.markdown(
-            f"""
-            <div style="background: {'#1E293B' if mode_gelap else '#FFFFFF'}; border-radius: 24px; padding: 30px 28px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.22); border: 1.5px solid {'#334155' if mode_gelap else '#E2E8F0'}; text-align: left;">
-                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; margin-bottom: 16px;">
-                    <div style="background: rgba(13, 148, 136, 0.12); padding: 12px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 1.5px solid rgba(52, 211, 153, 0.4); box-shadow: 0 6px 18px rgba(13, 148, 136, 0.15);">
-                        {LOGO_KARTA_SVG}
-                    </div>
-                    <div style="font-size: 1.80rem; font-weight: 800; color: {t['teks_utama']}; line-height: 1.1;">Selamat Datang</div>
-                    <div style="font-size: 0.82rem; color: {t['teks_redup']}; margin-top: 4px;">Masuk ke portal Command Center KARTA Anda</div>
+        with st.container(border=True):
+            header_card_html = _rapikan_html(f"""
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; margin-bottom: 14px;">
+                <div style="background: rgba(13, 148, 136, 0.12); padding: 12px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 1.5px solid rgba(52, 211, 153, 0.4); box-shadow: 0 6px 18px rgba(13, 148, 136, 0.15);">
+                    {LOGO_KARTA_SVG}
                 </div>
-            """,
-            unsafe_allow_html=True
-        )
+                <div style="font-size: 1.75rem; font-weight: 800; color: {t['teks_utama']}; line-height: 1.1;">Selamat Datang</div>
+                <div style="font-size: 0.82rem; color: {t['teks_redup']}; margin-top: 4px;">Masuk ke portal Command Center KARTA Anda</div>
+            </div>
+            """)
+            st.markdown(header_card_html, unsafe_allow_html=True)
 
-        tab_pilihan = st.radio("Pilihan Akses Portal", ["Masuk (Login)", "Pendaftaran Akun Baru (Sign Up)"], horizontal=True, label_visibility="collapsed")
+            tab_pilihan = st.radio("Pilihan Akses Portal", ["Masuk (Login)", "Pendaftaran Akun Baru (Sign Up)"], horizontal=True, label_visibility="collapsed")
 
-        if tab_pilihan == "Masuk (Login)":
-            email_val = st.text_input("✉️ Alamat Email / ID Petugas", value="kepala.dlh@surakarta.go.id", placeholder="Contoh: kepala.dlh@surakarta.go.id atau OP-042")
-            st.markdown("<div style='font-size:0.72rem; color:#059669; margin-top:-10px; margin-bottom:10px;'>● Gunakan akun resmi DLH Surakarta atau ID Petugas PLTSa</div>", unsafe_allow_html=True)
-            pass_val = st.text_input("🔒 Kata Sandi / Password", value="••••••••", type="password")
+            if tab_pilihan == "Masuk (Login)":
+                email_val = st.text_input("✉️ Alamat Email / ID Petugas", value="kepala.dlh@surakarta.go.id", placeholder="Contoh: kepala.dlh@surakarta.go.id atau OP-042")
+                st.markdown("<div style='font-size:0.72rem; color:#059669; margin-top:-8px; margin-bottom:10px;'>● Gunakan akun resmi DLH Surakarta atau ID Petugas PLTSa</div>", unsafe_allow_html=True)
+                pass_val = st.text_input("🔒 Kata Sandi / Password", value="••••••••", type="password")
 
-            c_ingat, c_lupa = st.columns([1, 1])
-            with c_ingat:
-                st.checkbox("Ingat Saya", value=True)
-            with c_lupa:
-                st.markdown(f"<div style='text-align:right; font-size:0.78rem; padding-top:4px;'><a href='#' style='color:{t['aksen']}; text-decoration:none; font-weight:600;'>Lupa Password?</a></div>", unsafe_allow_html=True)
+                c_ingat, c_lupa = st.columns([1, 1])
+                with c_ingat:
+                    st.checkbox("Ingat Saya", value=True)
+                with c_lupa:
+                    st.markdown(f"<div style='text-align:right; font-size:0.78rem; padding-top:4px;'><a href='#' style='color:{t['aksen']}; text-decoration:none; font-weight:600;'>Lupa Password?</a></div>", unsafe_allow_html=True)
 
-            if st.button("➜ Masuk ke Sistem", type="primary", use_container_width=True):
-                st.session_state["authenticated"] = True
-                st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
-                st.session_state["user_role"] = "Kepala DLH Kota Surakarta"
-                st.success("Autentikasi Berhasil! Mengalihkan ke Pusat Komando...")
-                st.rerun()
-
-            st.markdown(
-                """
-                <div style="text-align:center; margin: 18px 0 10px 0; font-size:0.75rem; color:#888; border-top:1px dashed rgba(0,0,0,0.12); padding-top:12px;">
-                    ─── AKSES CEPAT DEMO JURI HACKATHON ───
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-            cd1, cd2, cd3 = st.columns(3)
-            with cd1:
-                if st.button("👤 Kepala DLH", use_container_width=True):
+                if st.button("➜ Masuk ke Sistem", type="primary", use_container_width=True):
                     st.session_state["authenticated"] = True
                     st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
-                    st.session_state["user_role"] = "Kepala Dinas Lingkungan Hidup Surakarta"
-                    st.rerun()
-            with cd2:
-                if st.button("🏭 Direksi PLTSa", use_container_width=True):
-                    st.session_state["authenticated"] = True
-                    st.session_state["user_name"] = "Dra. Siti Rahayu, M.Sc."
-                    st.session_state["user_role"] = "Direksi Operasional PLTSa Putri Cempo"
-                    st.rerun()
-            with cd3:
-                if st.button("🚚 Petugas OP-042", use_container_width=True):
-                    st.session_state["authenticated"] = True
-                    st.session_state["user_name"] = "Agus Prasetyo (OP-042)"
-                    st.session_state["user_role"] = "Petugas Jembatan Timbang Gerbang PLTSa"
+                    st.session_state["user_role"] = "Kepala DLH Kota Surakarta"
+                    st.success("Autentikasi Berhasil! Mengalihkan ke Pusat Komando...")
                     st.rerun()
 
-            st.markdown(
-                """
-                <div style="text-align:center; margin-top: 14px; font-size: 0.80rem; color: #64748B;">
-                    Belum punya akun? <strong style="color: #059669;">Hubungi Operator DLH</strong>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(
-                f"""
-                <div style="font-size: 1.15rem; font-weight: 800; color: {t['teks_utama']}; margin-bottom: 4px;">Pendaftaran Akun Operator</div>
-                <div style="font-size: 0.78rem; color: {t['teks_redup']}; margin-bottom: 12px;">Akun diverifikasi langsung oleh admin DLH Surakarta</div>
-                """,
-                unsafe_allow_html=True
-            )
-            reg_nama = st.text_input("Nama Lengkap", placeholder="Contoh: Rian Hidayat, S.T.")
-            reg_id = st.text_input("Email / ID Petugas / NIP", placeholder="Contoh: OP-088 atau rian@dlh.surakarta.go.id")
-            c_p1, c_p2 = st.columns(2)
-            with c_p1:
-                reg_p1 = st.text_input("Kata Sandi Baru", type="password")
-            with c_p2:
-                reg_p2 = st.text_input("Konfirmasi Kata Sandi", type="password")
-            reg_wa = st.text_input("Nomor WhatsApp / HP (+62)", placeholder="+62 812-3456-7890")
-            reg_setuju = st.checkbox("Saya menyetujui SOP Keamanan Data DLH Surakarta & Integritas Umpan PLTSa Putri Cempo.", value=True)
+                st.markdown(
+                    "<div style='text-align:center; margin: 16px 0 10px 0; font-size:0.74rem; color:#888; border-top:1px dashed rgba(0,0,0,0.12); padding-top:12px;'>─── AKSES CEPAT DEMO JURI HACKATHON ───</div>",
+                    unsafe_allow_html=True
+                )
+                cd1, cd2, cd3 = st.columns(3)
+                with cd1:
+                    if st.button("👤 Kepala DLH", use_container_width=True):
+                        st.session_state["authenticated"] = True
+                        st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
+                        st.session_state["user_role"] = "Kepala Dinas Lingkungan Hidup Surakarta"
+                        st.rerun()
+                with cd2:
+                    if st.button("🏭 Direksi PLTSa", use_container_width=True):
+                        st.session_state["authenticated"] = True
+                        st.session_state["user_name"] = "Dra. Siti Rahayu, M.Sc."
+                        st.session_state["user_role"] = "Direksi Operasional PLTSa Putri Cempo"
+                        st.rerun()
+                with cd3:
+                    if st.button("🚚 Petugas OP-042", use_container_width=True):
+                        st.session_state["authenticated"] = True
+                        st.session_state["user_name"] = "Agus Prasetyo (OP-042)"
+                        st.session_state["user_role"] = "Petugas Jembatan Timbang Gerbang PLTSa"
+                        st.rerun()
 
-            if st.button("Daftarkan Akun & Masuk ➔", type="primary", use_container_width=True):
-                if reg_nama and reg_id:
-                    st.session_state["authenticated"] = True
-                    st.session_state["user_name"] = reg_nama
-                    st.session_state["user_role"] = "Operator Terverifikasi PLTSa Putri Cempo"
-                    st.success("Pendaftaran Berhasil! Selamat datang di KARTA.")
-                    st.rerun()
-                else:
-                    st.error("Mohon lengkapi Nama Lengkap dan ID Petugas/Email.")
+                st.markdown(
+                    "<div style='text-align:center; margin-top: 12px; font-size: 0.79rem; color: #64748B;'>Belum punya akun? <strong style='color: #059669;'>Hubungi Operator DLH</strong></div>",
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    _rapikan_html(f"""
+                    <div style="font-size: 1.10rem; font-weight: 800; color: {t['teks_utama']}; margin-bottom: 2px;">Pendaftaran Akun Operator</div>
+                    <div style="font-size: 0.76rem; color: {t['teks_redup']}; margin-bottom: 10px;">Akun diverifikasi langsung oleh admin DLH Surakarta</div>
+                    """),
+                    unsafe_allow_html=True
+                )
+                reg_nama = st.text_input("Nama Lengkap", placeholder="Contoh: Rian Hidayat, S.T.")
+                reg_id = st.text_input("Email / ID Petugas / NIP", placeholder="Contoh: OP-088 atau rian@dlh.surakarta.go.id")
+                c_p1, c_p2 = st.columns(2)
+                with c_p1:
+                    reg_p1 = st.text_input("Kata Sandi Baru", type="password")
+                with c_p2:
+                    reg_p2 = st.text_input("Konfirmasi Kata Sandi", type="password")
+                reg_wa = st.text_input("Nomor WhatsApp / HP (+62)", placeholder="+62 812-3456-7890")
+                reg_setuju = st.checkbox("Saya menyetujui SOP Keamanan Data DLH Surakarta & Integritas Umpan PLTSa Putri Cempo.", value=True)
 
-        st.markdown("</div>", unsafe_allow_html=True)
+                if st.button("Daftarkan Akun & Masuk ➔", type="primary", use_container_width=True):
+                    if reg_nama and reg_id:
+                        st.session_state["authenticated"] = True
+                        st.session_state["user_name"] = reg_nama
+                        st.session_state["user_role"] = "Operator Terverifikasi PLTSa Putri Cempo"
+                        st.success("Pendaftaran Berhasil! Selamat datang di KARTA.")
+                        st.rerun()
+                    else:
+                        st.error("Mohon lengkapi Nama Lengkap dan ID Petugas/Email.")
 
 # Jika belum login, tampilkan layar Portal Login / Sign Up lalu stop eksekusi
 if not st.session_state.get("authenticated", False):
@@ -2029,7 +2018,7 @@ if not st.session_state.get("authenticated", False):
 c_nav_left, c_nav_right = st.columns([3.8, 1.2])
 with c_nav_left:
     st.markdown(
-        f"""
+        _rapikan_html(f"""
         <div class="karta-navbar" style="margin-bottom: 8px;">
             <div class="karta-brand-wrap">
                 <div class="karta-logo-box" title="Emblem Sirkular KARTA Surakarta" style="background: rgba(13, 148, 136, 0.15); border: 1px solid rgba(52, 211, 153, 0.4);">
@@ -2050,18 +2039,18 @@ with c_nav_left:
                 <span class="karta-chip terracotta">KORIDOR SURAKARTA–SUKOHARJO</span>
             </div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True,
     )
 with c_nav_right:
     st.markdown(
-        f"""
+        _rapikan_html(f"""
         <div class="karta-surface" style="padding: 10px 14px; margin-bottom: 8px; border-top: 2px solid {t['aksen']}; text-align: right;">
             <div style="font-size: 0.72rem; color: {t['teks_redup']};">Akun Terverifikasi</div>
             <div style="font-size: 0.85rem; font-weight: 700; color: {t['teks_utama']};">👤 {st.session_state['user_name']}</div>
             <div style="font-size: 0.70rem; color: {t['aksen']}; font-weight: 600;">{st.session_state['user_role']}</div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True,
     )
     if st.button("🚪 Keluar / Logout", use_container_width=True):
@@ -2086,7 +2075,7 @@ with st.expander(
         st.slider("Akumulasi Hujan 72 Jam (mm)", 0.0, 300.0, hujan_72j_default, 1.0, key="top_hujan_72j", on_change=_sinkron_dari_panel_atas)
 
 st.markdown(
-    """
+    _rapikan_html("""
     <div class="karta-pipeline-bar">
         <div class="pipe-step">
             <div class="pipe-num">MODUL 01 · REAL-TIME STREAM</div>
@@ -2109,7 +2098,7 @@ st.markdown(
             <div class="pipe-desc">Chatbot regulasi DLH, metrik ilmiah mIoU/CQR untuk juri, &amp; ekspor laporan dinas.</div>
         </div>
     </div>
-    """,
+    """),
     unsafe_allow_html=True,
 )
 
@@ -2126,7 +2115,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
 # ==============================================================================
 with tab1:
     st.markdown(
-        """
+        _rapikan_html("""
         <div class="karta-guide-box emerald">
             <div class="karta-guide-title">Pusat Komando Eksekutif · Monitoring Agregat &amp; Live Ingestion Armada Masuk</div>
             <div>
@@ -2135,13 +2124,12 @@ with tab1:
                 Fokus utama komando adalah memastikan <strong>kadar air campuran bunker reaktor gasifier terkunci aman di bawah batas toleransi maksimal 20,0%</strong> guna menghindari <em>thermal drop</em>.
             </div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True,
     )
 
-    # Telemetri Cuaca Real-Time Solo Raya
     st.markdown(
-        """
+        _rapikan_html("""
         <div style="display:flex; align-items:center; justify-content:space-between; background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.25); border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.82rem;">
             <div style="display:flex; align-items:center; gap: 10px;">
                 <span style="display:inline-block; width: 9px; height: 9px; background: #10B981; border-radius: 50%; box-shadow: 0 0 8px #10B981;"></span>
@@ -2151,11 +2139,10 @@ with tab1:
                 Stasiun Adi Soemarmo (BMKG WMO-96751) · Suhu: 29.4 °C · RH: 74% · Hujan 24j: 12.0 mm
             </div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True,
     )
 
-    # 4 KPI Cards Utama Eksekutif
     render_kpi_grid([
         {
             "label": "Total Tonase Masuk Hari Ini",
@@ -2188,122 +2175,108 @@ with tab1:
     c_stream_left, c_stream_right = st.columns([1.6, 1.0], gap="large")
 
     with c_stream_left:
-        st.markdown(
-            """
-            <div class="karta-surface">
+        with st.container(border=True):
+            st.markdown(
+                _rapikan_html("""
                 <div class="karta-section-head">
                     <span>📡 Log Transaksi Armada Masuk Terkini (Feed Aplikasi Mobile Petugas)</span>
                     <span style="font-size:0.75rem; color:#059669; font-weight:700;">● LIVE SYNC</span>
                 </div>
                 <div class="karta-batik-divider"></div>
-            """,
-            unsafe_allow_html=True,
-        )
+                """),
+                unsafe_allow_html=True,
+            )
 
-        df_feed = df_bench.iloc[:12].copy().reset_index(drop=True)
-        truk_list = [f"AD-{8210+i} ZA (Truk {i+1:02d})" for i in range(len(df_feed))]
-        jam_list = [f"{7+i//2:02d}:{(i%2)*30+15:02d} WIB" for i in range(len(df_feed))]
-        df_feed["ID Truk"] = truk_list
-        df_feed["Waktu Tiba"] = jam_list
-        if "lhv_asli" not in df_feed.columns:
-            if "lhv_oven" in df_feed.columns:
-                df_feed["lhv_asli"] = df_feed["lhv_oven"]
-            else:
-                df_feed["lhv_asli"] = 18.0 * (1 - df_feed["w_oven"]) - 2.44 * df_feed["w_oven"]
-        
-        tabel_view = pd.DataFrame({
-            "Waktu": df_feed["Waktu Tiba"],
-            "Armada Truk": df_feed["ID Truk"],
-            "TPS Asal": df_feed["nama_tps"],
-            "Berat (Ton)": df_feed["ton"].round(2),
-            "Kadar Air (%)": (df_feed["w_oven"] * 100).round(1).astype(str) + "%",
-            "Nilai Kalor LHV": df_feed["lhv_asli"].round(2).astype(str) + " MJ/kg",
-            "Rute": df_feed["rute_gt"],
-            "Status Audit": ["Lolos Standar" if r != "R" else "Peringatan Residu" for r in df_feed["rute_gt"]]
-        })
+            df_feed = df_bench.iloc[:12].copy().reset_index(drop=True)
+            truk_list = [f"AD-{8210+i} ZA (Truk {i+1:02d})" for i in range(len(df_feed))]
+            jam_list = [f"{7+i//2:02d}:{(i%2)*30+15:02d} WIB" for i in range(len(df_feed))]
+            df_feed["ID Truk"] = truk_list
+            df_feed["Waktu Tiba"] = jam_list
+            if "lhv_asli" not in df_feed.columns:
+                if "lhv_oven" in df_feed.columns:
+                    df_feed["lhv_asli"] = df_feed["lhv_oven"]
+                else:
+                    df_feed["lhv_asli"] = 18.0 * (1 - df_feed["w_oven"]) - 2.44 * df_feed["w_oven"]
 
-        st.dataframe(tabel_view, use_container_width=True, hide_index=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+            tabel_view = pd.DataFrame({
+                "Waktu": df_feed["Waktu Tiba"],
+                "Armada Truk": df_feed["ID Truk"],
+                "TPS Asal": df_feed["nama_tps"],
+                "Berat (Ton)": df_feed["ton"].round(2),
+                "Kadar Air (%)": (df_feed["w_oven"] * 100).round(1).astype(str) + "%",
+                "Nilai Kalor LHV": df_feed["lhv_asli"].round(2).astype(str) + " MJ/kg",
+                "Rute": df_feed["rute_gt"],
+                "Status Audit": ["Lolos Standar" if r != "R" else "Peringatan Residu" for r in df_feed["rute_gt"]]
+            })
+
+            st.dataframe(tabel_view, use_container_width=True, hide_index=True)
 
     with c_stream_right:
         st.markdown(
-            """
+            _rapikan_html("""
             <div class="karta-surface">
                 <div class="karta-section-head">
                     <span>📊 Rekap Komposisi Fraksi Sampah Hari Ini</span>
                 </div>
                 <div class="karta-batik-divider"></div>
-            """,
+                <div style="font-size: 0.82rem; line-height: 1.8;">
+                    <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
+                        <span>🥬 Organik Basah (Sisa Makanan/Pasar)</span>
+                        <strong>62.8% (33.1 Ton)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
+                        <span>🛍️ Plastik &amp; Kemasan Fleksibel</span>
+                        <strong>16.4% (8.6 Ton)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
+                        <span>📦 Kertas &amp; Karton Kering</span>
+                        <strong>8.2% (4.3 Ton)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
+                        <span>👕 Tekstil &amp; Kain Bekas</span>
+                        <strong>4.1% (2.2 Ton)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
+                        <span>🪵 Kayu &amp; Ranting Kebun</span>
+                        <strong>3.5% (1.8 Ton)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding: 4px 0;">
+                        <span>🧱 Residu Inert (Batu/Beling/Tanah)</span>
+                        <strong style="color: #D97706;">5.0% (2.8 Ton)</strong>
+                    </div>
+                </div>
+                <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.12);">
+                    <div style="font-size: 0.82rem; font-weight: 700; margin-bottom: 8px;">Distribusi Alokasi 4 Rute Hari Ini:</div>
+                    <div style="display:flex; gap: 6px;">
+                        <span style="flex:1; background:#059669; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE U<br>25%</span>
+                        <span style="flex:2; background:#B45309; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE B<br>50%</span>
+                        <span style="flex:1; background:#0F766E; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE M<br>17%</span>
+                        <span style="flex:0.5; background:#DC2626; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE R<br>8%</span>
+                    </div>
+                </div>
+            </div>
+            """),
             unsafe_allow_html=True,
         )
-        
-        st.markdown(
-            """
-            <div style="font-size: 0.82rem; line-height: 1.8;">
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                    <span>🥬 Organik Basah (Sisa Makanan/Pasar)</span>
-                    <strong>62.8% (33.1 Ton)</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                    <span>🛍️ Plastik &amp; Kemasan Fleksibel</span>
-                    <strong>16.4% (8.6 Ton)</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                    <span>📦 Kertas &amp; Karton Kering</span>
-                    <strong>8.2% (4.3 Ton)</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                    <span>👕 Tekstil &amp; Kain Bekas</span>
-                    <strong>4.1% (2.2 Ton)</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                    <span>🪵 Kayu &amp; Ranting Kebun</span>
-                    <strong>3.5% (1.8 Ton)</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 4px 0;">
-                    <span>🧱 Residu Inert (Batu/Beling/Tanah)</span>
-                    <strong style="color: #D97706;">5.0% (2.8 Ton)</strong>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-        st.markdown(
-            """
-            <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.12);">
-                <div style="font-size: 0.82rem; font-weight: 700; margin-bottom: 8px;">Distribusi Alokasi 4 Rute Hari Ini:</div>
-                <div style="display:flex; gap: 6px;">
-                    <span style="flex:1; background:#059669; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE U<br>25%</span>
-                    <span style="flex:2; background:#B45309; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE B<br>50%</span>
-                    <span style="flex:1; background:#0F766E; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE M<br>17%</span>
-                    <span style="flex:0.5; background:#DC2626; color:white; padding:6px; border-radius:6px; text-align:center; font-size:0.75rem; font-weight:700;">RUTE R<br>8%</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    # Sub-Section: Kiosk Mode Simulator (Pratinjau Layar Operator Pos Gerbang)
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     with st.expander("👁️ Pratinjau Tampilan Operator Pos Gerbang (Kiosk Mode Simulator)", expanded=False):
         c_kiosk_img, c_kiosk_res = st.columns([1.1, 1.2], gap="large")
         pilihan_muatan = st.selectbox("Pilih Sampel Muatan Truk untuk Disimulasikan:", df_bench["foto"].unique().tolist(), index=0)
-        
+
         row_sel = df_bench[df_bench["foto"] == pilihan_muatan].iloc[0]
         img_raw = Image.open(FOLDER_BENCHMARK / "images" / row_sel["foto"]).convert("RGB")
         mask_raw = Image.open(FOLDER_BENCHMARK / "masks" / row_sel["foto"])
-        
+
         with c_kiosk_img:
             st.image(img_raw, caption=f"Citra Kamera Konveyor: {row_sel['foto']} ({row_sel['nama_tps']})", use_container_width=True)
             st.image(mask_raw, caption="Masker Segmentasi 6 Fraksi (Computer Vision DeepLabv3+)", use_container_width=True)
-        
+
         with c_kiosk_res:
             rute_code = row_sel['rute_gt']
             w_pct = row_sel['w_oven'] * 100
             berat_kg = row_sel['ton'] * 1000
-            
+
             if rute_code == "U":
                 r_theme_color = "#2563EB"
                 r_title = "Rute U · Gasifikasi"
@@ -2353,7 +2326,7 @@ with tab1:
                     </div>
                 </div>
                 """
-            else: # Rute R
+            else:
                 r_theme_color = "#DC2626"
                 r_title = "Rute R · Karantina Residu"
                 r_sub = "Fraksi Inert/Puing ≥ 22% · Dilarang Umpan Langsung"
@@ -2367,7 +2340,7 @@ with tab1:
                 """
 
             st.markdown(
-                f"""
+                _rapikan_html(f"""
                 <div style="background: {'#1E293B' if mode_gelap else '#FFFFFF'}; border-radius: 16px; padding: 20px 22px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); border: 1.5px solid {r_theme_color}30;">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 10px; margin-bottom: 12px;">
                         <div style="display:flex; align-items:center; gap: 8px;">
@@ -2376,7 +2349,6 @@ with tab1:
                         </div>
                         <span style="font-size: 0.72rem; color: #64748B;">Petugas: John - Shift 1</span>
                     </div>
-                    
                     <div style="background: rgba(0,0,0,0.025); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.80rem;">
                         <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
                             <span style="color:#64748B;">TPS ASAL:</span>
@@ -2387,27 +2359,24 @@ with tab1:
                             <span>BERAT MUATAN: <strong>{berat_kg:,.0f} kg</strong></span>
                         </div>
                     </div>
-                    
                     <div style="font-size: 1.25rem; font-weight: 800; color: {r_theme_color};">{r_title}</div>
                     <div style="font-size: 0.80rem; color: #64748B; margin-bottom: 14px;">{r_sub}</div>
-                    
                     <div style="display:flex; align-items:center; justify-content:center; margin: 12px 0 18px 0;">
                         <div style="width: 100px; height: 100px; border-radius: 50%; border: 6px solid {r_theme_color}; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow: 0 4px 15px {r_theme_color}30;">
                             <span style="font-size: 1.35rem; font-weight: 800; color: {t['teks_utama']};">{w_pct:.1f}%</span>
                             <span style="font-size: 0.60rem; color: {r_theme_color}; font-weight: 700;">{r_gauge_tag}</span>
                         </div>
                     </div>
-                    
                     {r_extra_html}
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True
             )
-            
+
             st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
             if st.button(r_btn_label, type="primary", use_container_width=True):
                 st.success(f"Instruksi '{r_btn_label}' berhasil dikirim ke palang otomatis konveyor!")
-            
+
             c_bt1, c_bt2 = st.columns(2)
             with c_bt1:
                 if st.button("✈️ Kirim Laporan", use_container_width=True):
@@ -2415,6 +2384,7 @@ with tab1:
             with c_bt2:
                 if st.button("📥 Unduh PDF", use_container_width=True):
                     st.success("Surat Bukti Timbang PDF berhasil diunduh!")
+
 # ==============================================================================
 # TAB 2: PETA GIS SEBARAN 12 TPS & AUDIT KEPATUHAN SE MENLH 11/2026
 # ==============================================================================
@@ -2794,9 +2764,9 @@ with tab4:
     ])
 
     with sub_t1:
-        st.markdown(
-            """
-            <div class="karta-surface">
+        with st.container(border=True):
+            st.markdown(
+                _rapikan_html("""
                 <div class="karta-section-head">
                     <span>🤖 KARTA AI Policy &amp; Logistics Assistant</span>
                     <span style="font-size:0.75rem; color:#0D9488; font-weight:700;">● MODEL SIAP</span>
@@ -2805,71 +2775,69 @@ with tab4:
                 <div style="font-size:0.80rem; color:#64748B; margin-bottom: 12px;">
                     Konsultasikan data operasional harian, kepatuhan SE MenLH No. 11/2026, pasokan serbuk kayu Sukoharjo, atau strategi mitigasi kadar air sampah Solo Raya.
                 </div>
-            """,
-            unsafe_allow_html=True
-        )
+                """),
+                unsafe_allow_html=True
+            )
 
-        c_q1, c_q2, c_q3, c_q4 = st.columns(4)
-        user_prompt = None
-        with c_q1:
-            if st.button("⚠️ TPS Residu Tertinggi", use_container_width=True):
-                user_prompt = "TPS mana saja yang memiliki tingkat pelanggaran residu dan kadar air tertinggi minggu ini?"
-        with c_q2:
-            if st.button("🪵 Rekomendasi Serbuk Kayu", use_container_width=True):
-                user_prompt = "Berapa ton serbuk kayu Sukoharjo yang harus dipesan untuk pengeringan besok?"
-        with c_q3:
-            if st.button("🌿 Emisi Metana Terhindar", use_container_width=True):
-                user_prompt = "Berapa estimasi emisi gas metana yang berhasil dicegah hari ini?"
-        with c_q4:
-            if st.button("📜 Audit SE 11/2026", use_container_width=True):
-                user_prompt = "Bagaimana status audit kepatuhan Solo Raya terhadap SE MenLH No. 11/2026?"
+            c_q1, c_q2, c_q3, c_q4 = st.columns(4)
+            user_prompt = None
+            with c_q1:
+                if st.button("⚠️ TPS Residu Tertinggi", use_container_width=True):
+                    user_prompt = "TPS mana saja yang memiliki tingkat pelanggaran residu dan kadar air tertinggi minggu ini?"
+            with c_q2:
+                if st.button("🪵 Rekomendasi Serbuk Kayu", use_container_width=True):
+                    user_prompt = "Berapa ton serbuk kayu Sukoharjo yang harus dipesan untuk pengeringan besok?"
+            with c_q3:
+                if st.button("🌿 Emisi Metana Terhindar", use_container_width=True):
+                    user_prompt = "Berapa estimasi emisi gas metana yang berhasil dicegah hari ini?"
+            with c_q4:
+                if st.button("📜 Audit SE 11/2026", use_container_width=True):
+                    user_prompt = "Bagaimana status audit kepatuhan Solo Raya terhadap SE MenLH No. 11/2026?"
 
-        for msg in st.session_state["chat_history"]:
-            if msg["role"] == "user":
-                st.markdown(f"<div style='background:rgba(13,148,136,0.1); border-radius:10px; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>👤 Anda:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
-            else:
-                st.markdown(f"<div style='background:rgba(2,132,199,0.08); border-left:3px solid #0284C7; border-radius:0 10px 10px 0; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>🤖 Asisten AI:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+            for msg in st.session_state["chat_history"]:
+                if msg["role"] == "user":
+                    st.markdown(f"<div style='background:rgba(13,148,136,0.1); border-radius:10px; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>👤 Anda:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"<div style='background:rgba(2,132,199,0.08); border-left:3px solid #0284C7; border-radius:0 10px 10px 0; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>🤖 Asisten AI:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
 
-        inp_chat = st.chat_input("Ketik pertanyaan regulasi atau data operasional...")
-        prompt_to_process = user_prompt or inp_chat
+            inp_chat = st.chat_input("Ketik pertanyaan regulasi atau data operasional...")
+            prompt_to_process = user_prompt or inp_chat
 
-        if prompt_to_process:
-            st.session_state["chat_history"].append({"role": "user", "content": prompt_to_process})
-            p_lower = prompt_to_process.lower()
-            if "tps" in p_lower and ("residu" in p_lower or "tinggi" in p_lower or "pelanggaran" in p_lower):
-                jawaban = (
-                    "Berdasarkan analisis audit telemetri KARTA terhadap 12 TPS Surakarta:\n\n"
-                    "1. **TPS Pasar Legi (Banjarsari)**: Rata-rata kadar air 62.8%, inert 7.0%. Perlu pengawasan ketat pemilahan sampah basah organik pasar.\n"
-                    "2. **TPS Pasar Gede (Jebres)**: Rata-rata kadar air 67.1%, organik 79.8%. Muatan ini optimal dialihkan langsung ke Rute M (Unit Biokonversi Maggot BSF Purwosari).\n"
-                    "3. **TPS Paling Patuh**: TPS Banjarsari & TPS Kadipiro menunjukkan fraksi kering tertinggi dan layak diprioritaskan untuk Rute U (Umpan Langsung Gasifier)."
-                )
-            elif "serbuk" in p_lower or "kayu" in p_lower or "sukoharjo" in p_lower:
-                jawaban = (
-                    "Hasil perhitungan model optimasi *Robust MILP* KARTA untuk 60 antrean armada harian:\n\n"
-                    "• **Kebutuhan Serbuk Kayu Hari Ini**: **26.41 Ton/hari** (untuk memproses 209.9 ton muatan lembap di bak *bio-drying*).\n"
-                    "• **Sentra Pasokan**: Klaster mebel Trangsan & Gatak, Kabupaten Sukoharjo (kadar air ~11.5%, LHV 16.4 MJ/kg).\n"
-                    "• **Dampak**: Waktu pengeringan terakselerasi dari 5 hari menjadi 3.2 hari, menurunkan kelembapan rata-rata ke **18.75%** (terkunci aman di bawah batas reaktor 20.0%)."
-                )
-            elif "metana" in p_lower or "emisi" in p_lower:
-                jawaban = (
-                    "Estimasi reduksi dampak lingkungan harian berkat sistem KARTA:\n\n"
-                    "• **Pengurangan Beban TPA**: 86.5 Ton sampah harian terhindar dari penimbunan terbuka (*open dumping*).\n"
-                    "• **Pencegahan Emisi Gas Metana ($CH_4$)**: Sekitar **22.8 Ton $CO_2e$/hari** (menggunakan faktor konversi IPCC untuk sampah biomassa perkotaan).\n"
-                    "• **Nilai Ekonomi Pupuk & Larva BSF**: Menghasilkan potensi ekonomi pakan ternak senilai **Rp 199.7 Juta/hari**."
-                )
-            elif "se 11" in p_lower or "audit" in p_lower or "regulasi" in p_lower:
-                jawaban = (
-                    "Status Evaluasi Kepatuhan terhadap **SE MenLH No. 11/2026** (Penghentian Open Dumping):\n\n"
-                    "• **Tingkat Kepatuhan Kota Surakarta**: **91.7%** (11 dari 12 TPS memenuhi batas toleransi fraksi inert <22%).\n"
-                    "• **Sanksi / Notifikasi Otomatis**: 1 armada terdeteksi membawa fraksi batu/puing tinggi dan otomatis diarahkan ke **Rute R (Karantina Residu)** dengan surat teguran digital yang diteruskan ke Kepala TPS asal."
-                )
-            else:
-                jawaban = f"Pertanyaan Anda mengenai '*{prompt_to_process}*' telah dianalisis oleh KARTA. Berdasarkan data telemetri 12 TPS dan koridor PLTSa Putri Cempo, seluruh parameter operasional berada dalam rentang toleransi aman, dengan rata-rata kelembapan reaktor gasifier terkunci pada 18.75%."
-            
-            st.session_state["chat_history"].append({"role": "assistant", "content": jawaban})
-            st.rerun()
-
-        st.markdown("</div>", unsafe_allow_html=True)
+            if prompt_to_process:
+                st.session_state["chat_history"].append({"role": "user", "content": prompt_to_process})
+                p_lower = prompt_to_process.lower()
+                if "tps" in p_lower and ("residu" in p_lower or "tinggi" in p_lower or "pelanggaran" in p_lower):
+                    jawaban = (
+                        "Berdasarkan analisis audit telemetri KARTA terhadap 12 TPS Surakarta:\n\n"
+                        "1. **TPS Pasar Legi (Banjarsari)**: Rata-rata kadar air 62.8%, inert 7.0%. Perlu pengawasan ketat pemilahan sampah basah organik pasar.\n"
+                        "2. **TPS Pasar Gede (Jebres)**: Rata-rata kadar air 67.1%, organik 79.8%. Muatan ini optimal dialihkan langsung ke Rute M (Unit Biokonversi Maggot BSF Purwosari).\n"
+                        "3. **TPS Paling Patuh**: TPS Banjarsari & TPS Kadipiro menunjukkan fraksi kering tertinggi dan layak diprioritaskan untuk Rute U (Umpan Langsung Gasifier)."
+                    )
+                elif "serbuk" in p_lower or "kayu" in p_lower or "sukoharjo" in p_lower:
+                    jawaban = (
+                        "Hasil perhitungan model optimasi *Robust MILP* KARTA untuk 60 antrean armada harian:\n\n"
+                        "• **Kebutuhan Serbuk Kayu Hari Ini**: **26.41 Ton/hari** (untuk memproses 209.9 ton muatan lembap di bak *bio-drying*).\n"
+                        "• **Sentra Pasokan**: Klaster mebel Trangsan & Gatak, Kabupaten Sukoharjo (kadar air ~11.5%, LHV 16.4 MJ/kg).\n"
+                        "• **Dampak**: Waktu pengeringan terakselerasi dari 5 hari menjadi 3.2 hari, menurunkan kelembapan rata-rata ke **18.75%** (terkunci aman di bawah batas reaktor 20.0%)."
+                    )
+                elif "metana" in p_lower or "emisi" in p_lower:
+                    jawaban = (
+                        "Estimasi reduksi dampak lingkungan harian berkat sistem KARTA:\n\n"
+                        "• **Pengurangan Beban TPA**: 86.5 Ton sampah harian terhindar dari penimbunan terbuka (*open dumping*).\n"
+                        "• **Pencegahan Emisi Gas Metana ($CH_4$)**: Sekitar **22.8 Ton $CO_2e$/hari** (menggunakan faktor konversi IPCC untuk sampah biomassa perkotaan).\n"
+                        "• **Nilai Ekonomi Pupuk & Larva BSF**: Menghasilkan potensi ekonomi pakan ternak senilai **Rp 199.7 Juta/hari**."
+                    )
+                elif "se 11" in p_lower or "audit" in p_lower or "regulasi" in p_lower:
+                    jawaban = (
+                        "Status Evaluasi Kepatuhan terhadap **SE MenLH No. 11/2026** (Penghentian Open Dumping):\n\n"
+                        "• **Tingkat Kepatuhan Kota Surakarta**: **91.7%** (11 dari 12 TPS memenuhi batas toleransi fraksi inert <22%).\n"
+                        "• **Sanksi / Notifikasi Otomatis**: 1 armada terdeteksi membawa fraksi batu/puing tinggi dan otomatis diarahkan ke **Rute R (Karantina Residu)** dengan surat teguran digital yang diteruskan ke Kepala TPS asal."
+                    )
+                else:
+                    jawaban = f"Pertanyaan Anda mengenai '*{prompt_to_process}*' telah dianalisis oleh KARTA. Berdasarkan data telemetri 12 TPS dan koridor PLTSa Putri Cempo, seluruh parameter operasional berada dalam rentang toleransi aman, dengan rata-rata kelembapan reaktor gasifier terkunci pada 18.75%."
+                
+                st.session_state["chat_history"].append({"role": "assistant", "content": jawaban})
+                st.rerun()
 
     with sub_t2:
         st.markdown(
@@ -3100,9 +3068,9 @@ with tab4:
 
 
     with sub_t3:
-        st.markdown(
-            """
-            <div class="karta-surface">
+        with st.container(border=True):
+            st.markdown(
+                _rapikan_html("""
                 <div class="karta-section-head">
                     <span>📥 Pusat Laporan Eksekutif DLH &amp; Ekspor Data Resmi</span>
                 </div>
@@ -3110,34 +3078,33 @@ with tab4:
                 <div style="font-size:0.80rem; color:#64748B; margin-bottom: 14px;">
                     Pilih filter rentang waktu dan wilayah untuk mengunduh laporan rekapitulasi audit bahan baku PLTSa dan kepatuhan TPS se-Surakarta.
                 </div>
-            """,
-            unsafe_allow_html=True
-        )
-        
-        c_fl1, c_fl2, c_fl3 = st.columns([1, 1, 1])
-        with c_fl1:
-            st.date_input("Pilih Tanggal Laporan", value=pd.to_datetime("2026-11-03"))
-        with c_fl2:
-            st.selectbox("Filter Wilayah TPS", ["Semua Wilayah (12 TPS Solo Raya)"] + df_bench["nama_tps"].unique().tolist())
-        with c_fl3:
-            st.selectbox("Format Berkas Ekspor", ["Ringkasan Eksekutif (.CSV / Excel)", "Naskah Formal Kedinasan (.PDF)"])
-
-        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-        
-        c_btn1, c_btn2 = st.columns(2)
-        with c_btn1:
-            csv_data = df_bench.to_csv(index=False).encode("utf-8")
-            st.download_button(
-                "📥 Unduh Rekap Transaksi Harian Lengkap (.CSV)",
-                data=csv_data,
-                file_name="Laporan_Kepatuhan_PLTSa_Putri_Cempo_DLH_2026.csv",
-                mime="text/csv",
-                use_container_width=True
+                """),
+                unsafe_allow_html=True
             )
-        with c_btn2:
-            if st.button("📄 Cetak Format Laporan Resmi Kepala DLH (PDF Siap TTD)", use_container_width=True):
-                st.success("Format Naskah Dinas Resmi berhasil disiapkan untuk pencetakan dokumen PDF.")
-        st.markdown("</div>", unsafe_allow_html=True)
+            
+            c_fl1, c_fl2, c_fl3 = st.columns([1, 1, 1])
+            with c_fl1:
+                st.date_input("Pilih Tanggal Laporan", value=pd.to_datetime("2026-11-03"))
+            with c_fl2:
+                st.selectbox("Filter Wilayah TPS", ["Semua Wilayah (12 TPS Solo Raya)"] + df_bench["nama_tps"].unique().tolist())
+            with c_fl3:
+                st.selectbox("Format Berkas Ekspor", ["Ringkasan Eksekutif (.CSV / Excel)", "Naskah Formal Kedinasan (.PDF)"])
+
+            st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+            
+            c_btn1, c_btn2 = st.columns(2)
+            with c_btn1:
+                csv_data = df_bench.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    "📥 Unduh Rekap Transaksi Harian Lengkap (.CSV)",
+                    data=csv_data,
+                    file_name="Laporan_Kepatuhan_PLTSa_Putri_Cempo_DLH_2026.csv",
+                    mime="text/csv",
+                    use_container_width=True
+                )
+            with c_btn2:
+                if st.button("📄 Cetak Format Laporan Resmi Kepala DLH (PDF Siap TTD)", use_container_width=True):
+                    st.success("Format Naskah Dinas Resmi berhasil disiapkan untuk pencetakan dokumen PDF.")
 
     with sub_t4:
         st.markdown(
