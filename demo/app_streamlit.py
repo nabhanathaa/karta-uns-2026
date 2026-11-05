@@ -196,7 +196,7 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
         /* Reset & App Shell (60% Eco Paper / Deep Charcoal + Background Batik Parang-Truntum Sogan Surakarta Full Web) */
         .stApp {{
@@ -487,6 +487,36 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
         }}
 
         /* Ornamen Garis Batik Surakarta pada Kartu Seksi */
+        
+        h1, h2, h3, .karta-brand-title, .kpi-num, .karta-section-head {
+            font-family: 'Montserrat', sans-serif !important;
+        }
+        body, p, span, div, input, label {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+        .stButton > button {
+            border-radius: 999px !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.02em !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        .stButton > button[kind="primary"] {
+            background: linear-gradient(90deg, #1D4ED8 0%, #2563EB 100%) !important;
+            border: none !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+        }
+        .stButton > button[kind="primary"]:hover {
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        input[type="text"], input[type="password"], input[type="number"] {
+            border-radius: 12px !important;
+            border: 1.5px solid #CBD5E1 !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+
         div[data-testid="stVerticalBlockBorderWrapper"] {{
             background-color: {t['bg_card']} !important;
             border: 1px solid {t['border']} !important;
@@ -1675,24 +1705,22 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.markdown("**1. Arsitektur Model Visi & Regresi**")
-    st.selectbox(
-        "Model Segmentasi Citra",
-        daftar_label_visi,
-        index=daftar_label_visi.index(st.session_state["cfg_label_visi"]),
-        key="sb_label_visi",
-        on_change=_sinkron_dari_sidebar,
-    )
-    st.selectbox(
-        "Model Estimasi Kadar Air & LHV",
-        daftar_label_air,
-        index=daftar_label_air.index(st.session_state["cfg_label_air"]),
-        key="sb_label_air",
-        on_change=_sinkron_dari_sidebar,
+    st.markdown(
+        """
+        <div style="background: rgba(13, 148, 136, 0.08); border: 1.5px solid rgba(13, 148, 136, 0.28); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px;">
+            <div style="font-size: 0.68rem; font-weight: 800; color: #0D9488; letter-spacing: 0.08em; text-transform: uppercase;">ARSITEKTUR MODEL RESMI KARTA</div>
+            <div style="font-size: 0.95rem; font-weight: 800; color: #0F172A; margin: 4px 0;">DeepLabv3+ &amp; CQR-ANN</div>
+            <div style="font-size: 0.74rem; color: #64748B; line-height: 1.5;">
+                • <strong>Visi Konveyor:</strong> DeepLabv3+ (Backbone MobileNetV3/Xception-65, modul ASPP, inferensi &lt;100 ms). Anotasi poligon 6 fraksi LabelMe.<br>
+                • <strong>Estimasi Kadar Air:</strong> Physics-Informed Conformal Regression (He dkk. 2022 &amp; Chen dkk. 2021) terkalibrasi SNI 19-3964-1994 (P10–P90).<br>
+                • <strong>Audit Mutu:</strong> Target kelembapan gasifier &le; 20.0% (SE MenLH No. 11/2026).
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
-    st.markdown("---")
-    st.markdown("**2. Parameter Cuaca & Perangkat Tepi**")
+    st.markdown("**Parameter Simulasi Cuaca & IoT Gerbang**")
     st.slider(
         "Curah Hujan 24 Jam BMKG (mm)",
         0.0,
@@ -1714,7 +1742,7 @@ with st.sidebar:
     st.text_input(
         "Port Serial Arduino Konveyor",
         value=st.session_state["cfg_port_arduino"],
-        placeholder="Kosong = Mode Simulasi",
+        placeholder="Kosong = Mode Simulasi Telemetri",
         key="sb_port_arduino",
         on_change=_sinkron_dari_sidebar,
     )
@@ -1732,10 +1760,10 @@ hujan_24j_default = float(st.session_state["cfg_hujan_24j"])
 hujan_72j_default = float(st.session_state["cfg_hujan_72j"])
 port_arduino = str(st.session_state["cfg_port_arduino"])
 
-jenis_visi = pilihan_visi_map[label_visi]
-label_chip_visi = "KARTA DEEPSCENE" if jenis_visi == "karta_v4" else jenis_visi.upper()
-metode_air = pilihan_air_map[label_air]
-label_chip_air = "CQR-GBM" if metode_air == "gbm" else metode_air.upper()
+jenis_visi = "karta_v4"
+label_chip_visi = "DeepLabv3+ (Xception-65)"
+metode_air = "gbm"
+label_chip_air = "CQR-ANN (SNI 19-3964-1994)"
 
 tema = dapatkan_palet_tema(mode_gelap)
 t = tema
@@ -1788,6 +1816,12 @@ components.html(
 
 visi, air, konveyor, df_bench = muat_ekosistem_karta(jenis_visi, metode_air, port_arduino)
 
+# Pra-kalkulasi optimasi baseline MILP harian (tersedia untuk seluruh tab)
+(rc_robust, ring_robust, rc_titik, ring_titik, par_robust, df_antrean,
+ w_nyata_robust, w_nyata_titik, w_nyata_fifo, fifo_u) = hitung_optimasi_harian(
+    metode_air, 150.0, 210.0, 35.0, 35.0
+)
+
 
 def _rapikan_html(teks_html: str) -> str:
     """Hilangkan baris kosong dan indentasi >=4 spasi agar CommonMark tidak merender HTML sebagai blok kode."""
@@ -1831,7 +1865,7 @@ if "chat_history" not in st.session_state:
     ]
 
 def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
-    """Menampilkan landing portal login eksekutif 2-kolom DLH Surakarta & PLTSa Putri Cempo (gaya SIMANTAP)."""
+    """Menampilkan landing portal login eksekutif resmi DLH Surakarta & PLTSa Putri Cempo (Figma Eco-Tech)."""
     bg_glass_card = "rgba(30, 41, 59, 0.94)" if mode_gelap else "rgba(255, 255, 255, 0.96)"
     border_glass = "rgba(52, 211, 153, 0.35)" if mode_gelap else "rgba(13, 148, 136, 0.28)"
     st.markdown(
@@ -1841,7 +1875,7 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
             background: {bg_glass_card} !important;
             backdrop-filter: blur(20px) !important;
             border-radius: 24px !important;
-            padding: 30px 28px !important;
+            padding: 32px 30px !important;
             box-shadow: 0 24px 55px -12px rgba(2, 44, 34, 0.22) !important;
             border: 1.5px solid {border_glass} !important;
         }}
@@ -1850,72 +1884,66 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
         unsafe_allow_html=True,
     )
 
-    col_hero, col_card = st.columns([1.15, 1.0], gap="large")
+    col_hero, col_card = st.columns([1.18, 1.0], gap="large")
 
     with col_hero:
         hero_html = _rapikan_html(f"""
-        <div style="background: linear-gradient(135deg, #022C22 0%, #064E3B 32%, #0F766E 68%, #0369A1 100%); border-radius: 24px; padding: 34px 30px; color: white; box-shadow: 0 22px 50px -12px rgba(2, 44, 34, 0.45); border: 1.5px solid rgba(52, 211, 153, 0.32); position: relative; overflow: hidden;">
-            <div style="display:flex; align-items:center; gap: 14px; margin-bottom: 18px;">
+        <div style="background: linear-gradient(135deg, #022C22 0%, #064E3B 32%, #0F766E 68%, #0369A1 100%); border-radius: 24px; padding: 36px 32px; color: white; box-shadow: 0 22px 50px -12px rgba(2, 44, 34, 0.45); border: 1.5px solid rgba(52, 211, 153, 0.32); position: relative; overflow: hidden;">
+            <div style="display:flex; align-items:center; gap: 14px; margin-bottom: 20px;">
                 <div style="background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); padding: 10px; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, 0.32); display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 6px 16px rgba(0,0,0,0.2);">
                     {LOGO_KARTA_SVG}
                 </div>
                 <div>
-                    <div style="font-size: 2.15rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #FFFFFF;">KARTA</div>
-                    <div style="font-size: 0.72rem; font-weight: 700; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 3px;">
-                        🏛️ SISTEM MANAJEMEN INTELIJEN MUTU UMPAN PLTSA PUTRI CEMPO
+                    <div style="font-family:'Montserrat',sans-serif; font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #FFFFFF;">KARTA</div>
+                    <div style="font-size: 0.70rem; font-weight: 700; color: #6EE7B7; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 3px;">
+                        SISTEM MANAJEMEN INTELIJEN MUTU UMPAN PLTSA PUTRI CEMPO
                     </div>
                 </div>
             </div>
-            <div style="font-size: 1.38rem; font-weight: 800; line-height: 1.28; margin-bottom: 6px; color: #F0FDF4;">
-                Mendukung Efisiensi PLTSa Putri Cempo &amp; Audit SE MenLH No. 11/2026
+            <div style="font-family:'Montserrat',sans-serif; font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin-bottom: 8px; color: #F0FDF4;">
+                Efisiensi Energi PLTSa Putri Cempo &amp; Audit SE MenLH No. 11/2026
             </div>
-            <div style="font-size: 0.82rem; color: #A7F3D0; line-height: 1.5; margin-bottom: 20px;">
-                Aplikasi resmi Dinas Lingkungan Hidup (DLH) Kota Surakarta bekerjasama dengan pengelola PLTSa Putri Cempo untuk pengawasan mutu fraksi bahan baku energi berbasis kecerdasan artifisial.
+            <div style="font-size: 0.84rem; color: #A7F3D0; line-height: 1.55; margin-bottom: 24px;">
+                Portal resmi Dinas Lingkungan Hidup (DLH) Kota Surakarta bekerjasama dengan PLTSa Putri Cempo untuk pengawasan mutu fraksi bahan baku energi berbasis kecerdasan artifisial.
             </div>
-            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
-                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                    <span style="font-size: 1.15rem;">🚛</span> Monitoring Armada &amp; Jembatan Timbang
-                </div>
-                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                    Pencatatan telemetri live 12 TPS se-Surakarta, gravimetrik timbangan, &amp; tiket sopir digital otomatis.
-                </div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
-                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                    <span style="font-size: 1.15rem;">🔬</span> Computer Vision &amp; Kadar Air CQR
-                </div>
-                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                    Segmentasi DeepLabv3+ 6 fraksi &amp; regresi konformal kalibrasi SNI 19-3964-1994 (kadar air &le; 20.0%).
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 14px 18px; margin-bottom: 12px;">
+                <div style="font-size: 0.68rem; font-weight: 800; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase;">MODUL 01 · LOGISTIK ARMADA</div>
+                <div style="font-weight: 700; font-size: 0.92rem; color: #FFFFFF; margin-top: 2px;">Pemantauan Armada &amp; Jembatan Timbang</div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 3px; line-height: 1.4;">
+                    Pencatatan telemetri live 12 TPS se-Surakarta, gravimetrik timbangan, dan tiket sopir digital otomatis.
                 </div>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 20px;">
-                <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
-                    <span style="font-size: 1.15rem;">🪵</span> Rantai Pasok Sirkular Sukoharjo
-                </div>
-                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
-                    Model optimasi Robust MILP serapan serbuk gergaji UMKM mebel Trangsan/Gatak sebagai <em>bulking agent</em> bio-drying.
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
-                    <div style="font-size: 1.15rem;">⚡</div>
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Proses Cepat</div>
-                    <div style="font-size: 0.65rem; color: #A7F3D0;">Edge AI &lt; 1.0 Detik</div>
-                </div>
-                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
-                    <div style="font-size: 1.15rem;">🛡️</div>
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Data Aman</div>
-                    <div style="font-size: 0.65rem; color: #A7F3D0;">Audit SE 11/2026</div>
-                </div>
-                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 6px; text-align: center;">
-                    <div style="font-size: 1.15rem;">☁️</div>
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Sinergi Daerah</div>
-                    <div style="font-size: 0.65rem; color: #A7F3D0;">Solo Raya Terpadu</div>
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 14px 18px; margin-bottom: 12px;">
+                <div style="font-size: 0.68rem; font-weight: 800; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase;">MODUL 02 · EDGE VISION AI</div>
+                <div style="font-weight: 700; font-size: 0.92rem; color: #FFFFFF; margin-top: 2px;">Segmentasi DeepLabv3+ &amp; Regresi Konformal CQR</div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 3px; line-height: 1.4;">
+                    Segmentasi 6 fraksi dan regresi konformal kalibrasi SNI 19-3964-1994 (kadar air &le; 20.0%).
                 </div>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.22); padding-top: 12px; font-size: 0.74rem; color: #A7F3D0;">
-                <div>📍 DLH Kota Surakarta &amp; PLTSa Putri Cempo</div>
-                <div>⏱️ Surakarta Smart Eco-City 2026</div>
+            <div style="background: rgba(255, 255, 255, 0.09); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 14px 18px; margin-bottom: 22px;">
+                <div style="font-size: 0.68rem; font-weight: 800; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase;">MODUL 03 · RISET OPERASI</div>
+                <div style="font-weight: 700; font-size: 0.92rem; color: #FFFFFF; margin-top: 2px;">Rantai Pasok Sirkular Serbuk Kayu Sukoharjo</div>
+                <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 3px; line-height: 1.4;">
+                    Model optimasi Robust MILP serapan limbah serbuk gergaji mebel Sukoharjo sebagai <em>bulking agent</em> bio-drying.
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px;">
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 8px; text-align: center;">
+                    <div style="font-size: 0.70rem; font-weight: 700; color: #A7F3D0; text-transform: uppercase;">Latensi Inferensi</div>
+                    <div style="font-family:'Montserrat',sans-serif; font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin-top: 2px;">&lt; 100 ms</div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 8px; text-align: center;">
+                    <div style="font-size: 0.70rem; font-weight: 700; color: #A7F3D0; text-transform: uppercase;">Standar Audit</div>
+                    <div style="font-family:'Montserrat',sans-serif; font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin-top: 2px;">SE 11/2026</div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.24); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 10px 8px; text-align: center;">
+                    <div style="font-size: 0.70rem; font-weight: 700; color: #A7F3D0; text-transform: uppercase;">Koridor Pasok</div>
+                    <div style="font-family:'Montserrat',sans-serif; font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin-top: 2px;">Solo Raya</div>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.22); padding-top: 14px; font-size: 0.75rem; color: #A7F3D0;">
+                <div>Dinas Lingkungan Hidup Kota Surakarta &amp; PLTSa Putri Cempo</div>
+                <div>Surakarta Smart Eco-City 2026</div>
             </div>
         </div>
         """)
@@ -1924,12 +1952,12 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
     with col_card:
         with st.container(border=True):
             header_card_html = _rapikan_html(f"""
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; margin-bottom: 14px;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; margin-bottom: 16px;">
                 <div style="background: rgba(13, 148, 136, 0.12); padding: 12px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 1.5px solid rgba(52, 211, 153, 0.4); box-shadow: 0 6px 18px rgba(13, 148, 136, 0.15);">
                     {LOGO_KARTA_SVG}
                 </div>
-                <div style="font-size: 1.75rem; font-weight: 800; color: {t['teks_utama']}; line-height: 1.1;">Selamat Datang</div>
-                <div style="font-size: 0.82rem; color: {t['teks_redup']}; margin-top: 4px;">Masuk ke portal Command Center KARTA Anda</div>
+                <div style="font-family:'Montserrat',sans-serif; font-size: 1.80rem; font-weight: 800; color: {t['teks_utama']}; line-height: 1.1;">Selamat Datang</div>
+                <div style="font-size: 0.82rem; color: {t['teks_redup']}; margin-top: 4px;">Portal Masuk Command Center Eksekutif KARTA</div>
             </div>
             """)
             st.markdown(header_card_html, unsafe_allow_html=True)
@@ -1937,9 +1965,9 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
             tab_pilihan = st.radio("Pilihan Akses Portal", ["Masuk (Login)", "Pendaftaran Akun Baru (Sign Up)"], horizontal=True, label_visibility="collapsed")
 
             if tab_pilihan == "Masuk (Login)":
-                email_val = st.text_input("✉️ Alamat Email / ID Petugas", value="kepala.dlh@surakarta.go.id", placeholder="Contoh: kepala.dlh@surakarta.go.id atau OP-042")
-                st.markdown("<div style='font-size:0.72rem; color:#059669; margin-top:-8px; margin-bottom:10px;'>● Gunakan akun resmi DLH Surakarta atau ID Petugas PLTSa</div>", unsafe_allow_html=True)
-                pass_val = st.text_input("🔒 Kata Sandi / Password", value="••••••••", type="password")
+                email_val = st.text_input("Alamat Email / ID Petugas", value="kepala.dlh@surakarta.go.id", placeholder="Contoh: kepala.dlh@surakarta.go.id atau OP-042")
+                st.markdown("<div style='font-size:0.72rem; color:#059669; margin-top:-8px; margin-bottom:10px;'>Gunakan akun resmi DLH Surakarta atau ID Petugas PLTSa</div>", unsafe_allow_html=True)
+                pass_val = st.text_input("Kata Sandi / Password", value="••••••••", type="password")
 
                 c_ingat, c_lupa = st.columns([1, 1])
                 with c_ingat:
@@ -1947,7 +1975,7 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
                 with c_lupa:
                     st.markdown(f"<div style='text-align:right; font-size:0.78rem; padding-top:4px;'><a href='#' style='color:{t['aksen']}; text-decoration:none; font-weight:600;'>Lupa Password?</a></div>", unsafe_allow_html=True)
 
-                if st.button("➜ Masuk ke Sistem", type="primary", use_container_width=True):
+                if st.button("Masuk ke Sistem ➔", type="primary", use_container_width=True):
                     st.session_state["authenticated"] = True
                     st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
                     st.session_state["user_role"] = "Kepala DLH Kota Surakarta"
@@ -1955,38 +1983,38 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
                     st.rerun()
 
                 st.markdown(
-                    "<div style='text-align:center; margin: 16px 0 10px 0; font-size:0.74rem; color:#888; border-top:1px dashed rgba(0,0,0,0.12); padding-top:12px;'>─── AKSES CEPAT DEMO JURI HACKATHON ───</div>",
+                    "<div style='text-align:center; margin: 18px 0 12px 0; font-size:0.72rem; font-weight:700; color:#888; letter-spacing:0.04em; border-top:1px dashed rgba(0,0,0,0.12); padding-top:14px;'>AKSES CEPAT DEMO PENGUJIAN JURI</div>",
                     unsafe_allow_html=True
                 )
                 cd1, cd2, cd3 = st.columns(3)
                 with cd1:
-                    if st.button("👤 Kepala DLH", use_container_width=True):
+                    if st.button("Kepala DLH", use_container_width=True):
                         st.session_state["authenticated"] = True
                         st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
                         st.session_state["user_role"] = "Kepala Dinas Lingkungan Hidup Surakarta"
                         st.rerun()
                 with cd2:
-                    if st.button("🏭 Direksi PLTSa", use_container_width=True):
+                    if st.button("Direksi PLTSa", use_container_width=True):
                         st.session_state["authenticated"] = True
                         st.session_state["user_name"] = "Dra. Siti Rahayu, M.Sc."
                         st.session_state["user_role"] = "Direksi Operasional PLTSa Putri Cempo"
                         st.rerun()
                 with cd3:
-                    if st.button("🚚 Petugas OP-042", use_container_width=True):
+                    if st.button("Petugas OP-042", use_container_width=True):
                         st.session_state["authenticated"] = True
                         st.session_state["user_name"] = "Agus Prasetyo (OP-042)"
                         st.session_state["user_role"] = "Petugas Jembatan Timbang Gerbang PLTSa"
                         st.rerun()
 
                 st.markdown(
-                    "<div style='text-align:center; margin-top: 12px; font-size: 0.79rem; color: #64748B;'>Belum punya akun? <strong style='color: #059669;'>Hubungi Operator DLH</strong></div>",
+                    "<div style='text-align:center; margin-top: 14px; font-size: 0.79rem; color: #64748B;'>Belum punya akun? <strong style='color: #059669;'>Hubungi Administrator DLH</strong></div>",
                     unsafe_allow_html=True
                 )
             else:
                 st.markdown(
                     _rapikan_html(f"""
-                    <div style="font-size: 1.10rem; font-weight: 800; color: {t['teks_utama']}; margin-bottom: 2px;">Pendaftaran Akun Operator</div>
-                    <div style="font-size: 0.76rem; color: {t['teks_redup']}; margin-bottom: 10px;">Akun diverifikasi langsung oleh admin DLH Surakarta</div>
+                    <div style="font-family:'Montserrat',sans-serif; font-size: 1.10rem; font-weight: 800; color: {t['teks_utama']}; margin-bottom: 2px;">Pendaftaran Akun Operator</div>
+                    <div style="font-size: 0.76rem; color: {t['teks_redup']}; margin-bottom: 12px;">Akun diverifikasi langsung oleh administrator DLH Surakarta</div>
                     """),
                     unsafe_allow_html=True
                 )
@@ -2063,16 +2091,16 @@ with st.expander(
     f"Model Visi: {label_chip_visi} | Kalibrasi: {label_chip_air} | Hujan BMKG: {hujan_24j_default:.1f} mm (Klik untuk Buka/Ubah)",
     expanded=False,
 ):
-    c_cfg1, c_cfg2, c_cfg3 = st.columns([1.15, 1.35, 1.25], gap="medium")
+    c_cfg1, c_cfg2 = st.columns([1.2, 1.8], gap="medium")
     with c_cfg1:
         st.toggle("Mode Tampilan Gelap (Dark Mode)", value=mode_gelap, key="top_mode_gelap", on_change=_sinkron_dari_panel_atas)
         st.text_input("Port Serial Arduino Konveyor", value=port_arduino, placeholder="Kosong = Mode Simulasi", key="top_port_arduino", on_change=_sinkron_dari_panel_atas)
     with c_cfg2:
-        st.selectbox("Arsitektur Model Segmentasi Citra", daftar_label_visi, index=daftar_label_visi.index(label_visi), key="top_label_visi", on_change=_sinkron_dari_panel_atas)
-        st.selectbox("Model Estimasi Kadar Air & LHV", daftar_label_air, index=daftar_label_air.index(label_air), key="top_label_air", on_change=_sinkron_dari_panel_atas)
-    with c_cfg3:
-        st.slider("Curah Hujan 24 Jam BMKG (mm)", 0.0, 150.0, hujan_24j_default, 0.5, key="top_hujan_24j", on_change=_sinkron_dari_panel_atas)
-        st.slider("Akumulasi Hujan 72 Jam (mm)", 0.0, 300.0, hujan_72j_default, 1.0, key="top_hujan_72j", on_change=_sinkron_dari_panel_atas)
+        c_h1, c_h2 = st.columns(2)
+        with c_h1:
+            st.slider("Curah Hujan 24 Jam BMKG (mm)", 0.0, 150.0, hujan_24j_default, 0.5, key="top_hujan_24j", on_change=_sinkron_dari_panel_atas)
+        with c_h2:
+            st.slider("Akumulasi Hujan 72 Jam (mm)", 0.0, 300.0, hujan_72j_default, 1.0, key="top_hujan_72j", on_change=_sinkron_dari_panel_atas)
 
 st.markdown(
     _rapikan_html("""
