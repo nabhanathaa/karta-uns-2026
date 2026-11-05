@@ -1723,6 +1723,7 @@ metode_air = pilihan_air_map[label_air]
 label_chip_air = "CQR-GBM" if metode_air == "gbm" else metode_air.upper()
 
 tema = dapatkan_palet_tema(mode_gelap)
+t = tema
 suntikkan_css_web(tema, mode_gelap=mode_gelap)
 
 # Injeksi Pembersih Chrome Streamlit Cloud (Sembunyikan Deploy/Menu Kanan, Pastikan Tombol >> Sidebar Kiri Atas Selalu Tampil)
