@@ -196,7 +196,27 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+        /* Proteksi Font Ikon Streamlit agar Ligature (keyboard_arrow dsb) Tidak Berubah Jadi Teks Mentah */
+        [data-testid="stIconMaterial"],
+        .material-symbols-rounded,
+        .material-symbols-outlined,
+        span[class*="material-symbols"],
+        i[class*="material-icons"] {{
+            font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', sans-serif !important;
+            font-weight: normal !important;
+            font-style: normal !important;
+            font-size: 20px !important;
+            line-height: 1 !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+            word-wrap: normal !important;
+            direction: ltr !important;
+            -webkit-font-smoothing: antialiased !important;
+        }}
 
         /* Reset & App Shell (60% Eco Paper / Deep Charcoal + Background Batik Parang-Truntum Sogan Surakarta Full Web) */
         .stApp {{
@@ -225,41 +245,73 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
             border-bottom: none !important;
             height: 2.75rem !important;
         }}
-        /* Tombol Buka/Tutup Sidebar (>> / <<) di Pojok Kiri Atas Dibuat Sangat Jelas (Hijau Emerald) */
+        /* Tombol Buka/Tutup Sidebar (>> / <<) di Pojok Kiri Atas */
         [data-testid="stSidebarCollapsedControl"],
-        [data-testid="collapsedControl"],
-        [data-testid="stExpandSidebarButton"],
-        [data-testid="stSidebarCollapseButton"] button {{
+        [data-testid="collapsedControl"] {{
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }}
+        [data-testid="stSidebarCollapsedControl"] button,
+        [data-testid="collapsedControl"] button,
+        button[data-testid="stSidebarCollapseButton"],
+        button[data-testid="stExpandSidebarButton"] {{
             pointer-events: auto !important;
             visibility: visible !important;
             display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            min-height: 36px !important;
+            padding: 0 !important;
+            overflow: hidden !important;
             opacity: 1 !important;
             background-color: #059669 !important;
             color: #FFFFFF !important;
             border: 1.5px solid #34D399 !important;
-            border-radius: 8px !important;
+            border-radius: 10px !important;
             box-shadow: 0 3px 10px rgba(5, 150, 105, 0.35) !important;
             z-index: 999999 !important;
+            cursor: pointer !important;
         }}
-        [data-testid="stSidebarCollapsedControl"] svg,
-        [data-testid="collapsedControl"] svg,
-        [data-testid="stExpandSidebarButton"] svg,
-        [data-testid="stSidebarCollapseButton"] svg {{
-            fill: #FFFFFF !important;
+        [data-testid="stSidebarCollapsedControl"] button:hover,
+        button[data-testid="stSidebarCollapseButton"]:hover {{
+            background-color: #10B981 !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.5) !important;
+        }}
+        [data-testid="stSidebarCollapsedControl"] button *,
+        button[data-testid="stSidebarCollapseButton"] * {{
             color: #FFFFFF !important;
+            fill: #FFFFFF !important;
         }}
+
         /* Styling Expander Panel Kontrol Cepat di Atas Halaman */
         div[data-testid="stExpander"] {{
             background-color: {t['bg_card']} !important;
-            border: 1px solid {t['aksen']} !important;
+            border: 1.5px solid {t['border']} !important;
+            border-left: 4px solid {t['aksen']} !important;
             border-radius: 12px !important;
             box-shadow: {t['shadow']} !important;
-            margin-bottom: 12px !important;
+            margin-bottom: 14px !important;
+            overflow: hidden !important;
         }}
         div[data-testid="stExpander"] summary {{
             font-weight: 700 !important;
             font-size: 0.85rem !important;
             color: {t['teks_utama']} !important;
+            padding: 11px 16px !important;
+            cursor: pointer !important;
+            background-color: {t['bg_card_subtle']} !important;
+            transition: background 0.15s ease !important;
+        }}
+        div[data-testid="stExpander"] summary:hover {{
+            background-color: {t['tbl_hover']} !important;
+        }}
+        div[data-testid="stExpander"] summary [data-testid="stIconMaterial"] {{
+            margin-right: 8px !important;
+            color: {t['aksen']} !important;
         }}
         .block-container {{
             padding-top: 2.2rem !important;
@@ -315,52 +367,111 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
             color: {t['teks_sekunder']} !important;
         }}
 
-        /* Tombol Utama Eco-Tech Forest Emerald */
-        div.stButton > button {{
+        /* Sistem Tombol Eco-Tech (Primer & Sekunder Terstruktur Rapi) */
+        div.stButton > button,
+        div[data-testid="stDownloadButton"] > button,
+        .stButton > button {{
+            border-radius: 999px !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 0.84rem !important;
+            letter-spacing: 0.02em !important;
+            padding: 0.50rem 1.25rem !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            background-color: {'#1E293B' if mode_gelap else '#FFFFFF'} !important;
+            border: 1.5px solid {'#475569' if mode_gelap else '#CBD5E1'} !important;
+            color: {t['teks_utama']} !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+            cursor: pointer !important;
+        }}
+        div.stButton > button:hover,
+        div[data-testid="stDownloadButton"] > button:hover,
+        .stButton > button:hover {{
+            border-color: #059669 !important;
+            color: #059669 !important;
+            background-color: {'#0F172A' if mode_gelap else '#F0FDF4'} !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.22) !important;
+            transform: translateY(-1.5px) !important;
+        }}
+        div.stButton > button:hover *,
+        div[data-testid="stDownloadButton"] > button:hover * {{
+            color: #059669 !important;
+        }}
+
+        div.stButton > button[kind="primary"],
+        .stButton > button[kind="primary"] {{
+            background: linear-gradient(135deg, #059669 0%, #0D9488 100%) !important;
+            border: 1.5px solid #047857 !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.38) !important;
+        }}
+        div.stButton > button[kind="primary"]:hover,
+        .stButton > button[kind="primary"]:hover {{
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+            border-color: #10B981 !important;
+            box-shadow: 0 6px 22px rgba(5, 150, 105, 0.50) !important;
+            transform: translateY(-2px) !important;
+        }}
+        div.stButton > button[kind="primary"] *,
+        .stButton > button[kind="primary"] * {{
+            color: #FFFFFF !important;
+        }}
+
+        /* Navigasi Tab Modern Terpadu */
+        div[data-testid="stTabs"] > div:first-child,
+        div[data-testid="stTabs"] [role="tablist"],
+        div[data-testid="stTabs"] [data-baseweb="tab-list"] {{
+            background-color: {t['bg_card']} !important;
+            border: 1.5px solid {t['border']} !important;
+            border-bottom: 3px solid #B45309 !important;
+            border-radius: 14px !important;
+            padding: 8px 10px !important;
+            gap: 8px !important;
+            box-shadow: {t['shadow']} !important;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            margin-bottom: 16px !important;
+        }}
+        div[data-testid="stTabs"] button,
+        div[data-testid="stTabs"] [role="tab"],
+        div[data-testid="stTabs"] button[data-baseweb="tab"] {{
+            border-radius: 10px !important;
+            padding: 9px 18px !important;
+            font-weight: 700 !important;
+            font-size: 0.84rem !important;
+            background-color: {'#1E293B' if mode_gelap else '#F1F5F9'} !important;
+            border: 1px solid {'#334155' if mode_gelap else '#CBD5E1'} !important;
+            color: {t['teks_sekunder']} !important;
+            white-space: nowrap !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+        }}
+        div[data-testid="stTabs"] button:hover,
+        div[data-testid="stTabs"] [role="tab"]:hover {{
+            background-color: {'#334155' if mode_gelap else '#E2E8F0'} !important;
+            color: {t['teks_utama']} !important;
+            border-color: {t['aksen']} !important;
+        }}
+        div[data-testid="stTabs"] button[aria-selected="true"],
+        div[data-testid="stTabs"] [role="tab"][aria-selected="true"] {{
             background: linear-gradient(135deg, #059669 0%, #0F766E 100%) !important;
             color: #FFFFFF !important;
             border: 1px solid #047857 !important;
-            border-radius: 8px !important;
-            font-weight: 700 !important;
-            font-size: 0.82rem !important;
-            padding: 0.45rem 0.9rem !important;
-            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.22) !important;
+            border-radius: 10px !important;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35) !important;
         }}
-        div.stButton > button * {{
+        div[data-testid="stTabs"] button[aria-selected="true"] * {{
             color: #FFFFFF !important;
+            font-weight: 800 !important;
         }}
-        div.stButton > button:hover {{
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
-            border-color: #10B981 !important;
-        }}
-
-        /* Navigasi Tab Modern (30% Forest Emerald & Ocean Teal) */
-        div[data-testid="stTabs"] [data-baseweb="tab-list"] {{
-            background-color: {t['bg_card']} !important;
-            border: 1px solid {t['border']} !important;
-            border-bottom: 3px solid {t['aksen_terracotta']} !important;
-            border-radius: 12px !important;
-            padding: 6px 10px !important;
-            gap: 6px !important;
-            box-shadow: {t['shadow']} !important;
-            overflow-x: auto !important;
-        }}
-        div[data-testid="stTabs"] button[role="tab"] {{
-            border-radius: 8px !important;
-            padding: 9px 16px !important;
-            font-weight: 700 !important;
-            font-size: 0.84rem !important;
+        div[data-testid="stTabs"] button[aria-selected="false"] * {{
             color: {t['teks_sekunder']} !important;
-            border: none !important;
-            white-space: nowrap !important;
         }}
-        div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {{
-            background: linear-gradient(135deg, #059669 0%, #0F766E 100%) !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 2px 10px rgba(5, 150, 105, 0.28) !important;
-        }}
-        div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p {{
-            color: #FFFFFF !important;
+        div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+        div[data-testid="stTabs"] [data-baseweb="tab-border"] {{
+            display: none !important;
+            visibility: hidden !important;
         }}
 
         /* Header Banner Pemerintah Kota Surakarta x Eco-Tech Circular + Ornamen Batik Kawung */
@@ -491,30 +602,16 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
         h1, h2, h3, .karta-brand-title, .kpi-num, .karta-section-head {{
             font-family: 'Montserrat', sans-serif !important;
         }}
-        body, p, span, div, input, label {{
+        .stApp, p, label, .stMarkdown, .stText {{
             font-family: 'Plus Jakarta Sans', sans-serif !important;
         }}
-        .stButton > button {{
+        input[type="text"], input[type="password"], input[type="number"], .stTextInput input {{
             border-radius: 999px !important;
+            border: 1.5px solid {'#475569' if mode_gelap else '#CBD5E1'} !important;
+            background-color: {'#1E293B' if mode_gelap else '#F8FAFC'} !important;
+            color: {t['teks_utama']} !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.02em !important;
-            transition: all 0.2s ease-in-out !important;
-        }}
-        .stButton > button[kind="primary"] {{
-            background: linear-gradient(90deg, #1D4ED8 0%, #2563EB 100%) !important;
-            border: none !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
-        }}
-        .stButton > button[kind="primary"]:hover {{
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5) !important;
-            transform: translateY(-1px) !important;
-        }}
-        input[type="text"], input[type="password"], input[type="number"] {{
-            border-radius: 12px !important;
-            border: 1.5px solid #CBD5E1 !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            padding: 8px 18px !important;
         }}
 
         div[data-testid="stVerticalBlockBorderWrapper"] {{
