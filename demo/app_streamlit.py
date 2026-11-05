@@ -690,12 +690,19 @@ def render_kpi_grid(items: list[dict]):
     """Render kartu KPI responsif yang otomatis menjadi 2 kolom di HP dan N kolom di Desktop."""
     html = '<div class="kpi-grid">'
     for it in items:
-        warna = it.get("warna", "#0D9488")
+        warna = it.get("warna", it.get("color", it.get("cls", "#0D9488")))
+        if "border-top-color:" in str(warna):
+            import re
+            m = re.search(r"#(?:[0-9a-fA-F]{3}){1,2}", str(warna))
+            warna = m.group(0) if m else "#0D9488"
+        nilai = it.get("nilai", it.get("val", it.get("value", "")))
+        label = it.get("label", it.get("title", ""))
+        sub = it.get("sub", it.get("meta", it.get("desc", "")))
         html += (
             f'<div class="kpi-box" style="border-top: 3px solid {warna};">'
-            f'<div class="kpi-lbl">{it["label"]}</div>'
-            f'<div class="kpi-num">{it["nilai"]}</div>'
-            f'<div class="kpi-meta">{it["sub"]}</div>'
+            f'<div class="kpi-lbl">{label}</div>'
+            f'<div class="kpi-num">{nilai}</div>'
+            f'<div class="kpi-meta">{sub}</div>'
             f"</div>"
         )
     html += "</div>"
@@ -1828,75 +1835,131 @@ if "chat_history" not in st.session_state:
     ]
 
 def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
-    """Menampilkan portal Login dan Sign Up berestetika Eco-Tech Circular sesuai desain Figma resmi KARTA."""
-    st.markdown(
-        f"""
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 20px 0 10px 0;">
-            <div style="background: rgba(13, 148, 136, 0.12); padding: 14px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; border: 1.5px solid rgba(52, 211, 153, 0.35); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                {LOGO_KARTA_SVG}
-            </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: {t['teks_utama']}; letter-spacing: -0.02em;">KARTA · Smart Gate Portal</div>
-            <div style="font-size: 0.85rem; color: {t['teks_redup']}; margin-top: 2px; text-align: center;">
-                Sistem Intelijen Gerbang Cerdas &amp; Pusat Komando DLH Kota Surakarta · PLTSa Putri Cempo
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    col_l, col_m, col_r = st.columns([1, 1.25, 1])
-    with col_m:
-        tab_pilihan = st.radio("Pilihan Akses Portal", ["Masuk (Login)", "Pendaftaran Akun Baru (Sign Up)"], horizontal=True, label_visibility="collapsed")
-        
-        if tab_pilihan == "Masuk (Login)":
-            st.markdown(
-                f"""
-                <div style="background: linear-gradient(180deg, #071930 0%, #0F2D4A 60%, #153B60 100%); padding: 28px 24px 32px 24px; border-radius: 20px 20px 0 0; text-align: left; color: white;">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px;">
-                        <div style="display:flex; align-items:center; gap: 8px;">
-                            <div style="width: 24px; height: 24px;">{LOGO_KARTA_SVG}</div>
-                            <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.06em; color: #FFFFFF;">KARTA</span>
+    """Menampilkan landing portal login eksekutif 2-kolom DLH Surakarta & PLTSa Putri Cempo (gaya SIMANTAP)."""
+    col_hero, col_card = st.columns([1.18, 1.0], gap="large")
+
+    with col_hero:
+        st.markdown(
+            f"""
+            <div style="background: linear-gradient(135deg, #022C22 0%, #064E3B 30%, #0F766E 65%, #0369A1 100%); border-radius: 24px; padding: 34px 30px; color: white; box-shadow: 0 20px 50px -10px rgba(2, 44, 34, 0.45); border: 1.5px solid rgba(52, 211, 153, 0.3); position: relative; overflow: hidden;">
+                <!-- Header Brand -->
+                <div style="display:flex; align-items:center; gap: 14px; margin-bottom: 18px;">
+                    <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 10px; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, 0.35); display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 6px 16px rgba(0,0,0,0.2);">
+                        {LOGO_KARTA_SVG}
+                    </div>
+                    <div>
+                        <div style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #FFFFFF;">KARTA</div>
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #6EE7B7; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px;">
+                            🏛️ SISTEM MANAJEMEN INTELIJEN MUTU UMPAN PLTSA PUTRI CEMPO
                         </div>
-                        <span style="font-size: 0.70rem; background: rgba(52, 211, 153, 0.2); color: #34D399; padding: 3px 8px; border-radius: 999px; border: 1px solid rgba(52, 211, 153, 0.4);">OPERATOR GATEWAY</span>
                     </div>
-                    <div style="font-size: 1.7rem; font-weight: 800; color: #FFFFFF; line-height: 1.1;">Hello! 👋</div>
-                    <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 4px;">Welcome to <strong>KARTA</strong></div>
                 </div>
-                <div style="background: {'#1E293B' if mode_gelap else '#FFFFFF'}; padding: 24px 26px 28px 26px; border-radius: 0 0 20px 20px; box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.25); border: 1px solid {'#334155' if mode_gelap else '#E2E8F0'}; border-top: none;">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 4px;">
-                        <div style="font-size: 1.25rem; font-weight: 800; color: {t['teks_utama']};">Login</div>
-                        <span style="width: 9px; height: 9px; background: #2563EB; border-radius: 50%; display: inline-block;"></span>
+
+                <!-- Headline -->
+                <div style="font-size: 1.40rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; color: #F0FDF4;">
+                    Mendukung Efisiensi PLTSa Putri Cempo &amp; Audit SE MenLH No. 11/2026
+                </div>
+                <div style="font-size: 0.82rem; color: #A7F3D0; line-height: 1.5; margin-bottom: 22px;">
+                    Aplikasi resmi Dinas Lingkungan Hidup (DLH) Kota Surakarta bekerjasama dengan pengelola PLTSa Putri Cempo untuk pengawasan mutu fraksi bahan baku energi berbasis kecerdasan artifisial.
+                </div>
+
+                <!-- 3 Frosted Feature Cards -->
+                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
+                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                        <span style="font-size: 1.15rem;">🚛</span> Monitoring Armada &amp; Jembatan Timbang
                     </div>
-                    <div style="font-size: 0.80rem; color: {t['teks_redup']}; margin-bottom: 16px;">Portal Operator Gerbang &amp; Penimbangan PLTSa</div>
-                """,
-                unsafe_allow_html=True
-            )
-            email_val = st.text_input("✉️ Email / ID Petugas", value="OP-042", placeholder="Contoh: OP-042 atau kepala.dlh@surakarta.go.id")
-            pass_val = st.text_input("🔒 Kata Sandi", value="••••••••", type="password")
-            
+                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                        Pencatatan telemetri live 12 TPS se-Surakarta, gravimetrik timbangan, &amp; tiket sopir digital otomatis.
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 11px;">
+                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                        <span style="font-size: 1.15rem;">🔬</span> Computer Vision &amp; Kadar Air CQR
+                    </div>
+                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                        Segmentasi DeepLabv3+ 6 fraksi &amp; regresi konformal kalibrasi SNI 19-3964-1994 (kadar air &le; 20.0%).
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 13px 16px; margin-bottom: 20px;">
+                    <div style="display:flex; align-items:center; gap: 9px; font-weight: 700; font-size: 0.90rem; color: #FFFFFF;">
+                        <span style="font-size: 1.15rem;">🪵</span> Rantai Pasok Sirkular Sukoharjo
+                    </div>
+                    <div style="font-size: 0.78rem; color: #D1FAE5; margin-top: 2px; line-height: 1.4;">
+                        Model optimasi Robust MILP serapan serbuk gergaji UMKM mebel Trangsan/Gatak sebagai <em>bulking agent</em> bio-drying.
+                    </div>
+                </div>
+
+                <!-- 3 Highlights -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
+                        <div style="font-size: 1.1rem;">⚡</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Proses Cepat</div>
+                        <div style="font-size: 0.65rem; color: #A7F3D0;">Edge AI &lt; 1.0 Detik</div>
+                    </div>
+                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
+                        <div style="font-size: 1.1rem;">🛡️</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Data Aman</div>
+                        <div style="font-size: 0.65rem; color: #A7F3D0;">Audit SE 11/2026</div>
+                    </div>
+                    <div style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 6px; text-align: center;">
+                        <div style="font-size: 1.1rem;">☁️</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">Sinergi Daerah</div>
+                        <div style="font-size: 0.65rem; color: #A7F3D0;">Solo Raya Terpadu</div>
+                    </div>
+                </div>
+
+                <!-- Municipal Footer -->
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; font-size: 0.74rem; color: #A7F3D0;">
+                    <div>📍 DLH Kota Surakarta &amp; PLTSa Putri Cempo</div>
+                    <div>⏱️ Surakarta Smart Eco-City 2026</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with col_card:
+        st.markdown(
+            f"""
+            <div style="background: {'#1E293B' if mode_gelap else '#FFFFFF'}; border-radius: 24px; padding: 30px 28px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.22); border: 1.5px solid {'#334155' if mode_gelap else '#E2E8F0'}; text-align: left;">
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; margin-bottom: 16px;">
+                    <div style="background: rgba(13, 148, 136, 0.12); padding: 12px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 1.5px solid rgba(52, 211, 153, 0.4); box-shadow: 0 6px 18px rgba(13, 148, 136, 0.15);">
+                        {LOGO_KARTA_SVG}
+                    </div>
+                    <div style="font-size: 1.80rem; font-weight: 800; color: {t['teks_utama']}; line-height: 1.1;">Selamat Datang</div>
+                    <div style="font-size: 0.82rem; color: {t['teks_redup']}; margin-top: 4px;">Masuk ke portal Command Center KARTA Anda</div>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        tab_pilihan = st.radio("Pilihan Akses Portal", ["Masuk (Login)", "Pendaftaran Akun Baru (Sign Up)"], horizontal=True, label_visibility="collapsed")
+
+        if tab_pilihan == "Masuk (Login)":
+            email_val = st.text_input("✉️ Alamat Email / ID Petugas", value="kepala.dlh@surakarta.go.id", placeholder="Contoh: kepala.dlh@surakarta.go.id atau OP-042")
+            st.markdown("<div style='font-size:0.72rem; color:#059669; margin-top:-10px; margin-bottom:10px;'>● Gunakan akun resmi DLH Surakarta atau ID Petugas PLTSa</div>", unsafe_allow_html=True)
+            pass_val = st.text_input("🔒 Kata Sandi / Password", value="••••••••", type="password")
+
             c_ingat, c_lupa = st.columns([1, 1])
             with c_ingat:
                 st.checkbox("Ingat Saya", value=True)
             with c_lupa:
-                st.markdown(f"<div style='text-align:right; font-size:0.78rem; padding-top:4px;'><a href='#' style='color:#2563EB; text-decoration:none; font-weight:600;'>Forgot Password?</a></div>", unsafe_allow_html=True)
-            
-            if st.button("Login ➔", type="primary", use_container_width=True):
+                st.markdown(f"<div style='text-align:right; font-size:0.78rem; padding-top:4px;'><a href='#' style='color:{t['aksen']}; text-decoration:none; font-weight:600;'>Lupa Password?</a></div>", unsafe_allow_html=True)
+
+            if st.button("➜ Masuk ke Sistem", type="primary", use_container_width=True):
                 st.session_state["authenticated"] = True
-                st.session_state["user_name"] = "Ir. Budi Santoso, M.T."
-                st.session_state["user_role"] = "Kepala Bidang Pengelolaan Sampah DLH Surakarta"
+                st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
+                st.session_state["user_role"] = "Kepala DLH Kota Surakarta"
                 st.success("Autentikasi Berhasil! Mengalihkan ke Pusat Komando...")
                 st.rerun()
-            
+
             st.markdown(
                 """
-                <div style="text-align:center; margin: 16px 0 10px 0; font-size:0.74rem; color:#94A3B8;">
-                    <span>Or login with</span>
-                    <div style="display:flex; justify-content:center; gap: 12px; margin-top: 8px;">
-                        <div style="width:34px; height:34px; border-radius:50%; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-weight:800; color:#1877F2; cursor:pointer;">f</div>
-                        <div style="width:34px; height:34px; border-radius:50%; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-weight:800; color:#EA4335; cursor:pointer;">G</div>
-                    </div>
+                <div style="text-align:center; margin: 18px 0 10px 0; font-size:0.75rem; color:#888; border-top:1px dashed rgba(0,0,0,0.12); padding-top:12px;">
+                    ─── AKSES CEPAT DEMO JURI HACKATHON ───
                 </div>
-                <div style="text-align:center; margin: 16px 0 10px 0; font-size:0.75rem; color:#888; border-top:1px dashed rgba(0,0,0,0.1); padding-top:12px;">─── AKSES CEPAT DEMO JURI HACKATHON ───</div>
                 """,
                 unsafe_allow_html=True
             )
@@ -1905,7 +1968,7 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
                 if st.button("👤 Kepala DLH", use_container_width=True):
                     st.session_state["authenticated"] = True
                     st.session_state["user_name"] = "Dr. Ir. Kristiyanto, M.Si."
-                    st.session_state["user_role"] = "Kepala DLH Kota Surakarta"
+                    st.session_state["user_role"] = "Kepala Dinas Lingkungan Hidup Surakarta"
                     st.rerun()
             with cd2:
                 if st.button("🏭 Direksi PLTSa", use_container_width=True):
@@ -1919,12 +1982,11 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
                     st.session_state["user_name"] = "Agus Prasetyo (OP-042)"
                     st.session_state["user_role"] = "Petugas Jembatan Timbang Gerbang PLTSa"
                     st.rerun()
-            
+
             st.markdown(
                 """
                 <div style="text-align:center; margin-top: 14px; font-size: 0.80rem; color: #64748B;">
-                    Don't have account? <strong style="color: #2563EB;">Sign Up</strong>
-                </div>
+                    Belum punya akun? <strong style="color: #059669;">Hubungi Operator DLH</strong>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -1932,46 +1994,32 @@ def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
         else:
             st.markdown(
                 f"""
-                <div style="background: linear-gradient(180deg, #071930 0%, #0F2D4A 60%, #153B60 100%); padding: 24px 24px 28px 24px; border-radius: 20px 20px 0 0; text-align: left; color: white;">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px;">
-                        <div style="display:flex; align-items:center; gap: 8px;">
-                            <div style="width: 24px; height: 24px;">{LOGO_KARTA_SVG}</div>
-                            <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.06em; color: #FFFFFF;">KARTA</span>
-                        </div>
-                        <span style="font-size: 0.70rem; color: #94A3B8;">&larr; Back to login</span>
-                    </div>
-                    <div style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; line-height: 1.1;">Sign Up</div>
-                    <div style="font-size: 0.82rem; color: #94A3B8; margin-top: 4px;">Pendaftaran akun operator PLTSa Putri Cempo</div>
-                </div>
-                <div style="background: {'#1E293B' if mode_gelap else '#FFFFFF'}; padding: 24px 26px 28px 26px; border-radius: 0 0 20px 20px; box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.25); border: 1px solid {'#334155' if mode_gelap else '#E2E8F0'}; border-top: none;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: {t['teks_utama']}; margin-bottom: 4px;">Pendaftaran Akun Operator</div>
+                <div style="font-size: 0.78rem; color: {t['teks_redup']}; margin-bottom: 12px;">Akun diverifikasi langsung oleh admin DLH Surakarta</div>
                 """,
                 unsafe_allow_html=True
             )
-            reg_id = st.text_input("✉️ Email / ID Petugas", placeholder="Contoh: OP-042 atau rina@putricempo.co.id")
-            reg_p1 = st.text_input("🔒 Password", type="password")
-            reg_p2 = st.text_input("🛡️ Confirm Password", type="password")
-            reg_wa = st.text_input("📞 Phone / WhatsApp (+62)", placeholder="+62 812-3456-7890")
-            reg_setuju = st.checkbox("Saya menyetujui SOP Keamanan Data DLH Surakarta & Triase PLTSa.", value=True)
-            
-            if st.button("Sign Up ➔", type="primary", use_container_width=True):
-                if reg_id and reg_p1:
+            reg_nama = st.text_input("Nama Lengkap", placeholder="Contoh: Rian Hidayat, S.T.")
+            reg_id = st.text_input("Email / ID Petugas / NIP", placeholder="Contoh: OP-088 atau rian@dlh.surakarta.go.id")
+            c_p1, c_p2 = st.columns(2)
+            with c_p1:
+                reg_p1 = st.text_input("Kata Sandi Baru", type="password")
+            with c_p2:
+                reg_p2 = st.text_input("Konfirmasi Kata Sandi", type="password")
+            reg_wa = st.text_input("Nomor WhatsApp / HP (+62)", placeholder="+62 812-3456-7890")
+            reg_setuju = st.checkbox("Saya menyetujui SOP Keamanan Data DLH Surakarta & Integritas Umpan PLTSa Putri Cempo.", value=True)
+
+            if st.button("Daftarkan Akun & Masuk ➔", type="primary", use_container_width=True):
+                if reg_nama and reg_id:
                     st.session_state["authenticated"] = True
-                    st.session_state["user_name"] = "Petugas Baru (" + reg_id + ")"
+                    st.session_state["user_name"] = reg_nama
                     st.session_state["user_role"] = "Operator Terverifikasi PLTSa Putri Cempo"
                     st.success("Pendaftaran Berhasil! Selamat datang di KARTA.")
                     st.rerun()
                 else:
-                    st.error("Mohon lengkapi Email/ID Petugas dan Password.")
-            
-            st.markdown(
-                """
-                <div style="text-align:center; margin-top: 14px; font-size: 0.80rem; color: #64748B;">
-                    Have an account? <strong style="color: #2563EB;">Log in</strong>
-                </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+                    st.error("Mohon lengkapi Nama Lengkap dan ID Petugas/Email.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # Jika belum login, tampilkan layar Portal Login / Sign Up lalu stop eksekusi
 if not st.session_state.get("authenticated", False):
@@ -2111,27 +2159,27 @@ with tab1:
     render_kpi_grid([
         {
             "label": "Total Tonase Masuk Hari Ini",
-            "val": "52.8 Ton",
+            "nilai": "52.8 Ton",
             "sub": "Dari 12 TPS (12 Armada Truk)",
-            "cls": "border-top-color: #0D9488;",
+            "warna": "#0D9488",
         },
         {
             "label": "Kadar Air Campuran Reaktor Gasifier",
-            "val": "18.75%",
-            "sub": "Target &le; 20.0% (Terkunci Aman Robust)",
-            "cls": "border-top-color: #059669;",
+            "nilai": "18.75%",
+            "sub": "Target ≤ 20.0% (Terkunci Aman Robust)",
+            "warna": "#059669",
         },
         {
             "label": "Serapan Serbuk Kayu Sukoharjo",
-            "val": "26.41 Ton",
+            "nilai": "26.41 Ton",
             "sub": "Sentra Mebel Trangsan/Gatak",
-            "cls": "border-top-color: #D97706;",
+            "warna": "#D97706",
         },
         {
             "label": "Kepatuhan SE MenLH No. 11/2026",
-            "val": "91.7%",
+            "nilai": "91.7%",
             "sub": "11 dari 12 TPS Memenuhi Ambang",
-            "cls": "border-top-color: #0284C7;",
+            "warna": "#0284C7",
         },
     ])
 
@@ -2157,6 +2205,11 @@ with tab1:
         jam_list = [f"{7+i//2:02d}:{(i%2)*30+15:02d} WIB" for i in range(len(df_feed))]
         df_feed["ID Truk"] = truk_list
         df_feed["Waktu Tiba"] = jam_list
+        if "lhv_asli" not in df_feed.columns:
+            if "lhv_oven" in df_feed.columns:
+                df_feed["lhv_asli"] = df_feed["lhv_oven"]
+            else:
+                df_feed["lhv_asli"] = 18.0 * (1 - df_feed["w_oven"]) - 2.44 * df_feed["w_oven"]
         
         tabel_view = pd.DataFrame({
             "Waktu": df_feed["Waktu Tiba"],
