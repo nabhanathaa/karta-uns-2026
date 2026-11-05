@@ -196,7 +196,7 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
         /* Reset & App Shell (60% Eco Paper / Deep Charcoal + Background Batik Parang-Truntum Sogan Surakarta Full Web) */
         .stApp {{
@@ -488,34 +488,34 @@ def suntikkan_css_web(t: dict[str, str], mode_gelap: bool = False):
 
         /* Ornamen Garis Batik Surakarta pada Kartu Seksi */
         
-        h1, h2, h3, .karta-brand-title, .kpi-num, .karta-section-head {
+        h1, h2, h3, .karta-brand-title, .kpi-num, .karta-section-head {{
             font-family: 'Montserrat', sans-serif !important;
-        }
-        body, p, span, div, input, label {
+        }}
+        body, p, span, div, input, label {{
             font-family: 'Plus Jakarta Sans', sans-serif !important;
-        }
-        .stButton > button {
+        }}
+        .stButton > button {{
             border-radius: 999px !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
             font-weight: 700 !important;
             letter-spacing: 0.02em !important;
             transition: all 0.2s ease-in-out !important;
-        }
-        .stButton > button[kind="primary"] {
+        }}
+        .stButton > button[kind="primary"] {{
             background: linear-gradient(90deg, #1D4ED8 0%, #2563EB 100%) !important;
             border: none !important;
             color: #FFFFFF !important;
             box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
-        }
-        .stButton > button[kind="primary"]:hover {
+        }}
+        .stButton > button[kind="primary"]:hover {{
             box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5) !important;
             transform: translateY(-1px) !important;
-        }
-        input[type="text"], input[type="password"], input[type="number"] {
+        }}
+        input[type="text"], input[type="password"], input[type="number"] {{
             border-radius: 12px !important;
             border: 1.5px solid #CBD5E1 !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
-        }
+        }}
 
         div[data-testid="stVerticalBlockBorderWrapper"] {{
             background-color: {t['bg_card']} !important;
@@ -1866,18 +1866,31 @@ if "chat_history" not in st.session_state:
 
 def tampilkan_portal_auth(t: dict[str, str], mode_gelap: bool):
     """Menampilkan landing portal login eksekutif resmi DLH Surakarta & PLTSa Putri Cempo (Figma Eco-Tech)."""
-    bg_glass_card = "rgba(30, 41, 59, 0.94)" if mode_gelap else "rgba(255, 255, 255, 0.96)"
-    border_glass = "rgba(52, 211, 153, 0.35)" if mode_gelap else "rgba(13, 148, 136, 0.28)"
+    bg_glass_card = "rgba(30, 41, 59, 0.96)" if mode_gelap else "#FFFFFF"
+    border_glass = "rgba(52, 211, 153, 0.40)" if mode_gelap else "rgba(13, 148, 136, 0.22)"
     st.markdown(
         _rapikan_html(f"""
         <style>
         div[data-testid="stVerticalBlockBorderWrapper"] {{
             background: {bg_glass_card} !important;
             backdrop-filter: blur(20px) !important;
-            border-radius: 24px !important;
-            padding: 32px 30px !important;
-            box-shadow: 0 24px 55px -12px rgba(2, 44, 34, 0.22) !important;
+            border-radius: 28px !important;
+            padding: 34px 32px !important;
+            box-shadow: 0 24px 55px -12px rgba(2, 44, 34, 0.16) !important;
             border: 1.5px solid {border_glass} !important;
+        }}
+        .stTextInput input {{
+            border-radius: 999px !important;
+            background-color: {'#1E293B' if mode_gelap else '#F8FAFC'} !important;
+            border: 1.5px solid {'#475569' if mode_gelap else '#CBD5E1'} !important;
+            padding: 10px 20px !important;
+            font-size: 0.88rem !important;
+            color: {t['teks_utama']} !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }}
+        .stTextInput input:focus {{
+            border-color: #2563EB !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18) !important;
         }}
         </style>
         """),
@@ -2074,14 +2087,14 @@ with c_nav_right:
     st.markdown(
         _rapikan_html(f"""
         <div class="karta-surface" style="padding: 10px 14px; margin-bottom: 8px; border-top: 2px solid {t['aksen']}; text-align: right;">
-            <div style="font-size: 0.72rem; color: {t['teks_redup']};">Akun Terverifikasi</div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: {t['teks_utama']};">👤 {st.session_state['user_name']}</div>
-            <div style="font-size: 0.70rem; color: {t['aksen']}; font-weight: 600;">{st.session_state['user_role']}</div>
+            <div style="font-size: 0.70rem; color: {t['teks_redup']}; text-transform: uppercase; letter-spacing: 0.05em;">AKUN TERVERIFIKASI</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: {t['teks_utama']};">{st.session_state['user_name']}</div>
+            <div style="font-size: 0.72rem; color: {t['aksen']}; font-weight: 600;">{st.session_state['user_role']}</div>
         </div>
         """),
         unsafe_allow_html=True,
     )
-    if st.button("🚪 Keluar / Logout", use_container_width=True):
+    if st.button("Keluar / Logout", use_container_width=True):
         st.session_state["authenticated"] = False
         st.rerun()
 
@@ -2207,7 +2220,7 @@ with tab1:
             st.markdown(
                 _rapikan_html("""
                 <div class="karta-section-head">
-                    <span>📡 Log Transaksi Armada Masuk Terkini (Feed Aplikasi Mobile Petugas)</span>
+                    <span>Log Transaksi Armada Masuk Terkini (Telemetri Gerbang Timbangan)</span>
                     <span style="font-size:0.75rem; color:#059669; font-weight:700;">● LIVE SYNC</span>
                 </div>
                 <div class="karta-batik-divider"></div>
@@ -2244,32 +2257,32 @@ with tab1:
             _rapikan_html("""
             <div class="karta-surface">
                 <div class="karta-section-head">
-                    <span>📊 Rekap Komposisi Fraksi Sampah Hari Ini</span>
+                    <span>Rekapitulasi Komposisi Fraksi Sampah (SNI 19-3964-1994)</span>
                 </div>
                 <div class="karta-batik-divider"></div>
                 <div style="font-size: 0.82rem; line-height: 1.8;">
                     <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                        <span>🥬 Organik Basah (Sisa Makanan/Pasar)</span>
+                        <span>Organik Basah (Sisa Makanan / Pasar)</span>
                         <strong>62.8% (33.1 Ton)</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                        <span>🛍️ Plastik &amp; Kemasan Fleksibel</span>
+                        <span>Plastik &amp; Kemasan Fleksibel</span>
                         <strong>16.4% (8.6 Ton)</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                        <span>📦 Kertas &amp; Karton Kering</span>
+                        <span>Kertas &amp; Karton Kering</span>
                         <strong>8.2% (4.3 Ton)</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                        <span>👕 Tekstil &amp; Kain Bekas</span>
+                        <span>Tekstil &amp; Kain Bekas</span>
                         <strong>4.1% (2.2 Ton)</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 4px 0;">
-                        <span>🪵 Kayu &amp; Ranting Kebun</span>
+                        <span>Kayu &amp; Ranting Kebun</span>
                         <strong>3.5% (1.8 Ton)</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; padding: 4px 0;">
-                        <span>🧱 Residu Inert (Batu/Beling/Tanah)</span>
+                        <span>Residu Inert &amp; Anorganik</span>
                         <strong style="color: #D97706;">5.0% (2.8 Ton)</strong>
                     </div>
                 </div>
@@ -2288,7 +2301,7 @@ with tab1:
         )
 
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    with st.expander("👁️ Pratinjau Tampilan Operator Pos Gerbang (Kiosk Mode Simulator)", expanded=False):
+    with st.expander("Pratinjau Telemetri Pos Gerbang & Kamera Konveyor (Simulasi Kiosk Operator)", expanded=False):
         c_kiosk_img, c_kiosk_res = st.columns([1.1, 1.2], gap="large")
         pilihan_muatan = st.selectbox("Pilih Sampel Muatan Truk untuk Disimulasikan:", df_bench["foto"].unique().tolist(), index=0)
 
@@ -2313,7 +2326,7 @@ with tab1:
                 r_btn_label = "Buka Palang Gasifikasi"
                 r_extra_html = """
                 <div style="display:flex; justify-content:space-between; background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.2); padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:0.78rem;">
-                    <span>⚡ Kualitas Umpan Reaktor:</span>
+                    <span>Kualitas Umpan Reaktor:</span>
                     <strong style="color:#2563EB;">PRIMA (LHV &ge; 10.5 MJ/kg)</strong>
                 </div>
                 """
@@ -2362,7 +2375,7 @@ with tab1:
                 r_btn_label = "Karantina & Terbitkan SP TPS"
                 r_extra_html = """
                 <div style="background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.25); border-radius:8px; padding:8px; font-size:0.75rem; margin-bottom:12px;">
-                    <span style="color:#DC2626; font-weight:700;">⚠️ PERINGATAN KONTAMINASI RESIDU TINGGI</span><br>
+                    <span style="color:#DC2626; font-weight:700;">PERINGATAN KONTAMINASI RESIDU TINGGI</span><br>
                     <span style="color:#64748B;">Muatan berisiko merusak feeding hopper &amp; slagging gasifier.</span>
                 </div>
                 """
@@ -2407,10 +2420,10 @@ with tab1:
 
             c_bt1, c_bt2 = st.columns(2)
             with c_bt1:
-                if st.button("✈️ Kirim Laporan", use_container_width=True):
+                if st.button("Kirim Laporan Telemetri", use_container_width=True):
                     st.info("Laporan armada berhasil disinkronkan ke Cloud DLH Surakarta.")
             with c_bt2:
-                if st.button("📥 Unduh PDF", use_container_width=True):
+                if st.button("Unduh Surat Tiket PDF", use_container_width=True):
                     st.success("Surat Bukti Timbang PDF berhasil diunduh!")
 
 # ==============================================================================
@@ -2785,10 +2798,10 @@ with tab4:
     )
 
     sub_t1, sub_t2, sub_t3, sub_t4 = st.tabs([
-        "💬 AI Policy Assistant (Chatbot DLH)",
-        "🧪 Evaluasi Model & Ground Truth Lab (Juri Hackathon)",
-        "📥 Pusat Laporan Kedinasan & Ekspor Data",
-        "⚙️ Arsitektur Edge IoT & Telemetri Alat",
+        "AI Policy Assistant (Konsultasi DLH)",
+        "Evaluasi Model & Ground Truth Lab (Juri Hackathon)",
+        "Pusat Laporan Kedinasan & Ekspor Data",
+        "Arsitektur Edge IoT & Telemetri Alat",
     ])
 
     with sub_t1:
@@ -2796,7 +2809,7 @@ with tab4:
             st.markdown(
                 _rapikan_html("""
                 <div class="karta-section-head">
-                    <span>🤖 KARTA AI Policy &amp; Logistics Assistant</span>
+                    <span>KARTA AI Policy &amp; Logistics Assistant</span>
                     <span style="font-size:0.75rem; color:#0D9488; font-weight:700;">● MODEL SIAP</span>
                 </div>
                 <div class="karta-batik-divider"></div>
@@ -2810,23 +2823,23 @@ with tab4:
             c_q1, c_q2, c_q3, c_q4 = st.columns(4)
             user_prompt = None
             with c_q1:
-                if st.button("⚠️ TPS Residu Tertinggi", use_container_width=True):
+                if st.button("TPS Residu Tertinggi", use_container_width=True):
                     user_prompt = "TPS mana saja yang memiliki tingkat pelanggaran residu dan kadar air tertinggi minggu ini?"
             with c_q2:
-                if st.button("🪵 Rekomendasi Serbuk Kayu", use_container_width=True):
+                if st.button("Rekomendasi Serbuk Kayu", use_container_width=True):
                     user_prompt = "Berapa ton serbuk kayu Sukoharjo yang harus dipesan untuk pengeringan besok?"
             with c_q3:
-                if st.button("🌿 Emisi Metana Terhindar", use_container_width=True):
+                if st.button("Reduksi Emisi Metana", use_container_width=True):
                     user_prompt = "Berapa estimasi emisi gas metana yang berhasil dicegah hari ini?"
             with c_q4:
-                if st.button("📜 Audit SE 11/2026", use_container_width=True):
+                if st.button("Audit SE 11/2026", use_container_width=True):
                     user_prompt = "Bagaimana status audit kepatuhan Solo Raya terhadap SE MenLH No. 11/2026?"
 
             for msg in st.session_state["chat_history"]:
                 if msg["role"] == "user":
-                    st.markdown(f"<div style='background:rgba(13,148,136,0.1); border-radius:10px; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>👤 Anda:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background:rgba(13,148,136,0.1); border-radius:10px; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>Pengguna (Eksekutif):</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
                 else:
-                    st.markdown(f"<div style='background:rgba(2,132,199,0.08); border-left:3px solid #0284C7; border-radius:0 10px 10px 0; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>🤖 Asisten AI:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background:rgba(2,132,199,0.08); border-left:3px solid #0284C7; border-radius:0 10px 10px 0; padding:10px 14px; margin:8px 0; font-size:0.85rem;'><strong>Asisten AI (Regulasi):</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
 
             inp_chat = st.chat_input("Ketik pertanyaan regulasi atau data operasional...")
             prompt_to_process = user_prompt or inp_chat
@@ -3100,7 +3113,7 @@ with tab4:
             st.markdown(
                 _rapikan_html("""
                 <div class="karta-section-head">
-                    <span>📥 Pusat Laporan Eksekutif DLH &amp; Ekspor Data Resmi</span>
+                    <span>Pusat Dokumen Eksekutif DLH &amp; Ekspor Data Resmi</span>
                 </div>
                 <div class="karta-batik-divider"></div>
                 <div style="font-size:0.80rem; color:#64748B; margin-bottom: 14px;">
@@ -3124,14 +3137,14 @@ with tab4:
             with c_btn1:
                 csv_data = df_bench.to_csv(index=False).encode("utf-8")
                 st.download_button(
-                    "📥 Unduh Rekap Transaksi Harian Lengkap (.CSV)",
+                    "Unduh Rekap Transaksi Harian (.CSV)",
                     data=csv_data,
                     file_name="Laporan_Kepatuhan_PLTSa_Putri_Cempo_DLH_2026.csv",
                     mime="text/csv",
                     use_container_width=True
                 )
             with c_btn2:
-                if st.button("📄 Cetak Format Laporan Resmi Kepala DLH (PDF Siap TTD)", use_container_width=True):
+                if st.button("Cetak Format Laporan Resmi Kepala DLH (PDF)", use_container_width=True):
                     st.success("Format Naskah Dinas Resmi berhasil disiapkan untuk pencetakan dokumen PDF.")
 
     with sub_t4:
