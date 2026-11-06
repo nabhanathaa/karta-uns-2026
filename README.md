@@ -1,85 +1,82 @@
-# KARTA prototipe v3
+# SORA · Dashboard Mutu Umpan PLTSa Putri Cempo
 
-Kode prototipe untuk **KARTA (Kinetic Analytics for Refuse Triage & Allocation)**, gerbang cerdas mutu umpan PLTSa Putri Cempo, UNS Innovation Hackathon 2026, Sub-tema B.
+**SORA: Sistem Observasi, Rekomendasi, dan Analisis Sampah Berbasis Computer Vision untuk Identifikasi Komposisi, Prediksi Kadar Air, dan Estimasi Nilai Kalor serta Penentuan Jalur Pengolahan di PLTSa Putri Cempo, Surakarta.**
 
-> **Status 31 Oktober 2026.** Semua angka kinerja di folder `eksperimen/hasil/` berasal dari **SIMULASI** (data sintetis). Belum ada satu pun foto atau uji oven dari Putri Cempo. Jangan menulis angka simulasi sebagai kinerja lapangan di proposal.
+UNS Innovation Hackathon 2026, Sub-tema B. Pemilik masalah: DLH Kota Surakarta.
 
-## Mulai cepat tanpa foto/anotasi (demo zero-shot)
-
-1. Colab: buka `notebooks/03_KARTA_Demo_Colab.ipynb`, unggah zip ini, jalankan sel dari atas. Bisa foto unggahan, URL gambar, kamera laptop, atau video.
-2. Laptop: `pip install -r requirements.txt torch transformers` lalu `python demo/kamera_langsung.py`.
-3. Mode `zero-shot` (CLIPSeg) **bukan model terlatih KARTA**; hanya untuk memeriksa alur dan bentuk keluaran. Ganti ke `segformer` setelah anotasi dan pelatihan.
-4. Belum diuji dengan bobot CLIPSeg asli di lingkungan pengembang (unduhan Hugging Face diblokir); logika pemrosesan sudah diuji dengan segmenter tiruan. Jika ada galat saat memuat model di Colab, catat pesan galatnya.
-
-## Alur sistem
-
-```
-QR TPS + jembatan timbang ─┐
-                           ▼
-foto muatan ─► [visi.py] proporsi luas tiap fraksi ─► [kadar_air.py] kadar air + LHV + interval 80%
-                                                                  │
-                     cuaca BMKG (hujan 24/72 jam) ────────────────┘
-                                                                  ▼
-                        [optimasi.py] rute tiap muatan: U umpan langsung / B bio-drying + serbuk kayu /
-                                                         M maggot BSF / R residu-tunda
-                                                                  ▼
-                        [alur.py] log per muatan ─► ringkasan per TPS (peta sumber untuk DLH)
-```
-
-## Isi folder
-
-| Berkas | Fungsi |
+| Bagian | Tempat |
 |---|---|
-| `karta/konstanta.py` | Daftar 6 fraksi + koefisien literatur kadar air, LHV, massa per luas (asumsi, wajib diganti data lokal) |
-| `karta/visi.py` | Foto → proporsi fraksi + peta ketidakpastian. Backend `segformer` (model utama), `petak` (baseline cepat), `yolo` (real-time tepi), `demo` (aturan warna, bukan AI); penggabungan banyak frame per muatan |
-| `karta/zero_shot.py` | Segmentasi berbasis teks CLIPSeg tanpa pelatihan (demo awal) |
-| `karta/tampil.py` | Menggambar masker, kotak berlabel, panel persen, peta keraguan |
-| `karta/aliran.py` | Video/kamera/konveyor: segmentasi berkala, satu keputusan rute per jendela waktu |
-| `notebooks/03_KARTA_Demo_Colab.ipynb` | Demo Colab: foto, URL, webcam, video |
-| `demo/kamera_langsung.py` | Kamera laptop real-time dengan overlay |
-| `karta/kadar_air.py` | Model fisika, koreksi linear (ridge + jackknife+), LightGBM kuantil + CQR; kalibrasi aktif |
-| `karta/optimasi.py` | MILP harian (scipy/HiGHS) memilih rute tiap muatan dengan kendala kadar air ≤ 20%, LHV, kapasitas, stok serbuk kayu |
-| `karta/ramalan.py` | Peramalan kadar air rata-rata hari berikutnya (ridge + pembanding persistensi) |
-| `karta/alur.py` | Satu muatan: foto → hasil → rute; pencatatan CSV; ringkasan per TPS |
-| `karta/perangkat.py` | Kamera, baca QR (OpenCV), kendali konveyor lewat serial |
-| `karta/simulasi.py` | Generator muatan sintetis untuk menguji desain |
-| `eksperimen/jalankan_simulasi.py` | Eksperimen E1–E4 (lihat di bawah), ±1 menit di CPU |
-| `latih/01_potong_petak.py` | Potong foto jadi petak untuk dilabeli (drag-and-drop ke folder kelas) |
-| `latih/02_latih_petak.py` | Latih pengklasifikasi petak (timm, transfer learning), validasi per foto |
-| `latih/05_latih_segformer.py` | Fine-tune SegFormer (HF Transformers), validasi per muatan, melaporkan mIoU dan galat proporsi fraksi. **Belum dijalankan** |
-| `latih/03_latih_yolo_seg.py` | Latih YOLO-seg dari anotasi poligon, ekspor ke ncnn/TensorRT |
-| `latih/04_kalibrasi_kadar_air.py` | Kalibrasi model kadar air dari lembar uji oven |
-| `demo/app_streamlit.py` | Layar operator untuk Hackathon Day |
-| `demo/konveyor_arduino/konveyor_arduino.ino` | Firmware Arduino: motor konveyor, servo pengalih, sensor IR |
-| `data/uji_oven_TEMPLATE.csv` | Contoh kolom lembar uji oven |
+| Dashboard web (repo ini) | <https://karta-uns-2026.streamlit.app/> |
+| Aplikasi petugas di HP | repo `azunzios/karta-mobile` (Next.js, Vercel) |
+| Proposal | `Proposal_SORA_UNS_Hackathon_2026.pdf` (dan `.docx`) |
 
-## Cara menjalankan
+> **Data simulasi.** Belum ada data lapangan. Semua angka di dashboard dibangkitkan oleh `demo/sora_data.py` untuk 12 TPS selama 30 hari. Rumus dan ambang rute sama dengan aplikasi HP dan lampiran laporan, jadi angkanya menunjukkan cara kerja sistem, bukan kondisi Putri Cempo yang sebenarnya. Data nyata dari HP bisa dimasukkan lewat **Pusat laporan → Impor CSV dari aplikasi HP**.
+
+## Isi dashboard
+
+| Halaman | Isi |
+|---|---|
+| Masuk | Akun demonstrasi `kepala.dlh`, `direksi.pltsa`, `analis` dengan kata sandi `sora2026` (hanya demo, bukan autentikasi sungguhan) |
+| Beranda | Ringkasan hari terakhir, tonase per rute, TPS prioritas pembinaan, alur kerja SORA |
+| Muatan masuk | Log setiap truk dengan filter TPS, jenis, rute, tanggal, dan pencarian; grafik tonase, kadar air, dan curah hujan |
+| Peta TPS | Peta interaktif 12 TPS dan PLTSa, warna menurut indikator (kadar air, porsi Rute R, LHV, organik, tonase), alur muatan beranimasi, peringkat TPS |
+| Komposisi sampah | Komposisi berat keseluruhan dan per TPS, hubungan organik dengan kadar air, sebaran nilai kalor |
+| Rute dan neraca | Tonase per rute, aturan rute berurutan, kebutuhan serbuk kayu, air yang perlu diuapkan, potensi listrik |
+| Model dan validasi | Status model, rencana data tahap 1 (60 unit, 300 foto, 25 uji oven), pembagian data StratifiedGroupKFold, kriteria lulus |
+| Pusat laporan | Rekap per TPS menurut filter, unduh Excel (rekap, rincian, keterangan), CSV, cetak atau PDF, impor CSV dari HP |
+
+## Rumus dan aturan yang dipakai
+
+Sama persis dengan `lib/karta` di aplikasi HP dan Bab 3 lampiran laporan.
+
+| Besaran | Rumus |
+|---|---|
+| Kadar air fisika | w = Σ yₖ · wₖ (wₖ: organik 0,70; plastik 0,05; kertas 0,10; tekstil 0,15; kayu 0,40; inert 0,05) |
+| Nilai kalor bersih | LHV = (1 − w) · LHV_kering − 2,443 · w |
+| Dosis serbuk kayu | d = (w − 0,50) / (0,50 − 0,12), dibatasi 10–20 % |
+| Potensi listrik | kWh/ton = 1000 · LHV · 0,20 / 3,6 |
+
+Aturan rute diperiksa berurutan, aturan pertama yang terpenuhi menjadi rekomendasi:
+
+1. Inert ≥ 20 % → **R** (area residu)
+2. Batas atas kadar air ≤ 20 % → **U** (umpan gasifikasi)
+3. Kadar air ≥ 60 %, organik ≥ 60 %, plastik ≤ 5 % → **M** (maggot BSF dan kompos)
+4. Kadar air < 65 % → **B** (bio-drying dengan serbuk kayu)
+5. Selain itu → **R**
+
+## Menjalankan
 
 ```bash
-pip install -r requirements.txt            # inti: numpy pandas scipy scikit-learn lightgbm matplotlib opencv
-python eksperimen/jalankan_simulasi.py     # hasil ke eksperimen/hasil/
-pip install streamlit pyserial qrcode       # untuk demo
-streamlit run demo/app_streamlit.py         # pilih "Unggah foto", model "demo"
+pip install streamlit numpy
+python demo/sora_data.py                 # membuat ulang demo/web/data/sora_demo.json (opsional)
+streamlit run demo/app_streamlit.py
 ```
 
-Melatih model visi (Colab disarankan): `pip install torch torchvision timm` lalu `latih/01` → label petak → `latih/02`.
+Tanpa Streamlit, halaman yang sama bisa dibuka langsung:
 
-## Hasil simulasi (data sintetis, 90 hari × 60 truk)
+```bash
+cd demo/web && python -m http.server 8000   # buka http://localhost:8000
+```
 
-| Eksperimen | Hasil | Arti untuk desain |
-|---|---|---|
-| E1, 30 uji oven | koreksi linear MAE 4,9 ± 0,2 poin; LightGBM 6,0 ± 0,5; fisika saja 7,4 | Dengan data sedikit, pakai **koreksi linear**, bukan gradient boosting. GBM baru menyamai pada ±240 uji oven |
-| E1, interval 80% | cakupan 0,79–0,82 | Interval conformal jujur (ideal 0,80) |
-| E2, kalibrasi aktif | MAE 4,87 vs acak 4,90; menang 9 dari 20 ulangan | **Tidak terbukti lebih baik.** Jangan dijual di proposal; uji lagi dengan data nyata |
-| E3, robust | hari dengan campuran umpan > 20%: 13/30 (taksiran tengah), 7/30 (batas atas P90), 0/30 (P90 + target 19%) | Pakai batas atas interval + cadangan 1 poin |
-| E5, galat model visi | proporsi fraksi meleset 6,0 / 4,5 / 3,2 / 2,2 / 1,2 poin → galat kadar air 6,4 / 5,7 / 4,9 / 4,1 / 3,8 poin | Agar kadar air ≤ 5 poin, model visi perlu galat proporsi ≲ 3 poin (rata-rata 6 fraksi) |
-| E6, ramalan hari berikutnya | MAE 1,0 poin vs persistensi 2,6 dan rata-rata 7 hari 1,8 (67 hari uji, prakiraan hujan dianggap tepat) | Alur peramalan berfungsi; angka optimistis karena hujan dalam simulasi diketahui pasti |
-| E4, vs urutan datang | energi hasil bio-drying +12,3% (29 dari 30 hari lebih tinggi) | Nilai utama KARTA: memilih muatan mana yang masuk bak bio-drying yang terbatas |
+## Struktur
 
-Semua angka bergantung pada asumsi dunia simulasi (`karta/simulasi.py`). Fungsinya memilih metode dan menunjukkan desain eksperimen, bukan membuktikan kinerja.
+```
+demo/
+  app_streamlit.py     pembungkus Streamlit (entrypoint Streamlit Cloud)
+  sora_data.py         pembangkit data simulasi
+  web/
+    index.html         kerangka halaman dan ikon
+    css/sora.css       tema SORA (navy, emas sogan, motif kawung)
+    js/app.js          logika halaman, grafik, peta, laporan, impor CSV
+    data/              sora_demo.json
+    vendor/            ECharts 5.5.1, Leaflet 1.9.4, SheetJS 0.18.5 (disimpan lokal, lisensi terlampir)
+karta/, latih/, eksperimen/, notebooks/   kode riset tahap awal (nama paket lama), tidak dipakai dashboard
+```
 
-## Catatan lisensi
+Pelatihan model segmentasi yang dipakai aplikasi HP ada di repo aplikasi, folder `training/` (notebook `SORA_Latih_DeepLabv3plus.ipynb`).
 
-- Ultralytics YOLO: AGPL-3.0. Aman untuk riset dan hackathon; produk komersial tertutup perlu lisensi Enterprise atau model lain (mis. DeepLabV3-MobileNetV3 torchvision, BSD).
-- Bobot SegFormer resmi NVIDIA berlisensi non-komersial. Cek sebelum dipakai di produk.
-- Dataset publik (ZeroWaste, TACO): cek lisensi masing-masing sebelum dipakai untuk pralatih.
+## Catatan
+
+- Koordinat TPS di peta adalah perkiraan dan perlu dicek ulang bersama DLH.
+- Peta memakai ubin © OpenStreetMap kontributor dan © CARTO.
+- Dataset publik untuk pralatih (TACO, ZeroWaste): cek lisensi masing-masing sebelum dipakai di luar riset.
