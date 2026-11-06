@@ -10,20 +10,24 @@ UNS Innovation Hackathon 2026, Sub-tema B. Pemilik masalah: DLH Kota Surakarta.
 | Aplikasi petugas di HP | repo `azunzios/karta-mobile` (Next.js, Vercel) |
 | Proposal | `Proposal_SORA_UNS_Hackathon_2026.pdf` (dan `.docx`) |
 
-> **Data simulasi.** Belum ada data lapangan. Semua angka di dashboard dibangkitkan oleh `demo/sora_data.py` untuk 12 TPS selama 30 hari. Rumus dan ambang rute sama dengan aplikasi HP dan lampiran laporan, jadi angkanya menunjukkan cara kerja sistem, bukan kondisi Putri Cempo yang sebenarnya. Data nyata dari HP bisa dimasukkan lewat **Pusat laporan → Impor CSV dari aplikasi HP**.
+> **Data simulasi.** Belum ada data lapangan. Semua angka di dashboard dibangkitkan oleh `demo/sora_data.py` untuk 12 TPS selama 30 hari. Rumus dan ambang rute sama dengan aplikasi HP dan lampiran laporan, jadi angkanya menunjukkan cara kerja sistem, bukan kondisi Putri Cempo yang sebenarnya. Data nyata dari HP bisa dimasukkan lewat **Laporan → Impor dari aplikasi HP**.
 
 ## Isi dashboard
+
+Setiap halaman dirancang muat dalam satu layar laptop (1366×768 ke atas) tanpa menggulir. Di layar HP, halaman tersusun satu kolom dan bisa digulir. Periode (7, 14, 30 hari) dan jenis TPS di bagian atas berlaku untuk semua halaman.
 
 | Halaman | Isi |
 |---|---|
 | Masuk | Akun demonstrasi `kepala.dlh`, `direksi.pltsa`, `analis` dengan kata sandi `sora2026` (hanya demo, bukan autentikasi sungguhan) |
-| Beranda | Ringkasan hari terakhir, tonase per rute, TPS prioritas pembinaan, alur kerja SORA |
-| Muatan masuk | Log setiap truk dengan filter TPS, jenis, rute, tanggal, dan pencarian; grafik tonase, kadar air, dan curah hujan |
-| Peta TPS | Peta interaktif 12 TPS dan PLTSa, warna menurut indikator (kadar air, porsi Rute R, LHV, organik, tonase), alur muatan beranimasi, peringkat TPS |
-| Komposisi sampah | Komposisi berat keseluruhan dan per TPS, hubungan organik dengan kadar air, sebaran nilai kalor |
-| Rute dan neraca | Tonase per rute, aturan rute berurutan, kebutuhan serbuk kayu, air yang perlu diuapkan, potensi listrik |
-| Model dan validasi | Status model, rencana data tahap 1 (60 unit, 300 foto, 25 uji oven), pembagian data StratifiedGroupKFold, kriteria lulus |
-| Pusat laporan | Rekap per TPS menurut filter, unduh Excel (rekap, rincian, keterangan), CSV, cetak atau PDF, impor CSV dari HP |
+| Ringkasan | Lima angka utama, peta asal muatan dan kadar air per TPS, temuan utama yang dihitung dari data, porsi tonase setiap rute |
+| Peta TPS | Peta 12 TPS dan PLTSa dengan pilihan indikator (kadar air, porsi Rute R, LHV, organik, tonase), alur muatan, peringkat TPS, profil TPS terpilih |
+| Muatan masuk | Tonase harian per rute dengan kadar air, curah hujan dengan kadar air, daftar muatan dengan saringan TPS, rute, dan pencarian |
+| Komposisi | Komposisi berat keseluruhan dan per TPS, hubungan organik dengan kadar air, sebaran nilai kalor |
+| Rute dan neraca | Tonase dan porsi setiap rute, tonase harian per rute, aturan rute berurutan beserta jumlah muatan per aturan, kebutuhan serbuk kayu, air yang perlu diuapkan, potensi listrik |
+| Model dan validasi | Status model, rencana data tahap 1 (60 unit, 300 foto, 25 uji oven), pembagian data StratifiedGroupKFold, kriteria lulus dan rujukan |
+| Laporan | Rekap per TPS menurut saringan, unduh Excel (rekap, rincian, keterangan), CSV, cetak atau PDF, impor CSV dari aplikasi HP |
+
+Peta dasar memakai Esri World Light Gray (tanpa kunci API), dengan pilihan OpenStreetMap dan citra satelit. Bila ubin Esri gagal dimuat, peta otomatis beralih ke OpenStreetMap.
 
 ## Rumus dan aturan yang dipakai
 
@@ -78,5 +82,5 @@ Pelatihan model segmentasi yang dipakai aplikasi HP ada di repo aplikasi, folder
 ## Catatan
 
 - Koordinat TPS di peta adalah perkiraan dan perlu dicek ulang bersama DLH.
-- Peta memakai ubin © OpenStreetMap kontributor dan © CARTO.
+- Peta memakai ubin © Esri, © OpenStreetMap kontributor, dan citra satelit © Esri.
 - Dataset publik untuk pralatih (TACO, ZeroWaste): cek lisensi masing-masing sebelum dipakai di luar riset.

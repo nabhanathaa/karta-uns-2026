@@ -43,6 +43,10 @@
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3.5 17 9 11.5l4 4L20.5 8"/><path d="M15 8h5.5v5.5"/></symbol>
 </svg>
 
 <!-- ====================================================== LOGIN -->
@@ -55,7 +59,7 @@
       <div class="login-points">
         <div><span><svg class="ico"><use href="#i-camera"/></svg></span>Komposisi sampah dibaca dari foto muatan</div>
         <div><span><svg class="ico"><use href="#i-drop"/></svg></span>Kadar air dan nilai kalor beserta rentangnya</div>
-        <div><span><svg class="ico"><use href="#i-route"/></svg></span>Rekomendasi rute U, B, M, atau R per truk</div>
+        <div><span><svg class="ico"><use href="#i-route"/></svg></span>Rekomendasi rute U, B, M, atau R untuk setiap bagian muatan</div>
       </div>
     </div>
     <form class="login-form" id="loginForm" autocomplete="off" novalidate>
@@ -83,40 +87,43 @@
 
 <!-- ====================================================== APP -->
 <div id="app" class="app" hidden>
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><img src="img/logo.svg" alt=""><div><strong>SORA</strong><small>Mutu umpan PLTSa</small></div></div>
-    <nav class="nav" id="nav">
-      <h6>Pemantauan</h6>
-      <a href="#beranda" data-p="beranda"><svg class="ico"><use href="#i-home"/></svg><span>Beranda</span></a>
-      <a href="#muatan" data-p="muatan"><svg class="ico"><use href="#i-truck"/></svg><span>Muatan masuk</span></a>
+  <header class="hdr">
+    <div class="hdr-row">
+      <a class="brand" href="#ringkasan" aria-label="SORA, ke Ringkasan">
+        <img src="img/logo.svg" alt="">
+        <div>
+          <span class="brand-eyebrow">DLH Kota Surakarta · PLTSa Putri Cempo</span>
+          <strong>SORA <em>Mutu Umpan PLTSa</em></strong>
+          <small>Komposisi, kadar air, nilai kalor, dan rute pengolahan setiap muatan sampah</small>
+        </div>
+      </a>
+      <div class="hdr-ctl">
+        <div class="seg seg-dark" id="gHari" role="group" aria-label="Periode">
+          <button data-h="7">7 hari</button><button data-h="14">14 hari</button><button data-h="30">30 hari</button>
+        </div>
+        <label class="sel-dark"><span class="sr">Jenis TPS</span><select id="gJenis"></select></label>
+        <span class="pill-sim" title="Belum ada data lapangan. Angka dibangkitkan komputer dengan rumus yang sama dengan aplikasi petugas."><i></i>Data simulasi</span>
+        <div class="who">
+          <div class="av" id="whoAv">KD</div>
+          <div class="who-txt"><b id="whoName">Kepala DLH</b><small id="whoRole">DLH Kota Surakarta</small></div>
+          <button class="icon-btn" id="btnOut" title="Keluar" aria-label="Keluar"><svg class="ico"><use href="#i-out"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <nav class="tabs" id="nav" aria-label="Halaman">
+      <a href="#ringkasan" data-p="ringkasan"><svg class="ico"><use href="#i-grid"/></svg><span>Ringkasan</span></a>
       <a href="#peta" data-p="peta"><svg class="ico"><use href="#i-map"/></svg><span>Peta TPS</span></a>
-      <a href="#komposisi" data-p="komposisi"><svg class="ico"><use href="#i-pie"/></svg><span>Komposisi sampah</span></a>
-      <h6>Keputusan</h6>
+      <a href="#muatan" data-p="muatan"><svg class="ico"><use href="#i-truck"/></svg><span>Muatan masuk</span></a>
+      <a href="#komposisi" data-p="komposisi"><svg class="ico"><use href="#i-pie"/></svg><span>Komposisi</span></a>
       <a href="#rute" data-p="rute"><svg class="ico"><use href="#i-route"/></svg><span>Rute dan neraca</span></a>
       <a href="#model" data-p="model"><svg class="ico"><use href="#i-flask"/></svg><span>Model dan validasi</span></a>
-      <h6>Laporan</h6>
-      <a href="#laporan" data-p="laporan"><svg class="ico"><use href="#i-file"/></svg><span>Pusat laporan</span><b class="badge" id="navImport" hidden></b></a>
+      <a href="#laporan" data-p="laporan"><svg class="ico"><use href="#i-file"/></svg><span>Laporan</span><b class="badge" id="navImport" hidden></b></a>
+      <span class="tabs-period" id="pillPeriod"></span>
     </nav>
-    <div class="side-foot">
-      <div class="who"><div class="av" id="whoAv">KD</div><div><b id="whoName">Kepala DLH</b><small id="whoRole">DLH Kota Surakarta</small></div></div>
-      <button class="side-btn" id="btnMini"><svg class="ico"><use href="#i-panel"/></svg><span>Lipat menu</span></button>
-      <button class="side-btn" id="btnOut"><svg class="ico"><use href="#i-out"/></svg><span>Keluar</span></button>
-    </div>
-  </aside>
-
-  <main class="main" id="main">
-    <div class="topbar">
-      <button class="menu-btn" id="btnMenu" aria-label="Buka menu"><svg class="ico"><use href="#i-menu"/></svg></button>
-      <div class="crumb"><b>Surakarta<i> · </i></b><span id="crumb">Beranda</span></div>
-      <div class="grow"></div>
-      <span class="pill warn" id="pillData"><i class="dot"></i><span>Data simulasi</span></span>
-      <span class="pill hide-sm" id="pillPeriod"></span>
-    </div>
-    <div id="pages"></div>
-    <div class="footer"><span>SORA · Sistem Observasi, Rekomendasi, dan Analisis Sampah · Prototipe 2026</span><span>Peta © OpenStreetMap, © CARTO</span></div>
-  </main>
+  </header>
+  <main class="pages" id="pages"></main>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script src="vendor/echarts.min.js"></script>
 <script src="vendor/leaflet.js"></script>

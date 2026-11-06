@@ -10,7 +10,7 @@ lampiran laporan Bab 3, supaya angka di HP, dashboard, dan dokumen konsisten:
 - rute               R bila inert >= 20 %; U bila batas atas w <= 20 %;
                      M bila w >= 60 %, organik >= 60 %, plastik <= 5 %; B bila w < 65 %; selain itu R
 
-Skenario simulasi memakai rentang kadar air +/- 7 poin (asumsi setelah kalibrasi uji oven).
+Rentang kadar air memakai lebar bawaan +/- 10 poin, sama dengan aplikasi sebelum kalibrasi uji oven.
 Koordinat TPS adalah perkiraan dan perlu dicek ulang bersama DLH.
 
 Jalankan:  python demo/sora_data.py   -> menulis demo/web/data/sora_demo.json
@@ -29,7 +29,7 @@ W_FRAKSI = np.array([0.70, 0.05, 0.10, 0.15, 0.40, 0.05])
 H_KERING = np.array([14.1, 31.7, 16.2, 18.0, 18.5, 0.5])
 SERAP = np.array([1, 0, 1, 1, 0, 0], float)
 KALOR_UAP_AIR = 2.443
-SETENGAH_RENTANG = 0.07
+SETENGAH_RENTANG = 0.10
 
 PLTSA = {"kode": "PLTSA", "nama": "PLTSa Putri Cempo", "kecamatan": "Jebres",
          "alamat": "Mojosongo, Jebres, Kota Surakarta", "lat": -7.5378, "lon": 110.8586}
@@ -60,14 +60,17 @@ TRIP = {"pasar": (3, 6), "permukiman": (2, 4), "ruang_publik": (1, 3)}
 
 
 def rute(y: np.ndarray, w: float, w_atas: float) -> str:
-    persen = y * 100
+    # Dibandingkan pada nilai yang sudah dibulatkan 0,1 poin, sama dengan angka
+    # yang tersimpan di JSON, supaya rute selalu bisa dicek ulang dari datanya.
+    persen = np.round(y * 100, 1)
+    w, w_atas = round(w * 100, 1), round(w_atas * 100, 1)
     if persen[5] >= 20:
         return "R"
-    if w_atas <= 0.20:
+    if w_atas <= 20:
         return "U"
-    if w >= 0.60 and persen[0] >= 60 and persen[1] <= 5:
+    if w >= 60 and persen[0] >= 60 and persen[1] <= 5:
         return "M"
-    if w < 0.65:
+    if w < 65:
         return "B"
     return "R"
 
@@ -104,8 +107,8 @@ def bangkitkan(hari: int = 30, akhir: str = "2026-11-06", seed: int = 2026) -> d
                 w_fis = float(y @ W_FRAKSI)
                 w = w_fis + 0.022 * math.log1p(r24) * float(y @ SERAP) + 0.010 * math.log1p(r72) \
                     + rng.normal(0, 0.025)
-                w = float(np.clip(w, 0.06, 0.85))
-                wb, wa = max(0.0, w - SETENGAH_RENTANG), min(1.0, w + SETENGAH_RENTANG)
+                w = round(float(np.clip(w, 0.06, 0.85)), 3)
+                wb, wa = round(max(0.0, w - SETENGAH_RENTANG), 3), round(min(1.0, w + SETENGAH_RENTANG), 3)
                 r = rute(y, w, wa)
                 lhv = lhv_basah(y, w)
                 dosis = min(0.20, max(0.10, (w - 0.50) / (0.50 - 0.12))) if r == "B" else 0.0
