@@ -452,10 +452,10 @@ PAGES.model = el => {
     'Hoerl, A. E., &amp; Kennard, R. W. (1970). Ridge regression. <i>Technometrics</i>, 12(1), 55–67.', 'Barber, R. F., dkk. (2021). Predictive inference with the jackknife+. <i>The Annals of Statistics</i>, 49(1), 486–507.',
     'ASTM E790-15. Residual moisture in a refuse-derived fuel analysis sample.', 'ISO 18125:2017 dan ISO 21654:2021. Penentuan nilai kalor bahan bakar padat.'];
   el.innerHTML = `
-  <div class="notice" style="--i:0">${ico('info')}<span><b>Status saat ini.</b> Model segmentasi di aplikasi masih versi uji dan kadar air belum dikalibrasi uji oven. Pengumpulan 300 foto dan 25 uji oven dijadwalkan 9–27 November 2026, pelatihan dan evaluasi 28 November–3 Desember 2026.</span></div>
+  <div class="notice" style="--i:0">${ico('info')}<span><b>Status saat ini.</b> Model segmentasi di aplikasi sudah dilatih dari data publik TACO dan ZeroWaste-f (6.003 frame), tetapi belum dari foto TPS, sehingga tetap berlabel versi uji. Kadar air belum dikalibrasi uji oven. Angka muatan di dashboard ini masih simulasi. Pengumpulan 300 foto dan 25 uji oven dijadwalkan 9–27 November 2026, pelatihan ulang dan evaluasi 28 November–3 Desember 2026.</span></div>
   <div class="mcards" style="--i:1">
-    <div class="mcard"><span class="st warn"><i></i>Versi uji</span><h4>Segmentasi komposisi</h4><p>DeepLabv3+ dengan encoder ResNet-50. Setiap piksel diberi satu dari enam fraksi atau latar, lalu luas diubah menjadi berat.</p>
-      <ul><li>Pralatih: TACO dan ZeroWaste-f (sekitar 2.700 foto berlabel)</li><li>Penyesuaian: 210 foto tim dari Kudus dan Malang, uji 90 foto</li><li>Berjalan sebagai ONNX INT8 di HP dan Raspberry Pi 5</li></ul></div>
+    <div class="mcard"><span class="st warn"><i></i>Versi uji · data publik</span><h4>Segmentasi komposisi</h4><p>DeepLabv3+ dengan encoder ResNet-50. Setiap piksel diberi satu dari enam fraksi atau latar, lalu luas diubah menjadi berat.</p>
+      <ul><li>Dilatih: TACO dan ZeroWaste-f, 6.003 frame</li><li>Hasil uji: mIoU 0,41, galat proporsi 14,3 poin persen (belum memenuhi target)</li><li>Berjalan sebagai ONNX INT8 (27 MB) di peramban HP</li><li>Belum mengenali organik, tekstil, dan kayu</li></ul></div>
     <div class="mcard"><span class="st warn"><i></i>Belum dikalibrasi</span><h4>Kadar air</h4><p>Neraca massa per fraksi, dikoreksi hujan 24 dan 72 jam dengan regresi ridge. Rentang 80% dari Jackknife+.</p>
       <ul><li>Kalibrasi: 25 uji oven (ASTM E790-15, 110 °C)</li><li>Validasi tinggalkan-satu-sampel pada 25 unit</li><li>Sebelum kalibrasi: rentang bawaan ±10 poin</li></ul></div>
     <div class="mcard"><span class="st ok"><i></i>Rumus standar</span><h4>Nilai kalor (LHV)</h4><p>Dihitung, bukan dilatih: nilai kalor kering tiap fraksi ditimbang komposisi, lalu dikurangi efek air.</p>
@@ -468,11 +468,13 @@ PAGES.model = el => {
         .map(x => `<tr><td>${x[0]}</td>${x.slice(1).map(v => `<td class="r num">${v}</td>`).join('')}</tr>`).join('')}
       <tr style="font-weight:800;background:#f7f9fd"><td>Jumlah</td><td class="r">60</td><td class="r">300</td><td class="r">25</td><td class="r">18 / 90</td></tr></tbody></table></div>
       <p class="count" style="margin-top:8px">Uji akhir ditulis unit / foto. Sisanya, 42 unit (210 foto), menjadi data pengembangan.</p></div>
-    <div class="panel">${ph('Pembagian data tanpa kebocoran', 'StratifiedGroupKFold: kelompok = unit, strata = lokasi', ['Validasi'])}
-      <div class="split scroll"><div class="blk all"><span>Seluruh data tim</span><b>60 unit · 300 foto</b></div>
-        <div class="two"><div class="blk dev"><span>Pengembangan</span><b>42 unit · 210 foto</b></div><div class="blk test"><span>Uji akhir, dikunci</span><b>18 unit · 90 foto</b></div></div>
-        <div class="folds" id="folds">${[1, 2, 3, 4, 5].map(i => `<div>Lipatan ${i}<small>8–9 unit</small></div>`).join('')}</div>
-        <p>Bergiliran, satu lipatan (emas) menjadi validasi dan empat lainnya data latih. Lima foto satu unit selalu di bagian yang sama, jadi model tidak pernah dinilai dengan foto yang mirip data latihnya. Model akhir dilatih ulang pada 42 unit, lalu dinilai sekali pada 18 unit uji.</p></div></div>
+    <div class="panel">${ph('Data pelatihan saat ini', 'Data publik, dibagi per kelompok agar frame mirip tidak terpisah', ['Hasil run'])}
+      <div class="tbl-wrap"><table><thead><tr><th>Sumber</th><th class="r">Frame</th><th class="r">Kelompok</th></tr></thead><tbody>
+      <tr><td>ZeroWaste-f (versi final)</td><td class="r num">4.503</td><td class="r num">12 video</td></tr>
+      <tr><td>TACO (15 batch)</td><td class="r num">1.500</td><td class="r num">1.500 foto</td></tr>
+      <tr style="font-weight:800;background:#f7f9fd"><td>Jumlah</td><td class="r">6.003</td><td class="r">1.512</td></tr></tbody></table></div>
+      <div class="split scroll"><div class="two"><div class="blk dev"><span>Pengembangan (latih + validasi)</span><b>3.234 frame</b></div><div class="blk test"><span>Uji, dikunci</span><b>2.769 frame</b></div></div>
+        <p>Set uji dikunci sebelum pelatihan dan dibuka sekali. Sekitar seperlima kelompok pengembangan menjadi validasi. Uji didominasi ZeroWaste (2.619 dari 2.769 frame), jadi belum mewakili foto TPS.</p></div></div>
     <div class="panel"><div class="ph"><div><h3 id="kTitle">Kriteria lulus evaluasi</h3><p>Diukur pada set uji akhir, selang kepercayaan 95% bootstrap per unit</p></div><div class="segtabs" id="kTabs"><button class="on" data-t="k">Kriteria</button><button data-t="r">Rujukan</button></div></div>
       <div class="tbl-wrap" id="kBody"></div></div>
   </div>`;

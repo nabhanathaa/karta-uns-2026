@@ -6,11 +6,12 @@ UNS Innovation Hackathon 2026, Sub-tema B. Pemilik masalah: DLH Kota Surakarta.
 
 | Bagian | Tempat |
 |---|---|
-| Dashboard web (repo ini) | <https://karta-uns-2026.streamlit.app/> |
-| Aplikasi petugas di HP | repo `azunzios/karta-mobile` (Next.js, Vercel) |
-| Proposal | `Proposal_SORA_UNS_Hackathon_2026.pdf` (dan `.docx`) |
+| Dashboard web (repo ini) | <https://sora-dashboard-hackathon-uns.streamlit.app/> |
+| Aplikasi petugas di HP | <https://sora-mobile.vercel.app/> (repo `azunzios/sora-mobile`, Next.js) |
 
-> **Data simulasi.** Belum ada data lapangan. Semua angka di dashboard dibangkitkan oleh `demo/sora_data.py` untuk 12 TPS selama 30 hari. Rumus dan ambang rute sama dengan aplikasi HP dan lampiran laporan, jadi angkanya menunjukkan cara kerja sistem, bukan kondisi Putri Cempo yang sebenarnya. Data nyata dari HP bisa dimasukkan lewat **Laporan → Impor dari aplikasi HP**.
+> **Status model.** Model segmentasi di aplikasi HP sudah dilatih dari data publik TACO dan ZeroWaste-f (6.003 frame, 1.512 kelompok; uji 2.769 frame): mIoU 0,41 dan galat proporsi 14,3 poin persen. Model ini belum dilatih dari foto TPS dan belum mengenali organik, tekstil, dan kayu, jadi di aplikasi tetap berlabel "Model versi uji". Pelatihan dengan foto TPS dijadwalkan 28 November–3 Desember 2026.
+
+> **Data simulasi.** Belum ada data lapangan. Semua angka muatan di dashboard dibangkitkan oleh `demo/sora_data.py` untuk 12 TPS selama 30 hari. Rumus dan ambang rute sama dengan aplikasi HP dan lampiran laporan, jadi angkanya menunjukkan cara kerja sistem, bukan kondisi Putri Cempo yang sebenarnya. Data nyata dari HP bisa dimasukkan lewat **Laporan → Impor dari aplikasi HP**.
 
 ## Isi dashboard
 
